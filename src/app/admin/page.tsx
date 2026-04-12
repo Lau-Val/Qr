@@ -37,10 +37,9 @@ export default async function AdminPage() {
             </p>
             <h1 className="mt-2 text-2xl font-bold md:text-3xl">Platformbeheer</h1>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/55">
-              Dit scherm is alleen voor <strong className="text-white/80">platformbeheerders</strong>.{" "}
-              <strong className="text-white/80">Klanten</strong> (eigenaren en personeel van een zaak) loggen
-              in op dezelfde pagina maar zien alleen het zaken-dashboard, campagnes en dealbeheer voor hun zaak —
-              niet deze beheerfuncties.
+              Alleen voor <strong className="text-white/80">platformbeheerders</strong>. Het zaken-dashboard
+              (cijfers, campagnes, gast-flow) is voor <strong className="text-white/80">klanten</strong> — jouw
+              beheerdersaccount heeft daar geen toegang toe; dat blijft gescheiden.
             </p>
           </div>
           <SignOutButton />
@@ -69,10 +68,9 @@ export default async function AdminPage() {
         </section>
 
         <p className="border-t border-white/10 pt-8 text-sm text-white/45">
-          <Link href="/dashboard" className="text-violet-300 hover:underline">
-            Naar zaken-dashboard
-          </Link>{" "}
-          — alleen relevant als jouw account ook aan een zaak is gekoppeld.
+          <Link href="/" className="text-violet-300 hover:underline">
+            ← Terug naar home
+          </Link>
         </p>
       </div>
     </div>

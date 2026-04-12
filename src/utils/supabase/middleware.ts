@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import type { User } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -9,6 +10,37 @@ function superAdminEmails(): string[] {
     .split(",")
     .map((s) => s.trim().toLowerCase())
     .filter(Boolean);
+}
+
+/** Zaken-dashboard, campagnes, gast-flow — niet voor platformbeheerders. */
+function isCustomerAppPath(pathname: string): boolean {
+  return (
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/campagnes") ||
+    pathname.startsWith("/gast")
+  );
+}
+
+/** next= query kan /dashboard?bar= zijn */
+function isCustomerAppNext(next: string): boolean {
+  const path = next.split("?")[0] ?? "";
+  return isCustomerAppPath(path);
+}
+
+async function resolvePlatformAdmin(
+  supabase: ReturnType<typeof createServerClient>,
+  user: User,
+  envAdmins: string[],
+): Promise<boolean> {
+  const email = user.email?.toLowerCase() ?? "";
+  if (envAdmins.length > 0 && envAdmins.includes(email)) return true;
+  if (!user.id) return false;
+  const { data } = await supabase
+    .from("platform_admins")
+    .select("user_id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+  return !!data;
 }
 
 /**
@@ -55,23 +87,16 @@ export async function updateSession(request: NextRequest) {
   if (user && pathname === "/login") {
     const nextParam = request.nextUrl.searchParams.get("next")?.trim();
     let next = nextParam || "/dashboard";
-    const email = user.email?.toLowerCase() ?? "";
-    const isEnvAdmin = admins.length > 0 && admins.includes(email);
-    let isDbAdmin = false;
-    if (!isEnvAdmin && user.id) {
-      const { data } = await supabase
-        .from("platform_admins")
-        .select("user_id")
-        .eq("user_id", user.id)
-        .maybeSingle();
-      isDbAdmin = !!data;
-    }
-    const isPlatformAdmin = isEnvAdmin || isDbAdmin;
-    if (
-      isPlatformAdmin &&
-      (!nextParam || nextParam === "/dashboard" || nextParam === "/platform")
-    ) {
-      next = "/admin";
+    const isPa = await resolvePlatformAdmin(supabase, user, admins);
+    if (isPa) {
+      if (
+        !nextParam ||
+        nextParam === "/dashboard" ||
+        nextParam === "/platform" ||
+        isCustomerAppNext(next)
+      ) {
+        next = "/admin";
+      }
     }
     return NextResponse.redirect(new URL(next, request.url));
   }
@@ -92,19 +117,16 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (user && isPlatformAdminPath(pathname)) {
-    const email = user.email?.toLowerCase() ?? "";
-    const isEnvAdmin = admins.length > 0 && admins.includes(email);
-    let allowed = isEnvAdmin;
-    if (!allowed && user.id) {
-      const { data } = await supabase
-        .from("platform_admins")
-        .select("user_id")
-        .eq("user_id", user.id)
-        .maybeSingle();
-      allowed = !!data;
-    }
-    if (!allowed) {
+    const isAllowed = await resolvePlatformAdmin(supabase, user, admins);
+    if (!isAllowed) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+  }
+
+  if (user && isCustomerAppPath(pathname)) {
+    const isPa = await resolvePlatformAdmin(supabase, user, admins);
+    if (isPa) {
+      return NextResponse.redirect(new URL("/admin", request.url));
     }
   }
 

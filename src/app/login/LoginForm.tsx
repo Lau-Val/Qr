@@ -34,7 +34,16 @@ export function LoginForm() {
       const r = await fetch("/api/auth/platform-access");
       const d = (await r.json()) as { show?: boolean };
       if (d.show) {
-        if (rawNext === "/dashboard" || rawNext === "/platform") {
+        const pathOnly = rawNext.split("?")[0] ?? "";
+        const isCustomerRoute =
+          pathOnly.startsWith("/dashboard") ||
+          pathOnly.startsWith("/campagnes") ||
+          pathOnly.startsWith("/gast");
+        if (
+          rawNext === "/platform" ||
+          rawNext === "/dashboard" ||
+          isCustomerRoute
+        ) {
           destination = "/admin";
         }
       }
