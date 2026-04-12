@@ -87,6 +87,7 @@ export async function createBarWithOwner(
     return { ok: false, error: memErr.message };
   }
 
+  revalidatePath("/admin");
   revalidatePath("/platform");
   return { ok: true };
 }

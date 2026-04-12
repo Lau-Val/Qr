@@ -17,10 +17,10 @@ export function PlatformNavLink() {
 
   return (
     <Link
-      href="/platform"
+      href="/admin"
       className="rounded-xl px-3 py-2 text-sm font-medium text-amber-200/90 transition-colors hover:bg-amber-500/15"
     >
-      Platform (zaken)
+      Platformbeheer
     </Link>
   );
 }

@@ -49,9 +49,20 @@ export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const admins = superAdminEmails();
 
+  const isPlatformAdminPath = (p: string) =>
+    p.startsWith("/platform") || p.startsWith("/admin");
+
   if (user && pathname === "/login") {
-    const next =
-      request.nextUrl.searchParams.get("next")?.trim() || "/dashboard";
+    const nextParam = request.nextUrl.searchParams.get("next")?.trim();
+    let next = nextParam || "/dashboard";
+    const email = user.email?.toLowerCase() ?? "";
+    if (
+      admins.length &&
+      admins.includes(email) &&
+      (!nextParam || nextParam === "/dashboard" || nextParam === "/platform")
+    ) {
+      next = "/admin";
+    }
     return NextResponse.redirect(new URL(next, request.url));
   }
 
@@ -64,13 +75,13 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(u);
   }
 
-  if (!user && pathname.startsWith("/platform")) {
+  if (!user && isPlatformAdminPath(pathname)) {
     const u = new URL("/login", request.url);
-    u.searchParams.set("next", "/platform");
+    u.searchParams.set("next", pathname.startsWith("/admin") ? "/admin" : "/platform");
     return NextResponse.redirect(u);
   }
 
-  if (user && pathname.startsWith("/platform")) {
+  if (user && isPlatformAdminPath(pathname)) {
     const email = user.email?.toLowerCase() ?? "";
     if (!admins.length || !admins.includes(email)) {
       return NextResponse.redirect(new URL("/dashboard", request.url));

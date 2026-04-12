@@ -28,7 +28,20 @@ export function LoginForm() {
       setError(signErr.message);
       return;
     }
-    router.push(next.startsWith("/") ? next : "/dashboard");
+    const rawNext = next.startsWith("/") ? next : "/dashboard";
+    let destination = rawNext;
+    try {
+      const r = await fetch("/api/auth/platform-access");
+      const d = (await r.json()) as { show?: boolean };
+      if (d.show) {
+        if (rawNext === "/dashboard" || rawNext === "/platform") {
+          destination = "/admin";
+        }
+      }
+    } catch {
+      /* gebruik rawNext */
+    }
+    router.push(destination);
     router.refresh();
   }
 
