@@ -1,0 +1,351 @@
+@import "tailwindcss";
+
+/* canvas-confetti: fullscreen fixed canvas — taps mogen nooit blokkeren (iOS / WebKit) */
+body canvas {
+  pointer-events: none !important;
+  touch-action: none !important;
+}
+
+:root {
+  --background: #06060a;
+  --foreground: #f4f4f5;
+  --bb-surface: rgba(255, 255, 255, 0.035);
+  --bb-surface-elevated: rgba(255, 255, 255, 0.055);
+  --bb-border: rgba(255, 255, 255, 0.08);
+  --bb-accent: #7c3aed;
+  --bb-accent-muted: #a78bfa;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --radius-bb: 1.125rem;
+  --radius-bb-lg: 1.5rem;
+}
+
+/* Luck wheel: subtiele glow-puls tijdens draaien */
+@keyframes bb-wheel-spin-glow {
+  0%,
+  100% {
+    filter: brightness(1) drop-shadow(0 0 18px rgba(167, 139, 250, 0.35));
+  }
+  50% {
+    filter: brightness(1.07) drop-shadow(0 0 32px rgba(196, 181, 253, 0.55));
+  }
+}
+
+.bb-wheel-spin-ambient {
+  animation: bb-wheel-spin-glow 2.2s ease-in-out infinite;
+}
+
+@keyframes bb-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bb-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(232, 121, 249, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 32px rgba(139, 92, 246, 0.25);
+  }
+}
+
+@keyframes bb-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.animate-bb-spin {
+  animation: bb-spin 2.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animate-bb-in {
+  animation: bb-fade-in 0.45s ease-out both;
+}
+
+.animate-bb-glow {
+  animation: bb-glow 3s ease-in-out infinite;
+}
+
+/* Upgrade card: moving violet wash (background-position) — onder de glans */
+@keyframes bb-upgrade-bg-drift {
+  0% {
+    background-position: 10% 20%;
+  }
+  25% {
+    background-position: 78% 38%;
+  }
+  50% {
+    background-position: 42% 82%;
+  }
+  75% {
+    background-position: 88% 55%;
+  }
+  100% {
+    background-position: 10% 20%;
+  }
+}
+
+/* Unlock prijskaarten: 3 verschoven drift-cycli (anders dan alleen delay — ander patroon) */
+@keyframes bb-prize-drift-bg-0 {
+  0%,
+  100% {
+    background-position: 10% 20%;
+  }
+  25% {
+    background-position: 78% 38%;
+  }
+  50% {
+    background-position: 42% 82%;
+  }
+  75% {
+    background-position: 88% 55%;
+  }
+}
+
+@keyframes bb-prize-drift-bg-1 {
+  0%,
+  100% {
+    background-position: 78% 38%;
+  }
+  25% {
+    background-position: 42% 82%;
+  }
+  50% {
+    background-position: 88% 55%;
+  }
+  75% {
+    background-position: 10% 20%;
+  }
+}
+
+@keyframes bb-prize-drift-bg-2 {
+  0%,
+  100% {
+    background-position: 42% 82%;
+  }
+  25% {
+    background-position: 88% 55%;
+  }
+  50% {
+    background-position: 10% 20%;
+  }
+  75% {
+    background-position: 78% 38%;
+  }
+}
+
+.bb-upgrade-bg-drift {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    122deg,
+    rgba(91, 33, 182, 0.55) 0%,
+    rgba(124, 58, 237, 0.48) 18%,
+    rgba(76, 29, 149, 0.52) 36%,
+    rgba(167, 139, 250, 0.42) 52%,
+    rgba(49, 10, 87, 0.58) 68%,
+    rgba(139, 92, 246, 0.45) 84%,
+    rgba(109, 40, 217, 0.5) 100%
+  );
+  background-size: 380% 380%;
+  animation: bb-upgrade-bg-drift 9.5s ease-in-out infinite;
+  mix-blend-mode: screen;
+  opacity: 0.58;
+  pointer-events: none;
+}
+
+/* Bartender deal card: zelfde drift-idee als paarse box, in emerald/groen */
+.bb-bartender-bg-drift {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    122deg,
+    rgba(5, 46, 22, 0.65) 0%,
+    rgba(16, 185, 129, 0.42) 18%,
+    rgba(6, 78, 59, 0.55) 36%,
+    rgba(52, 211, 153, 0.38) 52%,
+    rgba(4, 47, 32, 0.62) 68%,
+    rgba(20, 184, 166, 0.4) 84%,
+    rgba(6, 95, 70, 0.52) 100%
+  );
+  background-size: 380% 380%;
+  animation: bb-upgrade-bg-drift 9.5s ease-in-out infinite;
+  mix-blend-mode: screen;
+  opacity: 0.52;
+  pointer-events: none;
+}
+
+/* Bartender deal: verlopen — volledige kaart rood (zelfde drift als groen) */
+.bb-bartender-expired-bg-drift {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    122deg,
+    rgba(69, 10, 10, 0.7) 0%,
+    rgba(220, 38, 38, 0.45) 18%,
+    rgba(127, 29, 29, 0.58) 36%,
+    rgba(248, 113, 113, 0.35) 52%,
+    rgba(69, 10, 10, 0.65) 68%,
+    rgba(239, 68, 68, 0.42) 84%,
+    rgba(153, 27, 27, 0.55) 100%
+  );
+  background-size: 380% 380%;
+  animation: bb-upgrade-bg-drift 9.5s ease-in-out infinite;
+  mix-blend-mode: screen;
+  opacity: 0.52;
+  pointer-events: none;
+}
+
+/* Upgrade card: natural gloss sweep — oversized diagonal band, transform only (clipped inside card) */
+@keyframes bb-upgrade-gloss-primary {
+  0% {
+    transform: translate3d(-44%, -36%, 0) rotate(10deg) scale(1.06);
+  }
+  100% {
+    transform: translate3d(40%, 34%, 0) rotate(10deg) scale(1.06);
+  }
+}
+
+@keyframes bb-upgrade-gloss-secondary {
+  0% {
+    transform: translate3d(32%, -26%, 0) rotate(-16deg) scale(1.1);
+  }
+  100% {
+    transform: translate3d(-38%, 30%, 0) rotate(-16deg) scale(1.1);
+  }
+}
+
+.bb-upgrade-gloss-ray {
+  position: absolute;
+  left: -58%;
+  top: -58%;
+  width: 215%;
+  height: 215%;
+  background: linear-gradient(
+    118deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 39%,
+    rgba(255, 255, 255, 0.07) 44.5%,
+    rgba(248, 242, 255, 0.22) 47.5%,
+    rgba(255, 255, 255, 0.34) 50%,
+    rgba(236, 230, 255, 0.2) 52%,
+    rgba(255, 255, 255, 0.08) 56%,
+    rgba(255, 255, 255, 0) 61%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  mix-blend-mode: soft-light;
+  animation: bb-upgrade-gloss-primary 11s cubic-bezier(0.42, 0, 0.58, 1) infinite
+    alternate;
+  will-change: transform;
+}
+
+.bb-upgrade-gloss-ray--secondary {
+  left: -52%;
+  top: -52%;
+  width: 205%;
+  height: 205%;
+  opacity: 0.78;
+  background: linear-gradient(
+    72deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 41%,
+    rgba(216, 200, 255, 0.16) 47.5%,
+    rgba(255, 255, 255, 0.16) 50%,
+    rgba(180, 160, 255, 0.14) 52%,
+    rgba(255, 255, 255, 0) 58%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  mix-blend-mode: overlay;
+  animation: bb-upgrade-gloss-secondary 15s cubic-bezier(0.38, 0.02, 0.62, 0.98) infinite
+    alternate-reverse;
+  will-change: transform;
+}
+
+/* Na basis glans: prijskaarten krijgen eigen timing (variabelen op .prize-showcase-card) */
+.prize-showcase-card .bb-upgrade-gloss-ray {
+  animation-name: bb-upgrade-gloss-primary;
+  animation-duration: var(--prize-gloss-1-dur, 11s);
+  animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-delay: var(--prize-gloss-1-delay, 0s);
+}
+
+.prize-showcase-card .bb-upgrade-gloss-ray--secondary {
+  animation-name: bb-upgrade-gloss-secondary;
+  animation-duration: var(--prize-gloss-2-dur, 15s);
+  animation-timing-function: cubic-bezier(0.38, 0.02, 0.62, 0.98);
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
+  animation-delay: var(--prize-gloss-2-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-wheel-spin-ambient {
+    animation: none;
+    filter: none;
+  }
+
+  .bb-upgrade-bg-drift,
+  .bb-bartender-bg-drift,
+  .bb-bartender-expired-bg-drift,
+  .prize-showcase-drift-layer {
+    animation: none !important;
+    background-position: 50% 50%;
+  }
+
+  .bb-upgrade-gloss-ray,
+  .bb-upgrade-gloss-ray--secondary {
+    animation: none;
+    transform: translate3d(0, 0, 0) rotate(10deg) scale(1.05);
+    opacity: 0.65;
+  }
+
+  .bb-upgrade-gloss-ray--secondary {
+    transform: translate3d(0, 0, 0) rotate(-16deg) scale(1.08);
+    opacity: 0.45;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-dm-sans), var(--font-geist-sans), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: rgba(124, 58, 237, 0.35);
+  color: #fff;
+}
+
+input,
+textarea,
+select {
+  outline: none;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid rgba(232, 121, 249, 0.45);
+  outline-offset: 1px;
+}
