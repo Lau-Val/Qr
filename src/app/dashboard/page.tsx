@@ -1,11 +1,11 @@
 import { DashboardClient } from "./DashboardClient";
-import { loadDashboardData } from "@/lib/dashboard/load-dashboard";
+import { getDashboardData } from "@/lib/queries/dashboard";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Dashboard — BarBoost",
-  description: "Omzet en groei voor de bar",
+  description: "Cijfers voor je zaak in één oogopslag",
 };
 
 export default async function DashboardPage({
@@ -20,31 +20,11 @@ export default async function DashboardPage({
       ? barParam
       : Array.isArray(barParam)
         ? barParam[0]
-        : undefined) ??
-    process.env.NEXT_PUBLIC_DEFAULT_BAR_SLUG ??
+        : undefined)?.trim() ||
+    process.env.NEXT_PUBLIC_BAR_SLUG?.trim() ||
+    process.env.NEXT_PUBLIC_DEFAULT_BAR_SLUG?.trim() ||
     "cafe-nova";
 
-  try {
-    const data = await loadDashboardData(slug);
-    const referenceDateDefault =
-      data.metrics.referenceDateIso ?? new Date().toISOString().slice(0, 10);
-
-    return (
-      <DashboardClient
-        barName={data.bar.name}
-        deals={data.deals}
-        reviews={data.reviews}
-        metrics={data.metrics}
-        referenceDateDefault={referenceDateDefault}
-      />
-    );
-  } catch (e) {
-    const message = e instanceof Error ? e.message : "Onbekende fout";
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#0b0a12] px-4 text-white">
-        <p className="text-lg font-semibold">Dashboard niet geladen</p>
-        <p className="mt-2 max-w-md text-center text-sm text-white/60">{message}</p>
-      </div>
-    );
-  }
+  const data = await getDashboardData(slug);
+  return <DashboardClient data={data} />;
 }
