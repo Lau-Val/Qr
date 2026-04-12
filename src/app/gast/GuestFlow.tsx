@@ -92,6 +92,18 @@ type Step =
   | "claim"
   | "retention";
 
+/** Tijdelijk: volgordenummer voor ontwerp/test (verwijderen voor productie). */
+function gastFlowPageNumber(s: Step): number {
+  const n: Record<Step, number> = {
+    welcome: 1,
+    unlock: 2,
+    baseDeal: 3,
+    claim: 4,
+    retention: 5,
+  };
+  return n[s];
+}
+
 /** Query die het rad start — zelfde patroon als route-`Link` (werkt op iOS waar `click` faalt). */
 const SPIN_QUERY = "spin";
 
@@ -286,7 +298,14 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
 
   return (
     <MobileShell>
-      <div className="flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+      <div className="relative flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+        <span
+          className="pointer-events-none absolute left-0 top-0 z-[200] select-none font-mono text-[8px] tabular-nums leading-none text-white/40 sm:text-[9px]"
+          aria-hidden
+          title={`Stap ${gastFlowPageNumber(step)} (tijdelijk)`}
+        >
+          {gastFlowPageNumber(step)}
+        </span>
         {step === "welcome" ? (
           <section className="flex h-full min-h-0 min-w-0 flex-1 flex-col justify-between gap-2 overflow-hidden text-center [@media(max-height:640px)]:gap-1.5">
             <div className="min-h-0 shrink">
