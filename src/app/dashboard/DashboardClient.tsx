@@ -1,34 +1,18 @@
-'use client';
+"use client";
 
 import { useMemo, useState } from "react";
-import { BAR_NAME } from "@/data/bar";
 import { StatCard } from "@/components/barboost/StatCard";
 import { ChartCard } from "@/components/barboost/ChartCard";
 import { ReviewCard } from "@/components/barboost/ReviewCard";
 import { Badge } from "@/components/barboost/ui/Badge";
 import { Button } from "@/components/barboost/ui/Button";
 import { cn } from "@/lib/cn";
-import type { PeriodKey } from "@/data/types";
-import { MOCK_DEALS } from "@/data/mock/deals";
-import { MOCK_REVIEWS } from "@/data/mock/reviews";
-import {
-  claimsPerDay,
-  kpisByPeriod,
-  liveTonight,
-  missedRevenue,
-  monthlyImpact,
-  revenuePerDay,
-  reviewGrowth,
-  scansPerDay,
-  upgradeFunnel,
-  weekendReach,
-  whatsappCampaignOverview,
-  whatsappWeekendOptIns,
-} from "@/data/mock/dashboard-data";
+import type { Deal, LiveStatusLevel, MockReview, PeriodKey } from "@/data/types";
+import type { DashboardMetricsPayload } from "@/lib/dashboard/metrics-types";
 import Link from "next/link";
 import { AdminShell } from "@/components/barboost/AdminShell";
 
-function LiveStatusPill({ level }: { level: typeof liveTonight.liveStatus }) {
+function LiveStatusPill({ level }: { level: LiveStatusLevel }) {
   const map = {
     busy: {
       label: "Druk",
@@ -62,18 +46,44 @@ function LiveStatusPill({ level }: { level: typeof liveTonight.liveStatus }) {
   );
 }
 
-export function DashboardClient() {
+export type DashboardClientProps = {
+  barName: string;
+  deals: Deal[];
+  reviews: MockReview[];
+  metrics: DashboardMetricsPayload;
+  referenceDateDefault: string;
+};
+
+export function DashboardClient({
+  barName,
+  deals,
+  reviews,
+  metrics,
+  referenceDateDefault,
+}: DashboardClientProps) {
   const [period, setPeriod] = useState<PeriodKey>("today");
   const [boostedId, setBoostedId] = useState<string | null>(null);
   const [focusUpsell, setFocusUpsell] = useState(false);
   const [focusVolume, setFocusVolume] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
+  const {
+    kpisByPeriod,
+    upgradeFunnel,
+    liveTonight,
+    missedRevenue,
+    monthlyImpact,
+    weekendReach,
+    charts,
+    whatsappCampaignOverview,
+    weekendCampaignSummary,
+  } = metrics;
+
   const kpi = kpisByPeriod[period];
 
   const performanceDeals = useMemo(
-    () => MOCK_DEALS.filter((d) => d.category !== "retry"),
-    [],
+    () => deals.filter((d) => d.category !== "retry"),
+    [deals],
   );
 
   const boostedDealTitle = useMemo(() => {
@@ -94,7 +104,10 @@ export function DashboardClient() {
   const topDealNow = useMemo(() => {
     const d = dealsDisplay.find((x) => x.id === liveTonight.topDealId);
     return d ?? dealsDisplay[0]!;
-  }, [dealsDisplay]);
+  }, [dealsDisplay, liveTonight.topDealId]);
+
+  const wa = whatsappCampaignOverview;
+  const wk = weekendCampaignSummary;
 
   return (
     <AdminShell>
@@ -105,7 +118,7 @@ export function DashboardClient() {
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-violet-300/85">
               BarBoost
             </p>
-            <h1 className="mt-1 text-2xl font-bold tracking-tight">{BAR_NAME}</h1>
+            <h1 className="mt-1 text-2xl font-bold tracking-tight">{barName}</h1>
             <p className="mt-1 text-sm text-white/55">
               Meer omzet uit bestaande gasten — zonder extra personeel.
             </p>
@@ -120,7 +133,7 @@ export function DashboardClient() {
             <input
               type="date"
               className="rounded-xl border border-white/15 bg-black/40 px-3 py-2 text-sm text-white"
-              defaultValue="2026-04-10"
+              defaultValue={referenceDateDefault}
             />
             <div className="flex rounded-xl border border-white/10 bg-black/30 p-1">
               {(
@@ -156,7 +169,6 @@ export function DashboardClient() {
           </div>
         ) : null}
 
-        {/* Vanavond Live */}
         <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div>
@@ -223,7 +235,6 @@ export function DashboardClient() {
           </div>
         </section>
 
-        {/* Tonight control cockpit */}
         <section className="rounded-3xl border border-white/10 bg-[#0c0b14] p-5">
           <h2 className="text-lg font-bold">Sturing vanavond</h2>
           <p className="mt-1 text-sm text-white/48">
@@ -281,7 +292,6 @@ export function DashboardClient() {
           </div>
         </section>
 
-        {/* Boost deal */}
         <section className="rounded-3xl border border-violet-500/25 bg-gradient-to-r from-violet-950/45 to-[#0c0b14] p-5">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
@@ -314,7 +324,6 @@ export function DashboardClient() {
           </div>
         </section>
 
-        {/* KPI */}
         <section>
           <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-white/45">
             Prestaties ({period === "today" ? "vandaag" : period === "week" ? "week" : "maand"})
@@ -361,7 +370,6 @@ export function DashboardClient() {
           </div>
         </section>
 
-        {/* Upgrade funnel */}
         <section className="rounded-3xl border border-white/[0.07] bg-white/[0.02] p-5">
           <h2 className="text-lg font-semibold text-white">Upgrade conversie</h2>
           <p className="mt-1 text-sm text-white/42">
@@ -386,7 +394,6 @@ export function DashboardClient() {
           </div>
         </section>
 
-        {/* WhatsApp campagnes — detail */}
         <section className="rounded-3xl border border-emerald-500/15 bg-emerald-950/10 p-5">
           <h2 className="text-lg font-semibold text-white">WhatsApp campagnes</h2>
           <p className="mt-1 text-sm text-white/42">
@@ -394,27 +401,26 @@ export function DashboardClient() {
             duidelijke reden om terug te komen (demo-cijfers).
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            <StatCard label="Contacten" value={String(whatsappCampaignOverview.contacts)} />
+            <StatCard label="Contacten" value={String(wa.contacts)} />
             <StatCard
               label="Laatste campagne"
-              value={whatsappCampaignOverview.lastCampaign}
+              value={wa.lastCampaign}
             />
             <StatCard
               label="Open rate"
-              value={`${whatsappCampaignOverview.openRatePercent}%`}
+              value={`${wa.openRatePercent}%`}
             />
             <StatCard
               label="Claim rate"
-              value={`${whatsappCampaignOverview.claimRatePercent}%`}
+              value={`${wa.claimRatePercent}%`}
             />
             <StatCard
               label="Geschatte omzet"
-              value={`€${whatsappCampaignOverview.estimatedRevenue.toLocaleString("nl-NL")}`}
+              value={`€${wa.estimatedRevenue.toLocaleString("nl-NL")}`}
             />
           </div>
         </section>
 
-        {/* Weekend bereik */}
         <section className="rounded-3xl border border-emerald-500/20 bg-emerald-950/15 p-5">
           <h2 className="text-lg font-bold">Weekend bereik & impact</h2>
           <p className="mt-1 text-sm text-white/48">
@@ -450,7 +456,6 @@ export function DashboardClient() {
           </div>
         </section>
 
-        {/* Impact / ROI */}
         <section className="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
           <h2 className="text-xl font-bold">Impact deze maand</h2>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -485,7 +490,6 @@ export function DashboardClient() {
           </div>
         </section>
 
-        {/* Gemiste omzet */}
         <section className="rounded-3xl border border-amber-500/35 bg-gradient-to-br from-amber-950/35 to-[#0c0b14] p-5">
           <div className="flex flex-wrap items-start gap-3">
             <span className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-100">
@@ -495,7 +499,7 @@ export function DashboardClient() {
               <h2 className="text-lg font-bold text-amber-100">Gemiste omzet</h2>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/75">
                 Gebaseerd op vergelijkbare bars laat{" "}
-                <span className="font-semibold text-white">{BAR_NAME}</span>{" "}
+                <span className="font-semibold text-white">{barName}</span>{" "}
                 geschat{" "}
                 <span className="font-bold text-amber-200">
                   €{missedRevenue.rangeLow.toLocaleString("nl-NL")} – €
@@ -508,29 +512,27 @@ export function DashboardClient() {
           </div>
         </section>
 
-        {/* Charts */}
         <section className="grid gap-4 lg:grid-cols-2">
-          <ChartCard title="Scans per dag" data={scansPerDay} />
-          <ChartCard title="Claims per dag" data={claimsPerDay} color="from-emerald-400 to-teal-500" />
+          <ChartCard title="Scans per dag" data={charts.scansPerDay} />
+          <ChartCard title="Claims per dag" data={charts.claimsPerDay} color="from-emerald-400 to-teal-500" />
           <ChartCard
             title="Geschatte extra omzet per dag"
-            data={revenuePerDay}
+            data={charts.revenuePerDay}
             color="from-amber-400 to-orange-500"
           />
           <ChartCard
             title="WhatsApp opt-ins per weekend"
-            data={whatsappWeekendOptIns}
+            data={charts.whatsappWeekendOptIns}
             color="from-sky-400 to-indigo-500"
           />
           <ChartCard
             title="Reviewgroei"
-            data={reviewGrowth}
+            data={charts.reviewGrowth}
             color="from-pink-400 to-fuchsia-600"
             className="lg:col-span-2"
           />
         </section>
 
-        {/* Deal performance */}
         <section>
           <h2 className="mb-4 text-lg font-bold">Deal performance</h2>
           <div className="space-y-3">
@@ -566,7 +568,7 @@ export function DashboardClient() {
                   <div className="text-right text-sm">
                     <p className="font-bold text-white">{d.claims} claims</p>
                     <p className="text-white/50">
-                      {d.conversionPercent}% conv. · €{d.revenue} geschat
+                      {d.conversionPercent ?? 0}% conv. · €{d.revenue} geschat
                     </p>
                   </div>
                 </div>
@@ -575,11 +577,10 @@ export function DashboardClient() {
           </div>
         </section>
 
-        {/* Reviews */}
         <section className="grid gap-4 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-3">
             <h2 className="text-lg font-bold">Recente reviews</h2>
-            {MOCK_REVIEWS.map((r) => (
+            {reviews.map((r) => (
               <ReviewCard key={r.id} r={r} />
             ))}
           </div>
@@ -593,14 +594,25 @@ export function DashboardClient() {
           </div>
         </section>
 
-        {/* Weekend campagnes summary */}
         <section className="rounded-3xl border border-white/10 bg-[#0c0b14] p-5">
           <h2 className="text-lg font-bold">Weekendcampagnes</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <StatCard label="Actieve contacten" value="214" />
-            <StatCard label="Laatste campagne" value="Vrijdag Shot Deal" />
-            <StatCard label="Open rate (mock)" value="87%" />
-            <StatCard label="Claim rate (mock)" value="22%" />
+            <StatCard
+              label="Actieve contacten"
+              value={String(wk?.activeContacts ?? wa.contacts)}
+            />
+            <StatCard
+              label="Laatste campagne"
+              value={wk?.lastCampaign ?? wa.lastCampaign}
+            />
+            <StatCard
+              label="Open rate"
+              value={wk?.openRateLabel ?? `${wa.openRatePercent}%`}
+            />
+            <StatCard
+              label="Claim rate"
+              value={wk?.claimRateLabel ?? `${wa.claimRatePercent}%`}
+            />
           </div>
           <p className="mt-4 text-sm text-white/50">
             Komende preview: zaterdag groepsdeal —{" "}
@@ -610,7 +622,6 @@ export function DashboardClient() {
           </p>
         </section>
 
-        {/* Waarom dit werkt */}
         <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-violet-950/28 to-transparent p-5">
           <h2 className="text-lg font-bold">Waarom dit werkt</h2>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">

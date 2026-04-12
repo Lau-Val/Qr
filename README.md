@@ -1,38 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# nachtboost (BarBoost)
 
-## Getting Started
+Next.js app for bar deals and the admin dashboard.
 
-First, run the development server:
+## Supabase (dashboard data)
+
+1. Create a project at [Supabase](https://supabase.com) and open **SQL Editor**.
+2. Paste and run `supabase/migrations/0001_barboost.sql` to create tables, indexes, and RLS (no policies — only the service role can read/write via the server).
+3. Run `supabase/seed.sql` in the same editor to insert the demo bar `cafe-nova`, deals, reviews, and `bar_dashboard_state`.
+
+### CLI (optional)
+
+With the [Supabase CLI](https://supabase.com/docs/guides/cli) linked to your project:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+supabase db push   # applies migrations from supabase/migrations/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then execute `supabase/seed.sql` in the SQL Editor (or pipe it with `psql` if you use a direct DB URL).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Local environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.local.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` from **Project Settings → API** in Supabase.
 
-## Learn More
+The dashboard reads `?bar=<slug>` (default `cafe-nova`), e.g. `/dashboard` or `/dashboard?bar=cafe-nova`.
 
-To learn more about Next.js, take a look at the following resources:
+## Development
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Qr
-# Qr
+Open [http://localhost:3000](http://localhost:3000).
