@@ -109,7 +109,7 @@ export function GuestFlow(props: { initialStep?: Step }) {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-dvh flex-col items-center justify-center bg-[#06060a] px-4 text-sm text-white/45">
+        <div className="flex h-full min-h-0 flex-1 flex-col items-center justify-center overflow-hidden bg-[#06060a] px-4 text-sm text-white/45">
           Laden…
         </div>
       }
@@ -281,16 +281,9 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
       });
     });
 
-    const scrollT = window.setTimeout(() => {
-      document
-        .getElementById(`prize-reveal-${revealDealId}`)
-        ?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 300);
-
     return () => {
       cancelled = true;
       cancelAnimationFrame(raf);
-      window.clearTimeout(scrollT);
     };
   }, [revealDealId]);
 
@@ -331,11 +324,11 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
   );
 
   const footer = (
-    <div className="flex flex-col gap-2">
-      <p className="text-center text-[10px] leading-relaxed text-white/32">
+    <div className="flex flex-col gap-1">
+      <p className="text-center text-[9px] leading-snug text-white/32 sm:text-[10px]">
         Demonstratie — geen echte betalingen, berichten of koppelingen.
       </p>
-      <Button variant="ghost" className="w-full py-2 text-xs" onClick={reset}>
+      <Button variant="ghost" className="w-full py-1.5 text-xs sm:py-2" onClick={reset}>
         Demo resetten
       </Button>
     </div>
@@ -343,42 +336,49 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
 
   return (
     <MobileShell footer={footer}>
-      <div key={demoKey} className="flex flex-1 flex-col">
+      <div
+        key={demoKey}
+        className="flex min-h-0 flex-1 flex-col overflow-hidden"
+      >
         {step === "welcome" ? (
-          <section className="flex flex-1 flex-col text-center">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45">
-              BarBoost
-            </p>
-            <h1 className="mt-5 text-[1.6rem] font-bold leading-snug tracking-tight text-white">
-              Jouw deal van vanavond
-            </h1>
-            <p className="mt-3 text-sm leading-relaxed text-white/52">
-              Scan de QR bij je tafel — daarna claim je direct aan de bar. Geen app nodig.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-2">
-              <Badge tone="hot">Alleen vanavond</Badge>
-              <Badge tone="info">Aan de bar tonen</Badge>
-              <Badge tone="success">Geschikt voor groepen</Badge>
+          <section className="flex min-h-0 flex-1 flex-col justify-between gap-3 overflow-hidden text-center [@media(max-height:640px)]:gap-2">
+            <div className="min-h-0 shrink">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45">
+                BarBoost
+              </p>
+              <h1 className="mt-3 text-[clamp(1.25rem,4.8vw,1.6rem)] font-bold leading-snug tracking-tight text-white [@media(max-height:640px)]:mt-2">
+                Jouw deal van vanavond
+              </h1>
+              <p className="mt-2 text-[clamp(0.8rem,3.2vw,0.875rem)] leading-relaxed text-white/52 [@media(max-height:640px)]:mt-1.5">
+                Scan de QR bij je tafel — daarna claim je direct aan de bar. Geen app nodig.
+              </p>
+              <div className="mt-4 flex flex-wrap justify-center gap-1.5 [@media(max-height:640px)]:mt-3 [@media(max-height:640px)]:gap-1">
+                <Badge tone="hot">Alleen vanavond</Badge>
+                <Badge tone="info">Aan de bar tonen</Badge>
+                <Badge tone="success">Geschikt voor groepen</Badge>
+              </div>
             </div>
-            <div className="mt-auto space-y-3 pt-12">
+            <div className="shrink-0 space-y-2 pt-2 [@media(max-height:640px)]:space-y-1.5 [@media(max-height:640px)]:pt-1">
               <Link
                 href="/gast/unlock"
                 prefetch
                 className={buttonClassName(
                   "primary",
-                  "w-full justify-center py-4 text-base text-center no-underline",
+                  "w-full justify-center py-3.5 text-base text-center no-underline [@media(max-height:640px)]:py-3",
                 )}
               >
                 Start met deal
               </Link>
-              <p className="text-xs text-white/38">Gemiddeld onder een minuut</p>
+              <p className="text-[11px] text-white/38 sm:text-xs">
+                Gemiddeld onder een minuut
+              </p>
             </div>
           </section>
         ) : null}
 
         {step === "unlock" ? (
-          <section className="flex min-h-0 flex-1 flex-col gap-5 pb-2">
-            <div className="flex flex-col items-center pt-1">
+          <section className="bb-gast-unlock flex min-h-0 flex-1 flex-col gap-2 overflow-hidden pb-0 [@media(max-height:720px)]:gap-1.5">
+            <div className="flex shrink-0 flex-col items-center pt-0">
               <LuckWheel
                 rotationDeg={wheelRotation}
                 spinning={spinning}
@@ -388,12 +388,12 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                 segmentColors={UNLOCK_SHOWCASE.map((r) => r.wheelColor)}
               />
               {spinning ? (
-                <p className="mt-5 text-center text-[1.05rem] font-bold tracking-tight text-transparent bg-gradient-to-r from-violet-200 via-fuchsia-200 to-violet-300 bg-clip-text">
+                <p className="mt-2 text-center text-[clamp(0.9rem,3.8vw,1.05rem)] font-bold tracking-tight text-transparent bg-gradient-to-r from-violet-200 via-fuchsia-200 to-violet-300 bg-clip-text [@media(max-height:680px)]:mt-1">
                   Het rad draait…
                 </p>
               ) : null}
               {revealDealId && !spinning ? (
-                <p className="mt-4 text-center text-[13px] font-medium text-white/50">
+                <p className="mt-2 text-center text-[12px] font-medium text-white/50 [@media(max-height:680px)]:mt-1 [@media(max-height:680px)]:text-[11px]">
                   Zo meteen volgt je deal op het volgende scherm
                 </p>
               ) : null}
@@ -401,19 +401,19 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
 
             <div
               className={cn(
-                "rounded-[1.25rem] border border-white/[0.08] px-4 py-5 transition-all duration-500",
+                "flex min-h-0 flex-1 flex-col overflow-hidden rounded-[1.25rem] border border-white/[0.08] px-3 py-3 transition-all duration-500 [@media(max-height:720px)]:px-2.5 [@media(max-height:720px)]:py-2",
                 spinning && "pointer-events-none bg-white/[0.025] opacity-[0.92]",
                 !spinning && !revealDealId && "bg-white/[0.035]",
-                revealDealId && "relative bg-black/40 py-6 ring-1 ring-white/10",
+                revealDealId && "relative bg-black/40 ring-1 ring-white/10",
               )}
             >
-              <h2 className="text-[1.35rem] font-bold leading-tight tracking-tight text-white">
+              <h2 className="shrink-0 text-[clamp(1.05rem,4vw,1.35rem)] font-bold leading-tight tracking-tight text-white">
                 {revealDealId ? "Dit wordt jouw deal" : "Wat kan je winnen?"}
               </h2>
               <div
                 className={cn(
-                  "mt-4 flex flex-col gap-3",
-                  revealDealId && "gap-4",
+                  "mt-2 flex min-h-0 flex-1 flex-col justify-center gap-2 overflow-hidden [@media(max-height:720px)]:mt-1.5 [@media(max-height:720px)]:gap-1.5",
+                  revealDealId && "gap-2.5 [@media(max-height:720px)]:gap-2",
                 )}
               >
                 {UNLOCK_SHOWCASE.map((row, i) => {
@@ -426,16 +426,20 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                   return (
                     <div
                       key={row.dealId}
-                      className={cn(isWinner && revealDealId && "order-first")}
+                      className={cn(
+                        "min-h-0 shrink",
+                        isWinner && revealDealId && "order-first",
+                      )}
                     >
                       <PrizeShowcaseCard
                         accentHex={row.wheelColor}
                         staggerIndex={i}
                         emphasis={emphasis}
                         dealId={row.dealId}
+                        compact
                       >
                         {isWinner && revealDealId ? (
-                          <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-[0.28em] text-emerald-300/95">
+                          <p className="mb-1 text-center text-[9px] font-bold uppercase tracking-[0.28em] text-emerald-300/95 [@media(max-height:720px)]:mb-0.5">
                             Jouw prijs
                           </p>
                         ) : null}
@@ -443,13 +447,13 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                           className={cn(
                             "font-semibold leading-snug tracking-tight text-white",
                             isWinner && revealDealId
-                              ? "text-[1.42rem] leading-tight sm:text-[1.55rem]"
-                              : "text-[1.2rem]",
+                              ? "text-[clamp(1.05rem,4.2vw,1.42rem)] leading-tight"
+                              : "text-[clamp(1rem,3.8vw,1.2rem)]",
                           )}
                         >
                           {row.text}
                         </p>
-                        <p className="mt-2 text-[14px] text-white/50">
+                        <p className="mt-1 text-[12px] text-white/50 [@media(max-height:720px)]:mt-0.5 [@media(max-height:720px)]:text-[11px]">
                           Normaal{" "}
                           <span className="font-medium text-white/65 line-through decoration-white/35">
                             {row.normaal}
@@ -460,7 +464,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                   );
                 })}
               </div>
-              <p className="mt-5 text-center text-[14px] font-medium leading-snug text-white/45">
+              <p className="mt-2 shrink-0 text-center text-[12px] font-medium leading-snug text-white/45 [@media(max-height:720px)]:mt-1.5 [@media(max-height:720px)]:text-[11px]">
                 {spinning
                   ? "Eén van deze prijzen wordt zo je deal"
                   : revealDealId
@@ -469,54 +473,58 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
               </p>
             </div>
 
-            {spinning || revealDealId ? (
-              <div
-                className={buttonClassName(
-                  "primary",
-                  "w-full cursor-default justify-center py-4 text-lg font-semibold opacity-90",
-                )}
-                aria-live="polite"
-              >
-                {spinning ? "Even geduld…" : "Zo meteen…"}
-              </div>
-            ) : (
-              <Link
-                href={`/gast/unlock?${SPIN_QUERY}=1`}
-                prefetch={false}
-                className={buttonClassName(
-                  "primary",
-                  "w-full justify-center py-4 text-center text-lg font-semibold no-underline",
-                )}
-              >
-                Draai nu
-              </Link>
-            )}
+            <div className="shrink-0 pt-0.5">
+              {spinning || revealDealId ? (
+                <div
+                  className={buttonClassName(
+                    "primary",
+                    "w-full cursor-default justify-center py-3.5 text-base font-semibold opacity-90 [@media(max-height:720px)]:py-3",
+                  )}
+                  aria-live="polite"
+                >
+                  {spinning ? "Even geduld…" : "Zo meteen…"}
+                </div>
+              ) : (
+                <Link
+                  href={`/gast/unlock?${SPIN_QUERY}=1`}
+                  prefetch={false}
+                  className={buttonClassName(
+                    "primary",
+                    "w-full justify-center py-3.5 text-center text-base font-semibold no-underline [@media(max-height:720px)]:py-3",
+                  )}
+                >
+                  Draai nu
+                </Link>
+              )}
+            </div>
           </section>
         ) : null}
 
         {step === "baseDeal" && baseDeal ? (
-          <section className="flex flex-1 flex-col gap-6">
+          <section className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden [@media(max-height:760px)]:gap-1.5">
             {(() => {
               const pc = getDealPriceCompare(baseDeal);
               const upgraded = buildUpgradedDeal(baseDeal);
               const mins = Math.max(1, Math.ceil(baseDeal.timerSeconds / 60));
               return (
                 <>
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-6 text-center">
-                    <p className="text-lg font-bold text-emerald-300/95">Dit heb je gewonnen</p>
-                    <h2 className="mt-3 text-[1.75rem] font-bold leading-tight text-white">
+                  <div className="shrink-0 rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-3 text-center [@media(max-height:760px)]:px-3 [@media(max-height:760px)]:py-2.5">
+                    <p className="text-[clamp(0.95rem,3.8vw,1.125rem)] font-bold text-emerald-300/95">
+                      Dit heb je gewonnen
+                    </p>
+                    <h2 className="mt-1.5 text-[clamp(1.15rem,5vw,1.75rem)] font-bold leading-tight text-white [@media(max-height:760px)]:mt-1">
                       {baseDeal.title}
                     </h2>
-                    <p className="mt-5 text-lg text-white/45 line-through decoration-white/30">
+                    <p className="mt-2 text-[clamp(0.9rem,3.5vw,1.125rem)] text-white/45 line-through decoration-white/30 [@media(max-height:760px)]:mt-1.5">
                       normaal {pc.normal}
                     </p>
-                    <p className="mt-5 text-[17px] font-medium text-white/70">
+                    <p className="mt-2 text-[clamp(0.8rem,3.2vw,1rem)] font-medium text-white/70 [@media(max-height:760px)]:mt-1.5">
                       Nog {mins} minuten · alleen in {BAR_NAME}
                     </p>
                   </div>
 
-                  <div>
-                    <div className="relative overflow-hidden rounded-3xl border-2 border-violet-400/55 p-6 shadow-[0_0_0_1px_rgba(167,139,250,0.2),0_20px_50px_rgba(0,0,0,0.55),0_0_80px_rgba(124,58,237,0.22)]">
+                  <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+                    <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-3xl border-2 border-violet-400/55 p-4 shadow-[0_0_0_1px_rgba(167,139,250,0.2),0_20px_50px_rgba(0,0,0,0.55),0_0_80px_rgba(124,58,237,0.22)] [@media(max-height:760px)]:p-3">
                       <div
                         className="pointer-events-none absolute inset-0 bg-gradient-to-b from-violet-950/90 via-[#15101f] to-black/50"
                         aria-hidden
@@ -536,44 +544,44 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                         <div className="bb-upgrade-gloss-ray" />
                         <div className="bb-upgrade-gloss-ray bb-upgrade-gloss-ray--secondary" />
                       </div>
-                      <div className="relative z-[3]">
-                        <h3 className="text-center text-[1.35rem] font-extrabold leading-tight tracking-tight text-white">
+                      <div className="relative z-[3] flex min-h-0 flex-1 flex-col overflow-hidden">
+                        <h3 className="shrink-0 text-center text-[clamp(1rem,4vw,1.35rem)] font-extrabold leading-tight tracking-tight text-white">
                           <span aria-hidden>🔥</span> Pak de beste deal van vanavond
                         </h3>
 
-                        <div className="mt-6 space-y-5">
+                        <div className="mt-3 shrink-0 space-y-3 [@media(max-height:760px)]:mt-2 [@media(max-height:760px)]:space-y-2">
                           <div>
-                            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/38">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/38 [@media(max-height:760px)]:text-[9px]">
                               Jouw deal nu
                             </p>
-                            <p className="mt-2 text-[1.05rem] font-semibold leading-snug text-white/70">
+                            <p className="mt-1 text-[clamp(0.9rem,3.5vw,1.05rem)] font-semibold leading-snug text-white/70 [@media(max-height:760px)]:mt-0.5">
                               {baseDeal.title}
                             </p>
                           </div>
                           <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                           <div>
-                            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-amber-200/90">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-200/90 [@media(max-height:760px)]:text-[9px]">
                               <span aria-hidden>🔥</span> Met upgrade
                             </p>
-                            <p className="mt-2 text-[1.35rem] font-bold leading-snug text-white">
+                            <p className="mt-1 text-[clamp(1rem,4vw,1.35rem)] font-bold leading-snug text-white [@media(max-height:760px)]:mt-0.5">
                               {upgraded.title}
                             </p>
                           </div>
                         </div>
 
                         <form
-                          className="mt-8 flex flex-col gap-5"
+                          className="mt-3 flex min-h-0 flex-1 flex-col justify-end gap-3 [@media(max-height:760px)]:mt-2 [@media(max-height:760px)]:gap-2"
                           onSubmit={handleUpgradeSubmit}
                           autoComplete="on"
                         >
-                          <div className="space-y-3">
-                            <p className="text-center text-[1.15rem] font-bold leading-snug text-white">
+                          <div className="min-h-0 space-y-2">
+                            <p className="text-center text-[clamp(0.95rem,3.8vw,1.15rem)] font-bold leading-snug text-white">
                               Ontvang direct je betere deal
                             </p>
                             <div>
                               <label
                                 htmlFor="phone"
-                                className="mb-2 block w-full px-3 text-center text-[11px] font-semibold leading-snug text-white sm:px-4 sm:text-[12px]"
+                                className="mb-1 block w-full px-2 text-center text-[10px] font-semibold leading-snug text-white sm:px-3 sm:text-[11px]"
                               >
                                 Laat je nummer achter om de deal te activeren.
                               </label>
@@ -597,12 +605,12 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                                 aria-describedby={
                                   phoneError ? "phone-error" : undefined
                                 }
-                                className="w-full rounded-2xl border border-white/25 bg-black/50 px-5 py-5 text-xl leading-snug text-white shadow-inner outline-none ring-violet-400/40 placeholder:text-white/35 focus:border-violet-400/55 focus:ring-2"
+                                className="w-full rounded-2xl border border-white/25 bg-black/50 px-4 py-3 text-[clamp(1rem,4.2vw,1.25rem)] leading-snug text-white shadow-inner outline-none ring-violet-400/40 placeholder:text-white/35 focus:border-violet-400/55 focus:ring-2 [@media(max-height:760px)]:py-2.5"
                               />
                               {phoneError ? (
                                 <p
                                   id="phone-error"
-                                  className="mt-2 text-[15px] font-medium text-amber-200/95"
+                                  className="mt-1 text-[13px] font-medium text-amber-200/95"
                                   role="alert"
                                 >
                                   {phoneError}
@@ -613,11 +621,11 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
 
                           <Button
                             type="submit"
-                            className="w-full py-6 text-[1.15rem] font-extrabold shadow-lg shadow-violet-900/40"
+                            className="w-full shrink-0 py-4 text-[clamp(1rem,3.8vw,1.15rem)] font-extrabold shadow-lg shadow-violet-900/40 [@media(max-height:760px)]:py-3.5"
                           >
                             Activeer betere deal
                           </Button>
-                          <p className="px-2 text-center text-[10px] leading-relaxed text-white/38 sm:text-[11px]">
+                          <p className="shrink-0 px-1 text-center text-[9px] leading-relaxed text-white/38 sm:text-[10px]">
                             Je ontvangt de nieuwste deals en nieuwsbrieven.
                           </p>
                         </form>
@@ -626,7 +634,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
 
                     <Button
                       variant="ghost"
-                      className="mt-4 w-full py-3 text-[16px] text-white/45"
+                      className="mt-2 w-full shrink-0 py-2 text-[13px] leading-snug text-white/45 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:py-1.5 [@media(max-height:760px)]:text-[12px]"
                       onClick={goClaim}
                     >
                       Nee, ik ga door met de minder goede deal hierboven
@@ -639,7 +647,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
         ) : null}
 
         {step === "claim" && effectiveDeal && claimExpiresAt !== null ? (
-          <section className="flex min-h-0 flex-1 flex-col">
+          <section className="flex min-h-0 flex-1 flex-col overflow-hidden">
             <BartenderDealScreen
               dealTitle={effectiveDeal.title}
               totalLabel={getBartenderTotalLabel(effectiveDeal, isUpgraded)}
@@ -655,32 +663,38 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
             />
           </section>
         ) : step === "claim" && effectiveDeal ? (
-          <div className="flex flex-1 items-center justify-center text-sm text-white/40">
+          <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden text-sm text-white/40">
             Laden…
           </div>
         ) : null}
 
         {step === "retention" ? (
-          <section className="flex flex-1 flex-col gap-5">
-            <h2 className="text-2xl font-bold text-white">Nog iets extra?</h2>
-            <p className="text-[17px] text-white/55">
-              Mag je overslaan.
-            </p>
+          <section className="flex min-h-0 flex-1 flex-col justify-between gap-3 overflow-hidden [@media(max-height:700px)]:gap-2">
+            <div className="min-h-0 shrink">
+              <h2 className="text-[clamp(1.25rem,5vw,1.5rem)] font-bold text-white">
+                Nog iets extra?
+              </h2>
+              <p className="mt-1 text-[clamp(0.9rem,3.8vw,1.05rem)] text-white/55 [@media(max-height:700px)]:mt-0.5">
+                Mag je overslaan.
+              </p>
 
-            <div className="space-y-4">
-              <div className="rounded-2xl border border-white/[0.1] bg-white/[0.04] p-4">
-                <p className="text-lg font-bold text-white">Binnenkort terug?</p>
-                <p className="mt-2 text-[17px] text-white/60">
-                  Kom binnen 5 dagen — dan krijg je een extraatje aan de bar.
-                </p>
-                <Button
-                  className="mt-4 w-full py-4 text-lg font-bold"
-                  variant="secondary"
-                  disabled={comebackActivated}
-                  onClick={() => setComebackActivated(true)}
-                >
-                  {comebackActivated ? "Opgeslagen" : "Ja, dat wil ik"}
-                </Button>
+              <div className="mt-3 space-y-3 [@media(max-height:700px)]:mt-2 [@media(max-height:700px)]:space-y-2">
+                <div className="rounded-2xl border border-white/[0.1] bg-white/[0.04] p-3 [@media(max-height:700px)]:p-2.5">
+                  <p className="text-[clamp(1rem,4vw,1.125rem)] font-bold text-white">
+                    Binnenkort terug?
+                  </p>
+                  <p className="mt-1 text-[clamp(0.85rem,3.5vw,1.05rem)] text-white/60 [@media(max-height:700px)]:mt-1">
+                    Kom binnen 5 dagen — dan krijg je een extraatje aan de bar.
+                  </p>
+                  <Button
+                    className="mt-3 w-full py-3 text-base font-bold [@media(max-height:700px)]:mt-2 [@media(max-height:700px)]:py-2.5"
+                    variant="secondary"
+                    disabled={comebackActivated}
+                    onClick={() => setComebackActivated(true)}
+                  >
+                    {comebackActivated ? "Opgeslagen" : "Ja, dat wil ik"}
+                  </Button>
+                </div>
               </div>
             </div>
 
@@ -688,7 +702,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
               href="/gast"
               className={buttonClassName(
                 "ghost",
-                "mt-auto w-full justify-center pt-8 text-center no-underline",
+                "shrink-0 w-full justify-center py-2 text-center text-sm no-underline [@media(max-height:700px)]:py-1.5",
               )}
             >
               Terug naar start

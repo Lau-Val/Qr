@@ -111,11 +111,11 @@ export function BartenderDealScreen({
         </>
       ) : null}
 
-      <div className="relative z-[4] flex min-h-0 min-h-[min(52dvh,560px)] flex-1 flex-col">
+      <div className="relative z-[4] flex min-h-0 flex-1 flex-col">
         {/* Statusbalk — op groene of rode lagen */}
         <div
           className={cn(
-            "flex w-full shrink-0 items-center justify-center border-b px-3 py-4 text-center backdrop-blur-[2px]",
+            "flex w-full shrink-0 items-center justify-center border-b px-3 py-3 text-center backdrop-blur-[2px] [@media(max-height:720px)]:py-2.5",
             coloredShell && isActive && "border-emerald-400/35 bg-black/25",
             coloredShell && isExpired && "border-red-400/40 bg-black/30",
             status === "used" && "border-white/10 bg-black/40",
@@ -142,8 +142,8 @@ export function BartenderDealScreen({
           )}
         </div>
 
-        <div className="flex min-h-0 flex-1 flex-col justify-between gap-4 px-4 pb-5 pt-6 sm:px-5">
-          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-6 text-center">
+        <div className="flex min-h-0 flex-1 flex-col justify-between gap-2 px-3 pb-3 pt-4 sm:px-4 [@media(max-height:720px)]:gap-1.5 [@media(max-height:720px)]:pb-2.5 [@media(max-height:720px)]:pt-3">
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 text-center [@media(max-height:720px)]:gap-2">
             <p
               className="max-w-[100%] text-balance break-words text-[clamp(1.35rem,6.5vw,2.15rem)] font-black leading-[1.1] tracking-tight text-white"
               style={{ wordBreak: "break-word" }}
@@ -165,11 +165,11 @@ export function BartenderDealScreen({
             </p>
           </div>
 
-          <div className="shrink-0 space-y-3">
+          <div className="shrink-0 space-y-2 [@media(max-height:720px)]:space-y-1.5">
             {!used && status === "active" && !confirmOpen ? (
               <button
                 type="button"
-                className="relative z-[60] w-full touch-manipulation rounded-2xl bg-emerald-600 py-5 text-[1.25rem] font-black tracking-wide text-white shadow-lg shadow-emerald-950/45 transition hover:bg-emerald-500 active:scale-[0.99]"
+                className="relative z-[60] w-full touch-manipulation rounded-2xl bg-emerald-600 py-3.5 text-[clamp(1rem,4.5vw,1.25rem)] font-black tracking-wide text-white shadow-lg shadow-emerald-950/45 transition hover:bg-emerald-500 active:scale-[0.99] [@media(max-height:720px)]:py-3"
                 onClick={() => setConfirmOpen(true)}
               >
                 GEBRUIKT
@@ -205,7 +205,7 @@ export function BartenderDealScreen({
             ) : null}
 
             {!used && status === "expired" ? (
-              <p className="py-4 text-center text-[15px] font-bold text-red-200/80">
+              <p className="py-2 text-center text-[14px] font-bold text-red-200/80 [@media(max-height:720px)]:py-1.5 [@media(max-height:720px)]:text-[13px]">
                 Niet meer geldig — niet verzilveren
               </p>
             ) : null}

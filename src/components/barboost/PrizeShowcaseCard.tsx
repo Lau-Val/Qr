@@ -30,6 +30,7 @@ export function PrizeShowcaseCard({
   staggerIndex,
   emphasis = "normal",
   dealId,
+  compact,
   children,
 }: {
   accentHex: string;
@@ -37,6 +38,8 @@ export function PrizeShowcaseCard({
   emphasis?: "normal" | "winner" | "dimmed";
   /** Voor scroll/focus na het rad */
   dealId?: string;
+  /** Compacte padding en geen extra winner-scale — past in vaste viewport */
+  compact?: boolean;
   children: ReactNode;
 }) {
   const border = hexToRgba(accentHex, 0.55);
@@ -57,10 +60,13 @@ export function PrizeShowcaseCard({
     <div
       id={dealId ? `prize-reveal-${dealId}` : undefined}
       className={cn(
-        "prize-showcase-card pointer-events-none relative overflow-hidden rounded-2xl border-2 p-4 shadow-[0_20px_50px_rgba(0,0,0,0.45)] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        "prize-showcase-card pointer-events-none relative overflow-hidden rounded-2xl border-2 shadow-[0_20px_50px_rgba(0,0,0,0.45)] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        compact ? "p-3" : "p-4",
         "transition-[transform,opacity,box-shadow,border-color]",
         emphasis === "winner" &&
-          "z-30 will-change-transform scale-[1.07] ring-2 ring-white/35 ring-offset-2 ring-offset-[#06060a] sm:scale-[1.14] sm:-translate-y-1",
+          (compact
+            ? "z-30 ring-1 ring-white/30 ring-offset-1 ring-offset-[#06060a]"
+            : "z-30 will-change-transform scale-[1.07] ring-2 ring-white/35 ring-offset-2 ring-offset-[#06060a] sm:scale-[1.14] sm:-translate-y-1"),
         emphasis === "dimmed" && "z-0 scale-[0.94] opacity-[0.22]",
       )}
       style={{
