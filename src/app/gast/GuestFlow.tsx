@@ -368,19 +368,19 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
 
             <div
               className={cn(
-                "flex max-h-[min(228px,31dvh)] min-h-0 w-full shrink-0 flex-col overflow-hidden rounded-lg border border-white/[0.08] px-1.5 py-1.5 transition-all duration-500 sm:max-h-[min(248px,33dvh)] sm:rounded-xl sm:px-2 sm:py-2",
+                "flex max-h-[min(278px,36dvh)] min-h-0 w-full shrink-0 flex-col overflow-hidden rounded-xl border border-white/[0.08] px-2 py-2 transition-all duration-500 sm:max-h-[min(302px,38dvh)] sm:rounded-[1.1rem] sm:px-2.5 sm:py-2.5",
                 spinning && "pointer-events-none bg-white/[0.025] opacity-[0.92]",
                 !spinning && !revealDealId && "bg-white/[0.035]",
                 revealDealId && "relative bg-black/40 ring-1 ring-white/10",
               )}
             >
-              <h2 className="shrink-0 text-[clamp(0.68rem,3vw,0.95rem)] font-bold leading-none tracking-tight text-white">
+              <h2 className="shrink-0 text-[clamp(0.78rem,3.3vw,1.08rem)] font-bold leading-tight tracking-tight text-white">
                 {revealDealId ? "Dit wordt jouw deal" : "Wat kan je winnen?"}
               </h2>
               <div
                 className={cn(
-                  "mt-1 flex min-h-0 flex-1 flex-col justify-center gap-0.5 overflow-hidden",
-                  revealDealId && "gap-1",
+                  "mt-1.5 flex min-h-0 flex-1 flex-col justify-center gap-1 overflow-hidden sm:mt-2",
+                  revealDealId && "gap-1.5",
                 )}
               >
                 {UNLOCK_SHOWCASE.map((row, i) => {
@@ -407,21 +407,21 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                         dense
                       >
                         {isWinner && revealDealId ? (
-                          <p className="mb-0.5 text-center text-[7px] font-bold uppercase tracking-[0.2em] text-emerald-300/95">
+                          <p className="mb-0.5 text-center text-[8px] font-bold uppercase tracking-[0.22em] text-emerald-300/95">
                             Jouw prijs
                           </p>
                         ) : null}
                         <p
                           className={cn(
-                            "font-semibold leading-[1.15] tracking-tight text-white",
+                            "font-semibold leading-snug tracking-tight text-white",
                             isWinner && revealDealId
-                              ? "text-[clamp(0.78rem,3.2vw,1.05rem)]"
-                              : "text-[clamp(0.72rem,2.9vw,0.95rem)]",
+                              ? "text-[clamp(0.88rem,3.5vw,1.18rem)]"
+                              : "text-[clamp(0.8rem,3.1vw,1.05rem)]",
                           )}
                         >
                           {row.text}
                         </p>
-                        <p className="mt-0.5 text-[9px] leading-tight text-white/50">
+                        <p className="mt-1 text-[10px] leading-tight text-white/50 sm:text-[11px]">
                           Normaal{" "}
                           <span className="font-medium text-white/65 line-through decoration-white/35">
                             {row.normaal}
@@ -432,7 +432,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                   );
                 })}
               </div>
-              <p className="mt-1 shrink-0 text-center text-[9px] font-medium leading-tight text-white/40 sm:text-[10px]">
+              <p className="mt-1.5 shrink-0 text-center text-[10px] font-medium leading-snug text-white/42 sm:mt-2 sm:text-[11px]">
                 {spinning
                   ? "Eén van deze prijzen wordt zo je deal"
                   : revealDealId

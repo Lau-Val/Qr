@@ -66,11 +66,11 @@ export function LuckWheel({
       className={cn(
         "pointer-events-none relative mx-auto shrink-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
         guestUnlock && emphasized
-          ? "w-[min(100%,min(320px,48dvh))]"
+          ? "w-[min(100%,min(300px,45dvh))]"
           : emphasized
             ? "w-[min(100%,min(260px,34dvh))]"
             : guestUnlock && useMiniLayout
-              ? "w-[min(100%,min(220px,min(58vw,44dvh)))]"
+              ? "w-[min(100%,min(200px,min(54vw,40dvh)))]"
               : useMiniLayout
                 ? "w-[min(100%,112px)]"
                 : compact
@@ -101,11 +101,11 @@ export function LuckWheel({
         className={cn(
           "relative mx-auto aspect-square transition-[max-width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
           guestUnlock && emphasized
-            ? "w-full max-w-[min(300px,46dvh)]"
+            ? "w-full max-w-[min(284px,43dvh)]"
             : emphasized
               ? "w-full max-w-[min(240px,32dvh)]"
               : guestUnlock && useMiniLayout
-                ? "w-full max-w-[min(212px,42dvh)]"
+                ? "w-full max-w-[min(192px,38dvh)]"
                 : useMiniLayout
                   ? "w-full max-w-[104px]"
                   : compact
