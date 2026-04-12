@@ -34,6 +34,8 @@ export function LuckWheel({
   mini = false,
   /** Tijdens draaien: groot, helder, met gloed — overschrijft mini */
   emphasized = false,
+  /** Gast unlock (pagina 2): groter rad, past bij compactere lijst eronder */
+  unlockLayout = false,
   showCaption = true,
   segmentColors,
   className,
@@ -43,6 +45,7 @@ export function LuckWheel({
   compact?: boolean;
   mini?: boolean;
   emphasized?: boolean;
+  unlockLayout?: boolean;
   showCaption?: boolean;
   /** Eén kleur per prijs — rad krijgt evenveel segmenten als deze array lang is */
   segmentColors?: string[];
@@ -50,6 +53,9 @@ export function LuckWheel({
 }) {
   const useMiniLayout = mini && !emphasized;
   const small = (compact || mini) && !emphasized;
+  const guestUnlock = unlockLayout && mini;
+  /** Langzaam ronddraaien op gast unlock wanneer niet in de echte spin — alleen uiterlijk */
+  const idleAmbientSpin = guestUnlock && useMiniLayout && !spinning;
 
   const diskBackground =
     segmentColors && segmentColors.length > 0
@@ -59,13 +65,17 @@ export function LuckWheel({
     <div
       className={cn(
         "pointer-events-none relative mx-auto shrink-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-        emphasized
-          ? "w-[min(100%,min(260px,34dvh))]"
-          : useMiniLayout
-            ? "w-[min(100%,112px)]"
-            : compact
-              ? "w-[min(100%,148px)]"
-              : "w-[min(100%,240px)]",
+        guestUnlock && emphasized
+          ? "w-[min(100%,min(300px,44dvh))]"
+          : emphasized
+            ? "w-[min(100%,min(260px,34dvh))]"
+            : guestUnlock && useMiniLayout
+              ? "w-[min(100%,min(192px,min(52vw,40dvh)))]"
+              : useMiniLayout
+                ? "w-[min(100%,112px)]"
+                : compact
+                  ? "w-[min(100%,148px)]"
+                  : "w-[min(100%,240px)]",
         emphasized &&
           "shadow-[0_0_0_1px_rgba(255,255,255,0.14),0_16px_56px_rgba(0,0,0,0.55),0_0_88px_rgba(139,92,246,0.38),0_0_120px_rgba(167,139,250,0.22)]",
         emphasized && spinning && "bb-wheel-spin-ambient",
@@ -90,55 +100,73 @@ export function LuckWheel({
       <div
         className={cn(
           "relative mx-auto aspect-square transition-[max-width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-          emphasized
-            ? "w-full max-w-[min(240px,32dvh)]"
-            : useMiniLayout
-              ? "w-full max-w-[104px]"
-              : compact
-                ? "w-full max-w-[132px]"
-                : "w-[88%] max-w-[220px]",
+          guestUnlock && emphasized
+            ? "w-full max-w-[min(280px,42dvh)]"
+            : emphasized
+              ? "w-full max-w-[min(240px,32dvh)]"
+              : guestUnlock && useMiniLayout
+                ? "w-full max-w-[min(184px,38dvh)]"
+                : useMiniLayout
+                  ? "w-full max-w-[104px]"
+                  : compact
+                    ? "w-full max-w-[132px]"
+                    : "w-[88%] max-w-[220px]",
         )}
-        style={{
-          transform: `rotate(${rotationDeg}deg)`,
-          transition: spinning
-            ? "transform 5.75s cubic-bezier(0.08, 0.72, 0.12, 1), max-width 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
-            : "max-width 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
+        style={
+          idleAmbientSpin
+            ? {
+                transition:
+                  "max-width 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
+              }
+            : {
+                transform: `rotate(${rotationDeg}deg)`,
+                transition: spinning
+                  ? "transform 5.75s cubic-bezier(0.08, 0.72, 0.12, 1), max-width 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
+                  : "max-width 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
+              }
+        }
       >
         <div
           className={cn(
-            "h-full w-full rounded-full border shadow-[inset_0_0_32px_rgba(0,0,0,0.5)] transition-all duration-500",
-            emphasized
-              ? "border-white/25 opacity-100 shadow-[inset_0_0_52px_rgba(0,0,0,0.32),inset_0_-8px_24px_rgba(255,255,255,0.06)]"
-              : "border-white/[0.1]",
-            small && !emphasized && "opacity-[0.82]",
-            emphasized &&
-              spinning &&
-              "ring-2 ring-violet-400/45 ring-offset-2 ring-offset-[#06060a]",
-          )}
-          style={{
-            background: diskBackground,
-          }}
-        />
-        <div
-          className={cn(
-            "absolute rounded-full border border-white/10 bg-[#0a0a10]/95 shadow-inner transition-all duration-500",
-            emphasized ? "inset-[17%]" : useMiniLayout ? "inset-[14%]" : compact ? "inset-[16%]" : "inset-[18%]",
-          )}
-        />
-        <div
-          className={cn(
-            "absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-gradient-to-b from-white/10 to-transparent font-semibold uppercase tracking-wider transition-all duration-500 text-white/50",
-            emphasized
-              ? "h-[22%] min-h-[40px] w-[22%] min-w-[40px] text-[10px] text-white/70"
-              : useMiniLayout
-                ? "h-[28%] min-h-[26px] w-[28%] min-w-[26px] text-[7px]"
-                : compact
-                  ? "h-[26%] min-h-[32px] w-[26%] min-w-[32px] text-[8px]"
-                  : "h-[22%] min-h-[44px] w-[22%] min-w-[44px] text-[10px]",
+            "relative h-full w-full",
+            idleAmbientSpin && "bb-wheel-idle-spin",
           )}
         >
-          BB
+          <div
+            className={cn(
+              "h-full w-full rounded-full border shadow-[inset_0_0_32px_rgba(0,0,0,0.5)] transition-all duration-500",
+              emphasized
+                ? "border-white/25 opacity-100 shadow-[inset_0_0_52px_rgba(0,0,0,0.32),inset_0_-8px_24px_rgba(255,255,255,0.06)]"
+                : "border-white/[0.1]",
+              small && !emphasized && "opacity-[0.82]",
+              emphasized &&
+                spinning &&
+                "ring-2 ring-violet-400/45 ring-offset-2 ring-offset-[#06060a]",
+            )}
+            style={{
+              background: diskBackground,
+            }}
+          />
+          <div
+            className={cn(
+              "absolute rounded-full border border-white/10 bg-[#0a0a10]/95 shadow-inner transition-all duration-500",
+              emphasized ? "inset-[17%]" : useMiniLayout ? "inset-[14%]" : compact ? "inset-[16%]" : "inset-[18%]",
+            )}
+          />
+          <div
+            className={cn(
+              "absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-gradient-to-b from-white/10 to-transparent font-semibold uppercase tracking-wider transition-all duration-500 text-white/50",
+              emphasized
+                ? "h-[22%] min-h-[40px] w-[22%] min-w-[40px] text-[10px] text-white/70"
+                : useMiniLayout
+                  ? "h-[28%] min-h-[26px] w-[28%] min-w-[26px] text-[7px]"
+                  : compact
+                    ? "h-[26%] min-h-[32px] w-[26%] min-w-[32px] text-[8px]"
+                    : "h-[22%] min-h-[44px] w-[22%] min-w-[44px] text-[10px]",
+            )}
+          >
+            BB
+          </div>
         </div>
       </div>
       {showCaption ? (

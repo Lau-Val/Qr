@@ -343,23 +343,24 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
         ) : null}
 
         {step === "unlock" ? (
-          <section className="bb-gast-unlock flex h-full min-h-0 min-w-0 flex-1 flex-col gap-1.5 overflow-hidden pb-0 [@media(max-height:720px)]:gap-1">
+          <section className="bb-gast-unlock flex h-full min-h-0 min-w-0 flex-1 flex-col gap-1 overflow-hidden pb-0">
             <div className="flex shrink-0 flex-col items-center pt-0">
               <LuckWheel
                 rotationDeg={wheelRotation}
                 spinning={spinning}
                 mini
+                unlockLayout
                 emphasized={spinning}
                 showCaption={false}
                 segmentColors={UNLOCK_SHOWCASE.map((r) => r.wheelColor)}
               />
               {spinning ? (
-                <p className="mt-2 text-center text-[clamp(0.9rem,3.8vw,1.05rem)] font-bold tracking-tight text-transparent bg-gradient-to-r from-violet-200 via-fuchsia-200 to-violet-300 bg-clip-text [@media(max-height:680px)]:mt-1">
+                <p className="mt-1.5 text-center text-[clamp(0.78rem,3.2vw,0.95rem)] font-bold tracking-tight text-transparent bg-gradient-to-r from-violet-200 via-fuchsia-200 to-violet-300 bg-clip-text">
                   Het rad draait…
                 </p>
               ) : null}
               {revealDealId && !spinning ? (
-                <p className="mt-2 text-center text-[12px] font-medium text-white/50 [@media(max-height:680px)]:mt-1 [@media(max-height:680px)]:text-[11px]">
+                <p className="mt-1.5 text-center text-[10px] font-medium leading-tight text-white/45">
                   Zo meteen volgt je deal op het volgende scherm
                 </p>
               ) : null}
@@ -367,19 +368,19 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
 
             <div
               className={cn(
-                "flex min-h-0 flex-1 flex-col overflow-hidden rounded-[1.25rem] border border-white/[0.08] px-3 py-3 transition-all duration-500 [@media(max-height:720px)]:px-2.5 [@media(max-height:720px)]:py-2",
+                "flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-white/[0.08] px-2 py-2 transition-all duration-500 sm:rounded-[1.15rem] sm:px-2.5 sm:py-2.5",
                 spinning && "pointer-events-none bg-white/[0.025] opacity-[0.92]",
                 !spinning && !revealDealId && "bg-white/[0.035]",
                 revealDealId && "relative bg-black/40 ring-1 ring-white/10",
               )}
             >
-              <h2 className="shrink-0 text-[clamp(1.05rem,4vw,1.35rem)] font-bold leading-tight tracking-tight text-white">
+              <h2 className="shrink-0 text-[clamp(0.78rem,3.4vw,1.1rem)] font-bold leading-tight tracking-tight text-white">
                 {revealDealId ? "Dit wordt jouw deal" : "Wat kan je winnen?"}
               </h2>
               <div
                 className={cn(
-                  "mt-2 flex min-h-0 flex-1 flex-col justify-center gap-2 overflow-hidden [@media(max-height:720px)]:mt-1.5 [@media(max-height:720px)]:gap-1.5",
-                  revealDealId && "gap-2.5 [@media(max-height:720px)]:gap-2",
+                  "mt-1.5 flex min-h-0 flex-1 flex-col justify-center gap-1 overflow-hidden sm:mt-2 sm:gap-1.5",
+                  revealDealId && "gap-1.5 sm:gap-2",
                 )}
               >
                 {UNLOCK_SHOWCASE.map((row, i) => {
@@ -403,23 +404,24 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                         emphasis={emphasis}
                         dealId={row.dealId}
                         compact
+                        dense
                       >
                         {isWinner && revealDealId ? (
-                          <p className="mb-1 text-center text-[9px] font-bold uppercase tracking-[0.28em] text-emerald-300/95 [@media(max-height:720px)]:mb-0.5">
+                          <p className="mb-0.5 text-center text-[8px] font-bold uppercase tracking-[0.22em] text-emerald-300/95">
                             Jouw prijs
                           </p>
                         ) : null}
                         <p
                           className={cn(
-                            "font-semibold leading-snug tracking-tight text-white",
+                            "font-semibold leading-tight tracking-tight text-white",
                             isWinner && revealDealId
-                              ? "text-[clamp(1.05rem,4.2vw,1.42rem)] leading-tight"
-                              : "text-[clamp(1rem,3.8vw,1.2rem)]",
+                              ? "text-[clamp(0.88rem,3.6vw,1.2rem)]"
+                              : "text-[clamp(0.82rem,3.2vw,1.05rem)]",
                           )}
                         >
                           {row.text}
                         </p>
-                        <p className="mt-1 text-[12px] text-white/50 [@media(max-height:720px)]:mt-0.5 [@media(max-height:720px)]:text-[11px]">
+                        <p className="mt-0.5 text-[10px] leading-tight text-white/50 sm:text-[11px]">
                           Normaal{" "}
                           <span className="font-medium text-white/65 line-through decoration-white/35">
                             {row.normaal}
@@ -430,7 +432,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                   );
                 })}
               </div>
-              <p className="mt-2 shrink-0 text-center text-[12px] font-medium leading-snug text-white/45 [@media(max-height:720px)]:mt-1.5 [@media(max-height:720px)]:text-[11px]">
+              <p className="mt-1.5 shrink-0 text-center text-[10px] font-medium leading-snug text-white/40 sm:mt-2 sm:text-[11px]">
                 {spinning
                   ? "Eén van deze prijzen wordt zo je deal"
                   : revealDealId
@@ -444,7 +446,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                 <div
                   className={buttonClassName(
                     "primary",
-                    "w-full cursor-default justify-center py-3.5 text-base font-semibold opacity-90 [@media(max-height:720px)]:py-3",
+                    "w-full cursor-default justify-center py-2.5 text-sm font-semibold opacity-90 sm:py-3 sm:text-base",
                   )}
                   aria-live="polite"
                 >
@@ -456,7 +458,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                   prefetch={false}
                   className={buttonClassName(
                     "primary",
-                    "w-full justify-center py-3.5 text-center text-base font-semibold no-underline [@media(max-height:720px)]:py-3",
+                    "w-full justify-center py-2.5 text-center text-sm font-semibold no-underline sm:py-3 sm:text-base",
                   )}
                 >
                   Draai nu

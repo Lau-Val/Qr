@@ -31,6 +31,7 @@ export function PrizeShowcaseCard({
   emphasis = "normal",
   dealId,
   compact,
+  dense,
   children,
 }: {
   accentHex: string;
@@ -40,6 +41,8 @@ export function PrizeShowcaseCard({
   dealId?: string;
   /** Compacte padding en geen extra winner-scale — past in vaste viewport */
   compact?: boolean;
+  /** Nog strakker (gast unlock): kleinere padding en hoeken */
+  dense?: boolean;
   children: ReactNode;
 }) {
   const border = hexToRgba(accentHex, 0.55);
@@ -60,8 +63,12 @@ export function PrizeShowcaseCard({
     <div
       id={dealId ? `prize-reveal-${dealId}` : undefined}
       className={cn(
-        "prize-showcase-card pointer-events-none relative overflow-hidden rounded-2xl border-2 shadow-[0_20px_50px_rgba(0,0,0,0.45)] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
-        compact ? "p-2 sm:p-2.5" : "p-4",
+        "prize-showcase-card pointer-events-none relative overflow-hidden border-2 shadow-[0_20px_50px_rgba(0,0,0,0.45)] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        compact && dense
+          ? "rounded-xl p-1.5"
+          : compact
+            ? "rounded-2xl p-2 sm:p-2.5"
+            : "rounded-2xl p-4",
         "transition-[transform,opacity,box-shadow,border-color]",
         emphasis === "winner" &&
           (compact

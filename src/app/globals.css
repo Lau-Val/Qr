@@ -77,6 +77,18 @@ body canvas {
   animation: bb-wheel-spin-glow 2.2s ease-in-out infinite;
 }
 
+/* Gast unlock: rustig ronddraaiend rad (alleen visueel; wijzer blijft vast) */
+@keyframes bb-wheel-idle-rotate {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.bb-wheel-idle-spin {
+  transform-origin: 50% 50%;
+  animation: bb-wheel-idle-rotate 16s linear infinite;
+}
+
 @keyframes bb-fade-in {
   from {
     opacity: 0;
@@ -334,6 +346,10 @@ body canvas {
   .bb-wheel-spin-ambient {
     animation: none;
     filter: none;
+  }
+
+  .bb-wheel-idle-spin {
+    animation: none;
   }
 
   .bb-upgrade-bg-drift,
