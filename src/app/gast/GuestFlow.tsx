@@ -368,7 +368,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
 
             <div
               className={cn(
-                "flex max-h-[min(278px,36dvh)] min-h-0 w-full shrink-0 flex-col overflow-hidden rounded-xl border border-white/[0.08] px-2 py-2 transition-all duration-500 sm:max-h-[min(302px,38dvh)] sm:rounded-[1.1rem] sm:px-2.5 sm:py-2.5",
+                "flex max-h-[min(298px,38dvh)] min-h-0 w-full shrink-0 flex-col overflow-hidden rounded-xl border border-white/[0.08] px-2 py-2 transition-all duration-500 sm:max-h-[min(322px,40dvh)] sm:rounded-[1.1rem] sm:px-2.5 sm:py-2.5",
                 spinning && "pointer-events-none bg-white/[0.025] opacity-[0.92]",
                 !spinning && !revealDealId && "bg-white/[0.035]",
                 revealDealId && "relative bg-black/40 ring-1 ring-white/10",
@@ -379,8 +379,8 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
               </h2>
               <div
                 className={cn(
-                  "mt-1.5 flex min-h-0 flex-1 flex-col justify-center gap-1 overflow-hidden sm:mt-2",
-                  revealDealId && "gap-1.5",
+                  "mt-1.5 flex min-h-0 flex-1 flex-col justify-center gap-2.5 overflow-hidden sm:mt-2 sm:gap-3",
+                  revealDealId && "gap-3 sm:gap-3.5",
                 )}
               >
                 {UNLOCK_SHOWCASE.map((row, i) => {
