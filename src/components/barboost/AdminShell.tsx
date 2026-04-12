@@ -48,44 +48,41 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
-        <div className="mt-auto flex flex-col gap-1 border-t border-white/10 pt-4">
+        <div className="mt-auto flex flex-col gap-3 border-t border-white/10 pt-4">
           <PlatformNavLink />
-          <SignOutButton />
+          <SignOutButton fullWidth />
         </div>
       </aside>
 
-      <div className="flex min-h-dvh min-w-0 flex-1 flex-col">
-        <div className="border-b border-white/10 bg-[#0b0a12]/95 md:hidden">
-          <nav
-            className="flex min-w-0 items-stretch gap-0"
-            aria-label="Hoofdnavigatie"
-          >
-            <div className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-2 py-2">
-              <PlatformNavLink />
-              {NAV.map((item) => {
-                const active = navActive(pathname, item.href);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors",
-                      active
-                        ? "bg-white text-black"
-                        : "text-white/65 hover:bg-white/10 hover:text-white",
-                    )}
-                  >
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </div>
-            <div className="flex shrink-0 items-center border-l border-white/10 px-2">
-              <SignOutButton />
-            </div>
-          </nav>
-        </div>
+      <div className="flex min-h-dvh min-w-0 flex-1 flex-col pb-[5.25rem] md:pb-0">
+        <nav
+          className="flex items-center gap-1 overflow-x-auto border-b border-white/10 bg-[#0b0a12]/95 px-2 py-2 md:hidden"
+          aria-label="Hoofdnavigatie"
+        >
+          <PlatformNavLink />
+          {NAV.map((item) => {
+            const active = navActive(pathname, item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors",
+                  active
+                    ? "bg-white text-black"
+                    : "text-white/65 hover:bg-white/10 hover:text-white",
+                )}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
         {children}
+
+        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 bg-[#0b0a12]/98 px-4 py-3 backdrop-blur-md md:hidden">
+          <SignOutButton fullWidth />
+        </div>
       </div>
     </div>
   );

@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { SignOutButton } from "@/components/barboost/SignOutButton";
 import { createClient } from "@/utils/supabase/client";
 
 /**
- * Home header: Inloggen als uitgelogd; anders snelkoppeling naar app + uitloggen.
+ * Home header: Inloggen als uitgelogd; anders snelkoppeling naar app (uitloggen staat onderaan).
  */
 export function HomeHeaderAuth() {
   const [mounted, setMounted] = useState(false);
@@ -47,14 +46,11 @@ export function HomeHeaderAuth() {
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-end gap-2">
-      <Link
-        href="/dashboard"
-        className="rounded-full border border-white/20 bg-white/[0.06] px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
-      >
-        Mijn omgeving
-      </Link>
-      <SignOutButton variant="emphasized" />
-    </div>
+    <Link
+      href="/dashboard"
+      className="rounded-full border border-white/20 bg-white/[0.06] px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+    >
+      Mijn omgeving
+    </Link>
   );
 }

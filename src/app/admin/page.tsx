@@ -30,19 +30,16 @@ export default async function AdminPage() {
   return (
     <div className="min-h-dvh bg-[#07060f] px-4 py-10 text-white">
       <div className="mx-auto max-w-4xl space-y-14">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300/85">
-              Beheerdersdashboard
-            </p>
-            <h1 className="mt-2 text-2xl font-bold md:text-3xl">Platformbeheer</h1>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/55">
-              Alleen voor <strong className="text-white/80">platformbeheerders</strong>. Het zaken-dashboard
-              (cijfers, campagnes, gast-flow) is voor <strong className="text-white/80">klanten</strong> — jouw
-              beheerdersaccount heeft daar geen toegang toe; dat blijft gescheiden.
-            </p>
-          </div>
-          <SignOutButton variant="emphasized" />
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300/85">
+            Beheerdersdashboard
+          </p>
+          <h1 className="mt-2 text-2xl font-bold md:text-3xl">Platformbeheer</h1>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/55">
+            Alleen voor <strong className="text-white/80">platformbeheerders</strong>. Het zaken-dashboard
+            (cijfers, campagnes, gast-flow) is voor <strong className="text-white/80">klanten</strong> — jouw
+            beheerdersaccount heeft daar geen toegang toe; dat blijft gescheiden.
+          </p>
         </div>
 
         <AdminStatsSection overview={overview} admins={admins} />
@@ -67,11 +64,16 @@ export default async function AdminPage() {
           </div>
         </section>
 
-        <p className="border-t border-white/10 pt-8 text-sm text-white/45">
-          <Link href="/" className="text-violet-300 hover:underline">
-            ← Terug naar home
-          </Link>
-        </p>
+        <footer className="space-y-6 border-t border-white/10 pt-10">
+          <div className="mx-auto max-w-md">
+            <SignOutButton fullWidth />
+          </div>
+          <p className="text-center text-sm text-white/45">
+            <Link href="/" className="text-violet-300 hover:underline">
+              ← Terug naar home
+            </Link>
+          </p>
+        </footer>
       </div>
     </div>
   );
