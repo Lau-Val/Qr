@@ -5,7 +5,7 @@ import { Badge } from "@/components/barboost/ui/Badge";
 
 export default function Home() {
   return (
-    <div className="min-h-dvh bg-[#07060f] pb-[5.25rem] text-white">
+    <div className="min-h-dvh bg-[#07060f] text-white">
       <header className="border-b border-white/[0.06] bg-[#07060f]/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-5 py-4">
           <span className="text-sm font-semibold tracking-tight text-white">BarBoost</span>
@@ -89,9 +89,9 @@ export default function Home() {
             </Link>
           </p>
         </div>
-      </div>
 
-      <HomeFooterAuth />
+        <HomeFooterAuth />
+      </div>
     </div>
   );
 }

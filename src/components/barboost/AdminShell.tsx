@@ -48,15 +48,14 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
-        <div className="mt-auto flex flex-col gap-3 border-t border-white/10 pt-4">
+        <div className="mt-auto border-t border-white/10 pt-4">
           <PlatformNavLink />
-          <SignOutButton fullWidth />
         </div>
       </aside>
 
-      <div className="flex min-h-dvh min-w-0 flex-1 flex-col pb-[5.25rem] md:pb-0">
+      <div className="flex min-h-dvh min-w-0 flex-1 flex-col">
         <nav
-          className="flex items-center gap-1 overflow-x-auto border-b border-white/10 bg-[#0b0a12]/95 px-2 py-2 md:hidden"
+          className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-white/10 bg-[#0b0a12]/95 px-2 py-2 md:hidden"
           aria-label="Hoofdnavigatie"
         >
           <PlatformNavLink />
@@ -78,10 +77,14 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
-        {children}
 
-        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 bg-[#0b0a12]/98 px-4 py-3 backdrop-blur-md md:hidden">
-          <SignOutButton fullWidth />
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+          <div className="min-h-0 flex-1">{children}</div>
+          <footer className="shrink-0 border-t border-white/10 bg-[#07060f] px-4 py-8">
+            <div className="mx-auto max-w-md">
+              <SignOutButton fullWidth />
+            </div>
+          </footer>
         </div>
       </div>
     </div>
