@@ -208,7 +208,7 @@ export async function getDashboardData(barSlug: string): Promise<DashboardData> 
     return {
       configured: false,
       message:
-        "Supabase is niet geconfigureerd. Zet NEXT_PUBLIC_SUPABASE_URL en SUPABASE_SERVICE_ROLE_KEY in .env.local en voer de migraties uit.",
+        "Supabase is niet geconfigureerd. Lokaal: zet NEXT_PUBLIC_SUPABASE_URL en SUPABASE_SERVICE_ROLE_KEY in .env.local. Op Vercel: Project → Settings → Environment Variables (Production), daarna opnieuw deployen. Voer migraties + seed.sql uit in Supabase.",
     };
   }
   const supabase = createServiceClient();

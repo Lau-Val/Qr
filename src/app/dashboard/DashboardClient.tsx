@@ -45,12 +45,13 @@ export function DashboardClient({ data }: { data: DashboardData }) {
         <div className="mx-auto max-w-lg flex-1 px-4 py-16 text-center text-white">
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <p className="mt-4 text-sm leading-relaxed text-white/55">{data.message}</p>
-          <p className="mt-6 text-xs text-white/38">
-            Zet <code className="rounded bg-white/10 px-1.5 py-0.5">NEXT_PUBLIC_SUPABASE_URL</code>{" "}
-            en <code className="rounded bg-white/10 px-1.5 py-0.5">SUPABASE_SERVICE_ROLE_KEY</code>{" "}
-            in <code className="rounded bg-white/10 px-1.5 py-0.5">.env.local</code> en voer de
-            Supabase-migraties + <code className="rounded bg-white/10 px-1.5 py-0.5">seed.sql</code>{" "}
-            uit.
+          <p className="mt-6 text-xs leading-relaxed text-white/38">
+            <strong className="font-medium text-white/55">Vercel:</strong> Settings → Environment
+            Variables → voeg dezelfde keys toe als lokaal, dan Redeploy.{" "}
+            <strong className="font-medium text-white/55">Lokaal:</strong>{" "}
+            <code className="rounded bg-white/10 px-1 py-0.5">.env.local</code>. Daarnaast:
+            migraties + <code className="rounded bg-white/10 px-1 py-0.5">seed.sql</code> in het
+            Supabase SQL-scherm.
           </p>
         </div>
       </AdminShell>
