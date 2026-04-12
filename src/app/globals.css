@@ -1,5 +1,42 @@
 @import "tailwindcss";
 
+/* Gast-flow: geen document-scroll + lichte schaling op lage schermen */
+html.bb-gast-lock,
+body.bb-gast-lock {
+  height: 100%;
+  max-height: 100dvh;
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+.bb-gast-step {
+  font-size: 100%;
+}
+
+@media (max-height: 740px) {
+  .bb-gast-step {
+    font-size: 94%;
+  }
+}
+
+@media (max-height: 640px) {
+  .bb-gast-step {
+    font-size: 88%;
+  }
+}
+
+@media (max-height: 560px) {
+  .bb-gast-step {
+    font-size: 82%;
+  }
+}
+
+@media (max-height: 480px) {
+  .bb-gast-step {
+    font-size: 76%;
+  }
+}
+
 /* canvas-confetti: fullscreen fixed canvas — taps mogen nooit blokkeren (iOS / WebKit) */
 body canvas {
   pointer-events: none !important;

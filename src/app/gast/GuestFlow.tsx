@@ -107,15 +107,17 @@ function stripSpinQueryFromAddressBar() {
 
 export function GuestFlow(props: { initialStep?: Step }) {
   return (
-    <Suspense
-      fallback={
-        <div className="flex h-full min-h-0 flex-1 flex-col items-center justify-center overflow-hidden bg-[#06060a] px-4 text-sm text-white/45">
-          Laden…
-        </div>
-      }
-    >
-      <GuestFlowInner {...props} />
-    </Suspense>
+    <div className="flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+      <Suspense
+        fallback={
+          <div className="flex h-full min-h-0 flex-1 flex-col items-center justify-center overflow-hidden bg-[#06060a] px-4 text-sm text-white/45">
+            Laden…
+          </div>
+        }
+      >
+        <GuestFlowInner {...props} />
+      </Suspense>
+    </div>
   );
 }
 
@@ -338,10 +340,10 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
     <MobileShell footer={footer}>
       <div
         key={demoKey}
-        className="flex min-h-0 flex-1 flex-col overflow-hidden"
+        className="flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden"
       >
         {step === "welcome" ? (
-          <section className="flex min-h-0 flex-1 flex-col justify-between gap-3 overflow-hidden text-center [@media(max-height:640px)]:gap-2">
+          <section className="flex h-full min-h-0 min-w-0 flex-1 flex-col justify-between gap-2 overflow-hidden text-center [@media(max-height:640px)]:gap-1.5">
             <div className="min-h-0 shrink">
               <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45">
                 BarBoost
@@ -377,7 +379,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
         ) : null}
 
         {step === "unlock" ? (
-          <section className="bb-gast-unlock flex min-h-0 flex-1 flex-col gap-2 overflow-hidden pb-0 [@media(max-height:720px)]:gap-1.5">
+          <section className="bb-gast-unlock flex h-full min-h-0 min-w-0 flex-1 flex-col gap-1.5 overflow-hidden pb-0 [@media(max-height:720px)]:gap-1">
             <div className="flex shrink-0 flex-col items-center pt-0">
               <LuckWheel
                 rotationDeg={wheelRotation}
@@ -501,14 +503,14 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
         ) : null}
 
         {step === "baseDeal" && baseDeal ? (
-          <section className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden [@media(max-height:760px)]:gap-1.5">
+          <section className="flex h-full min-h-0 min-w-0 flex-1 flex-col gap-1.5 overflow-hidden [@media(max-height:760px)]:gap-1">
             {(() => {
               const pc = getDealPriceCompare(baseDeal);
               const upgraded = buildUpgradedDeal(baseDeal);
               const mins = Math.max(1, Math.ceil(baseDeal.timerSeconds / 60));
               return (
                 <>
-                  <div className="shrink-0 rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-3 text-center [@media(max-height:760px)]:px-3 [@media(max-height:760px)]:py-2.5">
+                  <div className="shrink-0 rounded-xl border border-white/10 bg-white/[0.04] px-2.5 py-2 text-center sm:rounded-2xl sm:px-3 sm:py-2.5 [@media(max-height:760px)]:py-2">
                     <p className="text-[clamp(0.95rem,3.8vw,1.125rem)] font-bold text-emerald-300/95">
                       Dit heb je gewonnen
                     </p>
@@ -523,8 +525,8 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                     </p>
                   </div>
 
-                  <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-                    <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-3xl border-2 border-violet-400/55 p-4 shadow-[0_0_0_1px_rgba(167,139,250,0.2),0_20px_50px_rgba(0,0,0,0.55),0_0_80px_rgba(124,58,237,0.22)] [@media(max-height:760px)]:p-3">
+                  <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+                    <div className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border-2 border-violet-400/55 p-3 shadow-[0_0_0_1px_rgba(167,139,250,0.2),0_20px_50px_rgba(0,0,0,0.55),0_0_80px_rgba(124,58,237,0.22)] sm:rounded-3xl sm:p-4 [@media(max-height:760px)]:p-2.5">
                       <div
                         className="pointer-events-none absolute inset-0 bg-gradient-to-b from-violet-950/90 via-[#15101f] to-black/50"
                         aria-hidden
@@ -549,7 +551,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                           <span aria-hidden>🔥</span> Pak de beste deal van vanavond
                         </h3>
 
-                        <div className="mt-3 shrink-0 space-y-3 [@media(max-height:760px)]:mt-2 [@media(max-height:760px)]:space-y-2">
+                        <div className="mt-2 shrink-0 space-y-2 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:space-y-1.5">
                           <div>
                             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/38 [@media(max-height:760px)]:text-[9px]">
                               Jouw deal nu
@@ -570,7 +572,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                         </div>
 
                         <form
-                          className="mt-3 flex min-h-0 flex-1 flex-col justify-end gap-3 [@media(max-height:760px)]:mt-2 [@media(max-height:760px)]:gap-2"
+                          className="mt-2 flex min-h-0 min-w-0 flex-1 flex-col justify-end gap-2 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:gap-1.5"
                           onSubmit={handleUpgradeSubmit}
                           autoComplete="on"
                         >
@@ -647,7 +649,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
         ) : null}
 
         {step === "claim" && effectiveDeal && claimExpiresAt !== null ? (
-          <section className="flex min-h-0 flex-1 flex-col overflow-hidden">
+          <section className="flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
             <BartenderDealScreen
               dealTitle={effectiveDeal.title}
               totalLabel={getBartenderTotalLabel(effectiveDeal, isUpgraded)}
@@ -663,13 +665,13 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
             />
           </section>
         ) : step === "claim" && effectiveDeal ? (
-          <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden text-sm text-white/40">
+          <div className="flex h-full min-h-0 flex-1 items-center justify-center overflow-hidden text-sm text-white/40">
             Laden…
           </div>
         ) : null}
 
         {step === "retention" ? (
-          <section className="flex min-h-0 flex-1 flex-col justify-between gap-3 overflow-hidden [@media(max-height:700px)]:gap-2">
+          <section className="flex h-full min-h-0 min-w-0 flex-1 flex-col justify-between gap-2 overflow-hidden [@media(max-height:700px)]:gap-1.5">
             <div className="min-h-0 shrink">
               <h2 className="text-[clamp(1.25rem,5vw,1.5rem)] font-bold text-white">
                 Nog iets extra?

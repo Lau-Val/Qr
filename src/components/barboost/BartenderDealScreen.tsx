@@ -56,7 +56,7 @@ export function BartenderDealScreen({
   return (
     <div
       className={cn(
-        "flex min-h-0 flex-1 flex-col overflow-hidden transition-colors duration-500",
+        "flex h-full max-h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden transition-colors duration-500",
         coloredShell && isActive
           ? "relative rounded-3xl border-2 border-emerald-400/55 shadow-[0_0_0_1px_rgba(52,211,153,0.2),0_20px_50px_rgba(0,0,0,0.55),0_0_80px_rgba(16,185,129,0.22)]"
           : coloredShell && isExpired
@@ -111,7 +111,7 @@ export function BartenderDealScreen({
         </>
       ) : null}
 
-      <div className="relative z-[4] flex min-h-0 flex-1 flex-col">
+      <div className="relative z-[4] flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         {/* Statusbalk — op groene of rode lagen */}
         <div
           className={cn(
@@ -142,17 +142,17 @@ export function BartenderDealScreen({
           )}
         </div>
 
-        <div className="flex min-h-0 flex-1 flex-col justify-between gap-2 px-3 pb-3 pt-4 sm:px-4 [@media(max-height:720px)]:gap-1.5 [@media(max-height:720px)]:pb-2.5 [@media(max-height:720px)]:pt-3">
-          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 text-center [@media(max-height:720px)]:gap-2">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col justify-between gap-1.5 px-2.5 pb-2 pt-3 sm:px-3 [@media(max-height:720px)]:gap-1 [@media(max-height:720px)]:pb-1.5 [@media(max-height:720px)]:pt-2">
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center gap-2 overflow-hidden text-center [@media(max-height:720px)]:gap-1.5">
             <p
-              className="max-w-[100%] text-balance break-words text-[clamp(1.35rem,6.5vw,2.15rem)] font-black leading-[1.1] tracking-tight text-white"
+              className="max-w-[100%] text-balance break-words text-[clamp(0.78rem,min(5.5vmin,5vw),2rem)] font-black leading-[1.08] tracking-tight text-white"
               style={{ wordBreak: "break-word" }}
             >
               {headline}
             </p>
             <p
               className={cn(
-                "text-[clamp(1.35rem,5.5vw,1.85rem)] font-black tracking-tight",
+                "text-[clamp(0.78rem,min(4.8vmin,4.5vw),1.75rem)] font-black tracking-tight",
                 status === "used"
                   ? "text-white/35"
                   : isExpired
