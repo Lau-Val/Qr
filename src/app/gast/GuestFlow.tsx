@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import {
   Suspense,
   useCallback,
@@ -122,8 +122,6 @@ export function GuestFlow(props: { initialStep?: Step }) {
 }
 
 function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
-  const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>(initialStep);
   const [baseDeal, setBaseDeal] = useState<Deal | null>(null);
@@ -132,7 +130,6 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const [voucherUsed, setVoucherUsed] = useState(false);
   const [claimExpiresAt, setClaimExpiresAt] = useState<number | null>(null);
-  const [demoKey, setDemoKey] = useState(0);
   const [comebackActivated, setComebackActivated] = useState(false);
   const [wheelRotation, setWheelRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
@@ -171,44 +168,6 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
     if (!baseDeal) return null;
     return isUpgraded ? buildUpgradedDeal(baseDeal) : baseDeal;
   }, [baseDeal, isUpgraded]);
-
-  const reset = useCallback(() => {
-    if (typeof window !== "undefined") {
-      try {
-        for (const k of Object.keys(localStorage)) {
-          if (k.startsWith("bb_claim_")) localStorage.removeItem(k);
-        }
-        for (const k of Object.keys(sessionStorage)) {
-          if (k.startsWith("bb_claim_")) sessionStorage.removeItem(k);
-        }
-      } catch {
-        /* ignore */
-      }
-    }
-
-    /* Vanaf /gast/unlock: echte route-wissel — betrouwbaar op mobiel (geen JS-click nodig). */
-    if (pathname?.includes("/gast/unlock")) {
-      router.push("/gast");
-      return;
-    }
-
-    setStep("welcome");
-    setBaseDeal(null);
-    setIsUpgraded(false);
-    setPhone("");
-    setPhoneError(null);
-    setVoucherUsed(false);
-    setClaimExpiresAt(null);
-    setDemoKey((k) => k + 1);
-    setComebackActivated(false);
-    setWheelRotation(0);
-    setSpinning(false);
-    setRevealDealId(null);
-    if (revealAdvanceRef.current) {
-      window.clearTimeout(revealAdvanceRef.current);
-      revealAdvanceRef.current = null;
-    }
-  }, [pathname, router]);
 
   useEffect(() => {
     if (step !== "unlock") {
@@ -325,23 +284,9 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
     [phone, goClaim],
   );
 
-  const footer = (
-    <div className="flex flex-col gap-1">
-      <p className="text-center text-[9px] leading-snug text-white/32 sm:text-[10px]">
-        Demonstratie — geen echte betalingen, berichten of koppelingen.
-      </p>
-      <Button variant="ghost" className="w-full py-1.5 text-xs sm:py-2" onClick={reset}>
-        Demo resetten
-      </Button>
-    </div>
-  );
-
   return (
-    <MobileShell footer={footer}>
-      <div
-        key={demoKey}
-        className="flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden"
-      >
+    <MobileShell>
+      <div className="flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         {step === "welcome" ? (
           <section className="flex h-full min-h-0 min-w-0 flex-1 flex-col justify-between gap-2 overflow-hidden text-center [@media(max-height:640px)]:gap-1.5">
             <div className="min-h-0 shrink">
