@@ -1,0 +1,16 @@
+---
+description: Na code-wijzigingen committen en naar GitHub pushen
+alwaysApply: true
+---
+
+# Git: commit + push na updates
+
+Wanneer je in deze repository **bestaande code wijzigt of nieuwe bestanden toevoegt** als onderdeel van een taak:
+
+1. Controleer `git status`.
+2. Voeg relevante bestanden toe (`git add`), maak een **duidelijke commit** met een korte Nederlandse of Engelse boodschap die de wijziging samenvat.
+3. Push naar **`origin main`**: `git push origin main`.
+
+Doe dit **aan het einde van de taak**, tenzij de gebruiker expliciet vraagt om géén commit/push, alleen lokaal te laten, of een andere branch/strategie.
+
+Als er niets te committen is, hoef je geen lege commit te maken.
