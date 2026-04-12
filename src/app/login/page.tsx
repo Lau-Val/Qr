@@ -4,7 +4,7 @@ import { LoginForm } from "./LoginForm";
 
 export const metadata = {
   title: "Inloggen — BarBoost",
-  description: "Log in voor je zaak-dashboard",
+  description: "Zaken-dashboard (klanten) of beheerdersdashboard (platform)",
 };
 
 export default function LoginPage() {
@@ -16,7 +16,8 @@ export default function LoginPage() {
         </p>
         <h1 className="mt-3 text-center text-2xl font-bold">Inloggen</h1>
         <p className="mt-2 text-center text-sm text-white/50">
-          Alleen voor geregistreerde zaken. Geen account? Neem contact op met je leverancier.
+          Zelfde inlog voor zaken (eigenaren/personeel) en voor platformbeheerders; na inloggen zie je het juiste
+          scherm op basis van je account.
         </p>
         <Suspense fallback={<p className="mt-8 text-center text-sm text-white/40">Laden…</p>}>
           <LoginForm />

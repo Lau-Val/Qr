@@ -56,9 +56,19 @@ export async function updateSession(request: NextRequest) {
     const nextParam = request.nextUrl.searchParams.get("next")?.trim();
     let next = nextParam || "/dashboard";
     const email = user.email?.toLowerCase() ?? "";
+    const isEnvAdmin = admins.length > 0 && admins.includes(email);
+    let isDbAdmin = false;
+    if (!isEnvAdmin && user.id) {
+      const { data } = await supabase
+        .from("platform_admins")
+        .select("user_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      isDbAdmin = !!data;
+    }
+    const isPlatformAdmin = isEnvAdmin || isDbAdmin;
     if (
-      admins.length &&
-      admins.includes(email) &&
+      isPlatformAdmin &&
       (!nextParam || nextParam === "/dashboard" || nextParam === "/platform")
     ) {
       next = "/admin";
@@ -83,7 +93,17 @@ export async function updateSession(request: NextRequest) {
 
   if (user && isPlatformAdminPath(pathname)) {
     const email = user.email?.toLowerCase() ?? "";
-    if (!admins.length || !admins.includes(email)) {
+    const isEnvAdmin = admins.length > 0 && admins.includes(email);
+    let allowed = isEnvAdmin;
+    if (!allowed && user.id) {
+      const { data } = await supabase
+        .from("platform_admins")
+        .select("user_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      allowed = !!data;
+    }
+    if (!allowed) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }

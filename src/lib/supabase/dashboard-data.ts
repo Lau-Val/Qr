@@ -105,6 +105,24 @@ async function sumClaimRevenue(
   return sum;
 }
 
+export async function getPeriodStatsForBarId(
+  barId: string,
+  kind: PeriodKey,
+): Promise<PeriodStats> {
+  if (!isSupabaseConfigured()) {
+    return {
+      scans: 0,
+      claims: 0,
+      upgrades: 0,
+      comebacks: 0,
+      whatsappOptIns: 0,
+      estimatedDealValue: 0,
+    };
+  }
+  const supabase = createServiceClient();
+  return buildPeriodStats(supabase, barId, kind);
+}
+
 async function buildPeriodStats(
   supabase: ReturnType<typeof createServiceClient>,
   barId: string,

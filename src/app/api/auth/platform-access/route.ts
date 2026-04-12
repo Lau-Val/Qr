@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth/bar-session";
-import { isSuperAdminEmail } from "@/lib/auth/super-admin";
+import { isPlatformAdminUser } from "@/lib/auth/platform-admin";
 
 export async function GET() {
   const user = await getSessionUser();
-  if (!user?.email) {
+  if (!user) {
     return NextResponse.json({ show: false });
   }
-  return NextResponse.json({ show: isSuperAdminEmail(user.email) });
+  return NextResponse.json({ show: await isPlatformAdminUser(user) });
 }

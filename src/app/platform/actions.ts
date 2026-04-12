@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { isSuperAdminEmail } from "@/lib/auth/super-admin";
+import { isPlatformAdminUser } from "@/lib/auth/platform-admin";
 import { createServerSupabase } from "@/utils/supabase/server";
 
 export type CreateBarResult =
@@ -16,7 +16,7 @@ export async function createBarWithOwner(
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user?.email || !isSuperAdminEmail(user.email)) {
+  if (!user || !(await isPlatformAdminUser(user))) {
     return { ok: false, error: "Geen toegang tot platform-beheer." };
   }
 
