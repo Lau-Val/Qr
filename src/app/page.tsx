@@ -4,6 +4,17 @@ import { Badge } from "@/components/barboost/ui/Badge";
 export default function Home() {
   return (
     <div className="min-h-dvh bg-[#07060f] text-white">
+      <header className="border-b border-white/[0.06] bg-[#07060f]/90 backdrop-blur-sm">
+        <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-5 py-4">
+          <span className="text-sm font-semibold tracking-tight text-white">BarBoost</span>
+          <Link
+            href="/login"
+            className="rounded-full bg-violet-500 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-violet-950/40 transition hover:bg-violet-400"
+          >
+            Inloggen
+          </Link>
+        </div>
+      </header>
       <div className="mx-auto flex min-h-dvh max-w-4xl flex-col px-5 py-14">
         <div className="text-center">
           <Badge tone="neutral" className="mb-4 border-white/15 bg-white/[0.06] text-white/75">
@@ -77,7 +88,7 @@ export default function Home() {
           </p>
           <p className="text-xs text-white/45">
             <Link href="/login" className="font-medium text-violet-300 hover:underline">
-              Inloggen zaak
+              Inloggen — zaak of platformbeheer
             </Link>
           </p>
         </div>
