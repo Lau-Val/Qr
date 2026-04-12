@@ -71,9 +71,14 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="mt-12 text-center">
+        <div className="mt-12 space-y-2 text-center">
           <p className="text-xs text-white/32">
             Alle schermen gebruiken dezelfde demo: Café Nova.
+          </p>
+          <p className="text-xs text-white/45">
+            <Link href="/login" className="font-medium text-violet-300 hover:underline">
+              Inloggen zaak
+            </Link>
           </p>
         </div>
       </div>

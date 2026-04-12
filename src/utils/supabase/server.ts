@@ -29,3 +29,8 @@ export const createClient = (
     },
   });
 };
+
+/** Server Components / actions: cookies() is async. */
+export async function createServerSupabase() {
+  return createClient(await cookies());
+}

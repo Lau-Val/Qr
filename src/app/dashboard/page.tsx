@@ -1,5 +1,7 @@
+import { redirect } from "next/navigation";
 import { DashboardClient } from "./DashboardClient";
 import { getDashboardData } from "@/lib/queries/dashboard";
+import { getSessionUser, getVerifiedBarSlugForUser } from "@/lib/auth/bar-session";
 
 export const dynamic = "force-dynamic";
 
@@ -13,17 +15,36 @@ export default async function DashboardPage({
 }: {
   searchParams?: Promise<{ bar?: string | string[] }>;
 }) {
+  const user = await getSessionUser();
+  if (!user) {
+    redirect("/login?next=/dashboard");
+  }
+
   const params = (await searchParams) ?? {};
   const barParam = params.bar;
-  const slug =
-    (typeof barParam === "string"
+  const requested =
+    typeof barParam === "string"
       ? barParam
       : Array.isArray(barParam)
         ? barParam[0]
-        : undefined)?.trim() ||
-    process.env.NEXT_PUBLIC_BAR_SLUG?.trim() ||
-    process.env.NEXT_PUBLIC_DEFAULT_BAR_SLUG?.trim() ||
-    "cafe-nova";
+        : undefined;
+
+  const slug = await getVerifiedBarSlugForUser(
+    user.id,
+    requested?.trim() || null,
+  );
+
+  if (!slug) {
+    return (
+      <DashboardClient
+        data={{
+          configured: false,
+          message:
+            "Je account heeft nog geen zaak gekoppeld. Vraag toegang aan je beheerder of gebruik het platform-account om een zaak aan te maken.",
+        }}
+      />
+    );
+  }
 
   const data = await getDashboardData(slug);
   return <DashboardClient data={data} />;
