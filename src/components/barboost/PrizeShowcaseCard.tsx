@@ -65,7 +65,7 @@ export function PrizeShowcaseCard({
       className={cn(
         "prize-showcase-card pointer-events-none relative overflow-hidden border-2 shadow-[0_20px_50px_rgba(0,0,0,0.45)] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
         compact && dense
-          ? "rounded-xl p-1.5"
+          ? "rounded-lg p-1"
           : compact
             ? "rounded-2xl p-2 sm:p-2.5"
             : "rounded-2xl p-4",
