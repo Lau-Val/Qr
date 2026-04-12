@@ -368,7 +368,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
 
             <div
               className={cn(
-                "flex max-h-[min(298px,38dvh)] min-h-0 w-full shrink-0 flex-col overflow-hidden rounded-xl border border-white/[0.08] px-2 py-2 transition-all duration-500 sm:max-h-[min(322px,40dvh)] sm:rounded-[1.1rem] sm:px-2.5 sm:py-2.5",
+                "flex max-h-[min(318px,40dvh)] min-h-0 w-full shrink-0 flex-col overflow-hidden rounded-xl border border-white/[0.08] px-2 py-2 transition-all duration-500 sm:max-h-[min(340px,42dvh)] sm:rounded-[1.1rem] sm:px-2.5 sm:py-2.5",
                 spinning && "pointer-events-none bg-white/[0.025] opacity-[0.92]",
                 !spinning && !revealDealId && "bg-white/[0.035]",
                 revealDealId && "relative bg-black/40 ring-1 ring-white/10",
@@ -379,8 +379,8 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
               </h2>
               <div
                 className={cn(
-                  "mt-1.5 flex min-h-0 flex-1 flex-col justify-center gap-2.5 overflow-hidden sm:mt-2 sm:gap-3",
-                  revealDealId && "gap-3 sm:gap-3.5",
+                  "mt-1.5 flex min-h-0 flex-1 flex-col justify-center gap-3 overflow-hidden pb-0.5 sm:mt-2 sm:gap-3.5",
+                  revealDealId && "gap-3.5 sm:gap-4",
                 )}
               >
                 {UNLOCK_SHOWCASE.map((row, i) => {
@@ -432,13 +432,6 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                   );
                 })}
               </div>
-              <p className="mt-1.5 shrink-0 text-center text-[10px] font-medium leading-snug text-white/42 sm:mt-2 sm:text-[11px]">
-                {spinning
-                  ? "Eén van deze prijzen wordt zo je deal"
-                  : revealDealId
-                    ? "Even rustig bekijken — daarna zie je alle details"
-                    : "Draai en unlock 1 van deze deals"}
-              </p>
             </div>
 
             <div className="shrink-0 pt-0.5">
