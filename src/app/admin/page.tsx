@@ -42,7 +42,7 @@ export default async function AdminPage() {
               beheerdersaccount heeft daar geen toegang toe; dat blijft gescheiden.
             </p>
           </div>
-          <SignOutButton />
+          <SignOutButton variant="emphasized" />
         </div>
 
         <AdminStatsSection overview={overview} admins={admins} />

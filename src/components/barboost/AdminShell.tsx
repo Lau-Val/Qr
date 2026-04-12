@@ -55,29 +55,36 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div className="flex min-h-dvh min-w-0 flex-1 flex-col">
-        <nav
-          className="flex items-center gap-1 overflow-x-auto border-b border-white/10 bg-[#0b0a12]/95 px-3 py-2 md:hidden"
-          aria-label="Hoofdnavigatie"
-        >
-          <PlatformNavLink />
-          {NAV.map((item) => {
-            const active = navActive(pathname, item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors",
-                  active
-                    ? "bg-white text-black"
-                    : "text-white/65 hover:bg-white/10 hover:text-white",
-                )}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
+        <div className="border-b border-white/10 bg-[#0b0a12]/95 md:hidden">
+          <nav
+            className="flex min-w-0 items-stretch gap-0"
+            aria-label="Hoofdnavigatie"
+          >
+            <div className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-2 py-2">
+              <PlatformNavLink />
+              {NAV.map((item) => {
+                const active = navActive(pathname, item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors",
+                      active
+                        ? "bg-white text-black"
+                        : "text-white/65 hover:bg-white/10 hover:text-white",
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+            <div className="flex shrink-0 items-center border-l border-white/10 px-2">
+              <SignOutButton />
+            </div>
+          </nav>
+        </div>
         {children}
       </div>
     </div>

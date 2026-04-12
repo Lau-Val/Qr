@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HomeHeaderAuth } from "@/components/barboost/HomeHeaderAuth";
 import { Badge } from "@/components/barboost/ui/Badge";
 
 export default function Home() {
@@ -7,12 +8,7 @@ export default function Home() {
       <header className="border-b border-white/[0.06] bg-[#07060f]/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-5 py-4">
           <span className="text-sm font-semibold tracking-tight text-white">BarBoost</span>
-          <Link
-            href="/login"
-            className="rounded-full bg-violet-500 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-violet-950/40 transition hover:bg-violet-400"
-          >
-            Inloggen
-          </Link>
+          <HomeHeaderAuth />
         </div>
       </header>
       <div className="mx-auto flex min-h-dvh max-w-4xl flex-col px-5 py-14">
