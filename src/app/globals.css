@@ -77,6 +77,76 @@ body canvas {
   animation: bb-wheel-spin-glow 2.2s ease-in-out infinite;
 }
 
+/* Mystery box: rustig zweven */
+@keyframes bb-box-float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.bb-box-float {
+  animation: bb-box-float 3.4s ease-in-out infinite;
+}
+
+/* Mystery box: glow-puls op de grond */
+@keyframes bb-box-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translateX(-50%) scaleX(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: translateX(-50%) scaleX(1.18);
+  }
+}
+
+.bb-box-glow {
+  animation: bb-box-glow-pulse 2.8s ease-in-out infinite;
+}
+
+/* Mystery box lid: shimmer-sweep */
+@keyframes bb-box-shimmer {
+  0% {
+    transform: translateX(-180%) skewX(-18deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(500%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+.bb-box-shimmer {
+  animation: bb-box-shimmer 4.2s ease-in-out 2.2s infinite;
+}
+
+/* Mystery box: sparkle die wegvliegt */
+@keyframes bb-sparkle-fly {
+  0% {
+    opacity: 1;
+    transform: translate(var(--sx), var(--sy)) scale(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(var(--ex), var(--ey)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--ex), var(--ey)) scale(0.5);
+  }
+}
+
 /* Kappers: prijs kaartje uit de box */
 @keyframes bb-kapper-prize-rise {
   0% {
