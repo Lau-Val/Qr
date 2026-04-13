@@ -30,8 +30,6 @@ export interface GastTemplate {
     footerHint: string;
   };
   unlock: {
-    listHeading: string;
-    listHeadingReveal: string;
     /** Tijdens animatie (mystery box) */
     openingHint: string;
     /** Tekst boven de hoofdknop (uitleg: openen via knop) */
@@ -124,8 +122,6 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
       footerHint: "Gemiddeld onder een minuut",
     },
     unlock: {
-      listHeading: "Wat kan je winnen?",
-      listHeadingReveal: "Dit wordt jouw deal",
       openingHint: "De mystery box opent…",
       boxIdleHint: "Klik op de knop hieronder om je mystery box te openen.",
       primaryCta: "Klik om te openen",
@@ -164,8 +160,6 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
       footerHint: "Gemiddeld onder een minuut",
     },
     unlock: {
-      listHeading: "Wat zit erin?",
-      listHeadingReveal: "Jouw prijs",
       openingHint: "De mystery box opent…",
       boxIdleHint: "Klik op de knop hieronder om je mystery box te openen.",
       primaryCta: "Klik om te openen",

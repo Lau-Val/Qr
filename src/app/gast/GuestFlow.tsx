@@ -17,7 +17,6 @@ import type { GastTemplateId } from "@/data/gast-templates";
 import { getGastTemplate } from "@/data/gast-templates";
 import type { Deal } from "@/data/types";
 import { BartenderDealScreen } from "@/components/barboost/BartenderDealScreen";
-import { PrizeShowcaseCard } from "@/components/barboost/PrizeShowcaseCard";
 import { Button, buttonClassName } from "@/components/barboost/ui/Button";
 import { Badge } from "@/components/barboost/ui/Badge";
 import { KapperPrizeBox } from "@/components/barboost/KapperPrizeBox";
@@ -382,79 +381,6 @@ function GuestFlowInner({
                 </p>
               ) : null}
             </div>
-
-            {!salonStyle ? (
-              <div
-                className={cn(
-                  "flex max-h-[min(318px,40dvh)] min-h-0 w-full shrink-0 flex-col overflow-hidden rounded-xl border px-2 py-2 transition-all duration-500 sm:max-h-[min(340px,42dvh)] sm:rounded-[1.1rem] sm:px-2.5 sm:py-2.5",
-                  "border-white/[0.08]",
-                  spinning && "pointer-events-none opacity-[0.92]",
-                  !spinning && !revealDealId && "bg-white/[0.035]",
-                  revealDealId && "relative bg-black/40 ring-1 ring-white/10",
-                )}
-              >
-                <h2 className="shrink-0 text-[clamp(0.78rem,3.3vw,1.08rem)] font-bold leading-tight tracking-tight text-white">
-                  {revealDealId
-                    ? tpl.unlock.listHeadingReveal
-                    : tpl.unlock.listHeading}
-                </h2>
-                <div
-                  className={cn(
-                    "mt-1.5 flex min-h-0 flex-1 flex-col justify-center gap-3 overflow-hidden pb-0.5 sm:mt-2 sm:gap-3.5",
-                    revealDealId && "gap-3.5 sm:gap-4",
-                  )}
-                >
-                  {tpl.unlockShowcase.map((row, i) => {
-                    const isWinner = revealDealId === row.dealId;
-                    const emphasis = revealDealId
-                      ? isWinner
-                        ? "winner"
-                        : "dimmed"
-                      : "normal";
-                    return (
-                      <div
-                        key={row.dealId}
-                        className={cn(
-                          "min-h-0 shrink",
-                          isWinner && revealDealId && "order-first",
-                        )}
-                      >
-                        <PrizeShowcaseCard
-                          accentHex={row.wheelColor}
-                          staggerIndex={i}
-                          emphasis={emphasis}
-                          dealId={row.dealId}
-                          compact
-                          dense
-                        >
-                          {isWinner && revealDealId ? (
-                            <p className="mb-0.5 text-center text-[8px] font-bold uppercase tracking-[0.22em] text-emerald-300/95">
-                              Jouw prijs
-                            </p>
-                          ) : null}
-                          <p
-                            className={cn(
-                              "font-semibold leading-snug tracking-tight text-white",
-                              isWinner && revealDealId
-                                ? "text-[clamp(0.88rem,3.5vw,1.18rem)]"
-                                : "text-[clamp(0.8rem,3.1vw,1.05rem)]",
-                            )}
-                          >
-                            {row.text}
-                          </p>
-                          <p className="mt-1 text-[10px] leading-tight text-white/50 sm:text-[11px]">
-                            Normaal{" "}
-                            <span className="font-medium line-through text-white/65 decoration-white/35">
-                              {row.normaal}
-                            </span>
-                          </p>
-                        </PrizeShowcaseCard>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : null}
 
             <div className="shrink-0 pt-0.5">
               {spinning || revealDealId ? (
