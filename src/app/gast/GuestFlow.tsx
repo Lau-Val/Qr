@@ -378,7 +378,7 @@ function GuestFlowInner({
                     text,
                   }))}
                   onBoxPress={() => startUnlockAnimation()}
-                  idleHint="Schuif de knop naar rechts: het pakje opent mee; daarna schiet het deksel omhoog en zie je je voordeel."
+                  idleHint="Tik op het pakje om het te openen — daarna zie je je voordeel."
                 />
               ) : (
                 <LuckWheel
