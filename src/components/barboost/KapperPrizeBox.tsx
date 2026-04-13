@@ -102,26 +102,28 @@ export function KapperPrizeBox({
             aria-hidden
           />
 
-          {/* Lint (kruis) */}
+          {/* Lint alleen op de onderkant (kruis op de bodem) */}
           <div
-            className="pointer-events-none absolute bottom-1 left-1/2 top-[42%] z-[1] w-[20%] -translate-x-1/2 rounded-sm bg-[linear-gradient(180deg,#6b2d36_0%,#a84852_50%,#6b2d36_100%)] shadow-sm"
+            className="pointer-events-none absolute bottom-1 left-1/2 top-[46%] z-[1] w-[20%] -translate-x-1/2 rounded-sm bg-[linear-gradient(180deg,#6b2d36_0%,#a84852_50%,#6b2d36_100%)] shadow-sm"
             aria-hidden
           />
           <div
-            className="pointer-events-none absolute bottom-[44%] left-[10%] right-[10%] z-[1] h-[11%] rounded-sm bg-[linear-gradient(90deg,#5c2830_0%,#c45f6a_50%,#5c2830_100%)] shadow-sm"
+            className="pointer-events-none absolute bottom-[18%] left-[10%] right-[10%] z-[1] h-[13%] rounded-sm bg-[linear-gradient(90deg,#5c2830_0%,#c45f6a_50%,#5c2830_100%)] shadow-sm"
             aria-hidden
           />
 
-          {/* Deksel */}
+          {/* Deksel — neutrale doos, geen rood (strakker dan ‘ingepakt’) */}
           <div
-            className="absolute left-[7%] right-[7%] top-[8%] z-[2] h-[36%] rounded-t-[0.85rem] border border-b-0 border-stone-300/90 bg-gradient-to-b from-white to-stone-100 shadow-md will-change-transform"
+            className="absolute left-[6%] right-[6%] top-[7%] z-[2] h-[37%] overflow-hidden rounded-t-[0.9rem] border border-b-0 border-stone-300/85 bg-gradient-to-b from-white via-stone-50 to-stone-200/90 shadow-[inset_0_2px_0_rgba(255,255,255,0.95),0_6px_14px_rgba(28,25,23,0.1)] will-change-transform"
             style={{
               transform: `translateY(calc(-${lidOff * 7.5}rem))`,
               transition: opening ? "none" : "transform 280ms ease-out",
             }}
             aria-hidden
           >
-            <div className="pointer-events-none absolute inset-x-[30%] bottom-2 top-2 rounded-sm bg-[linear-gradient(180deg,#7a343e_0%,#b85662_50%,#7a343e_100%)] opacity-90" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/80 via-transparent to-stone-400/10" />
+            <div className="pointer-events-none absolute left-0 top-0 h-[35%] w-[55%] rounded-br-[100%] bg-gradient-to-br from-white/90 to-transparent" />
+            <div className="pointer-events-none absolute bottom-0 left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-stone-400/35 to-transparent" />
           </div>
         </div>
       </button>
