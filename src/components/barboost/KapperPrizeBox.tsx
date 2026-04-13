@@ -5,7 +5,7 @@ import { cn } from "@/lib/cn";
 type Row = { dealId: string; text: string };
 
 /**
- * Warme goud/amber cadeaudoos: tik om te openen, daarna komt de prijs omhoog.
+ * Ingepakt cadeaupakje (licht papier + lint): tik om te openen, prijs komt tevoorschijn.
  */
 export function KapperPrizeBox({
   opening,
@@ -18,7 +18,6 @@ export function KapperPrizeBox({
   revealDealId: string | null;
   showcase: Row[];
   onBoxPress: () => void;
-  /** Onder de box als nog niet geopend */
   idleHint: string;
 }) {
   const lidOpen = opening || Boolean(revealDealId);
@@ -31,8 +30,8 @@ export function KapperPrizeBox({
   return (
     <div className="flex w-full flex-col items-center px-1">
       <div
-        className="relative mx-auto w-full max-w-[min(280px,78vw)]"
-        style={{ perspective: "960px" }}
+        className="relative mx-auto w-full max-w-[min(260px,76vw)]"
+        style={{ perspective: "900px" }}
       >
         <button
           type="button"
@@ -41,78 +40,87 @@ export function KapperPrizeBox({
             if (canTap) onBoxPress();
           }}
           className={cn(
-            "relative block w-full pb-[72%] outline-none transition-transform",
+            "relative block w-full pb-[78%] outline-none transition-transform",
             canTap &&
-              "cursor-pointer active:scale-[0.98] [-webkit-tap-highlight-color:transparent]",
+              "cursor-pointer active:scale-[0.99] [-webkit-tap-highlight-color:transparent]",
             !canTap && "cursor-default",
           )}
-          aria-label={canTap ? "Open de cadeaudoos om je prijs te zien" : undefined}
+          aria-label={
+            canTap ? "Open het pakje om je salon-voordeel te zien" : undefined
+          }
         >
           <div
             className="absolute inset-0 flex items-center justify-center"
             style={{ transformStyle: "preserve-3d" }}
           >
-            {/* Schaduw onder de doos */}
+            {/* Zachte schaduw */}
             <div
-              className="absolute bottom-[6%] left-1/2 h-[14%] w-[72%] -translate-x-1/2 rounded-full bg-black/35 blur-xl"
+              className="absolute bottom-[5%] left-1/2 h-[12%] w-[70%] -translate-x-1/2 rounded-full bg-stone-400/25 blur-lg"
               aria-hidden
             />
 
-            {/* Doos: onderkant */}
+            {/* Pakje: onderkant — ingepakt papier */}
             <div
-              className="absolute bottom-0 left-[9%] right-[9%] top-[38%] rounded-b-[1.35rem] rounded-t-sm border border-amber-900/25 bg-gradient-to-b from-amber-100 via-amber-300 to-amber-700 shadow-[inset_0_2px_0_rgba(255,255,255,0.35),0_12px_28px_rgba(120,80,20,0.45)]"
+              className="absolute bottom-0 left-[8%] right-[8%] top-[36%] rounded-b-[1.25rem] rounded-t-sm border border-stone-300/70 bg-[#f3ebe3] shadow-[inset_0_1px_0_rgba(255,255,255,0.85),0_10px_24px_rgba(28,25,23,0.08)]"
               aria-hidden
-            />
+            >
+              {/* Verticaal lint */}
+              <div
+                className="absolute inset-y-2 left-1/2 w-[22%] -translate-x-1/2 rounded-sm bg-gradient-to-b from-[#e8d5c4] via-[#d4a574] to-[#b8956a] opacity-90 shadow-inner"
+                aria-hidden
+              />
+              {/* Horizontaal lint */}
+              <div
+                className="absolute left-2 right-2 top-1/2 h-[18%] -translate-y-1/2 rounded-sm bg-gradient-to-r from-[#e8d5c4] via-[#d4a574] to-[#b8956a] opacity-90 shadow-inner"
+                aria-hidden
+              />
+            </div>
 
-            {/* Deksel — scharnier onderaan */}
+            {/* Deksel / bovenflap van het pakje */}
             <div
-              className="absolute left-[7%] right-[7%] top-[8%] h-[34%] origin-bottom rounded-t-[1.25rem] border border-amber-900/30 bg-gradient-to-br from-amber-50 via-amber-200 to-amber-600 shadow-[0_-4px_16px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.5)] transition-[transform,box-shadow] duration-[2400ms] ease-[cubic-bezier(0.33,1,0.68,1)]"
+              className="absolute left-[6%] right-[6%] top-[6%] h-[32%] origin-bottom rounded-t-[1.15rem] border border-stone-300/75 bg-gradient-to-br from-[#faf6f1] via-[#f0e6dc] to-[#e5d5c8] shadow-[0_4px_12px_rgba(28,25,23,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] transition-[transform] duration-[2400ms] ease-[cubic-bezier(0.33,1,0.68,1)]"
               style={{
-                transform: lidOpen ? "rotateX(-108deg)" : "rotateX(0deg)",
+                transform: lidOpen ? "rotateX(-110deg)" : "rotateX(0deg)",
                 transformOrigin: "50% 100%",
                 transformStyle: "preserve-3d",
               }}
+              aria-hidden
             >
-              <div
-                className="absolute inset-x-[18%] top-[18%] h-[22%] rounded-full bg-gradient-to-r from-amber-400/80 via-yellow-200/90 to-amber-400/80 opacity-90 blur-[1px]"
-                aria-hidden
-              />
-              <span
-                className="absolute left-1/2 top-[28%] -translate-x-1/2 text-2xl drop-shadow-sm"
-                aria-hidden
-              >
-                🎀
-              </span>
+              {/* Mini strik */}
+              <div className="absolute left-1/2 top-[22%] flex -translate-x-1/2 items-center justify-center">
+                <span className="text-lg drop-shadow-sm" aria-hidden>
+                  🎀
+                </span>
+              </div>
             </div>
 
-            {/* Binnenkant / vraagteken vóór prijs */}
+            {/* Binnenkant vóór prijs — licht & rustig */}
             {!showPrize ? (
               <div
                 className={cn(
-                  "absolute bottom-[14%] left-[16%] right-[16%] top-[44%] flex items-center justify-center rounded-lg border border-amber-900/15 bg-gradient-to-b from-amber-950/90 to-stone-900/95 transition-opacity duration-500",
-                  opening && "opacity-40",
+                  "absolute bottom-[12%] left-[14%] right-[14%] top-[42%] flex items-center justify-center rounded-lg border border-stone-200/80 bg-stone-50/95 transition-opacity duration-500",
+                  opening && "opacity-70",
                 )}
               >
                 <span
                   className={cn(
-                    "text-4xl font-black text-amber-200/35 transition-all duration-700",
-                    opening && "scale-110 text-amber-100/50",
+                    "text-3xl font-light text-stone-300 transition-all duration-700",
+                    opening && "scale-105 text-stone-400",
                   )}
                   aria-hidden
                 >
-                  ?
+                  ···
                 </span>
               </div>
             ) : null}
 
-            {/* Prijs kaartje omhoog */}
             {showPrize && winner ? (
-              <div className="bb-kapper-prize-rise pointer-events-none absolute bottom-[18%] left-[8%] right-[8%] z-20 flex justify-center">
-                <div className="max-w-[95%] rounded-2xl border-2 border-amber-300/90 bg-gradient-to-b from-white to-amber-50 px-4 py-3 text-center shadow-[0_20px_40px_rgba(0,0,0,0.35)] ring-1 ring-amber-500/30">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-800/80">
-                    Gefeliciteerd
+              <div className="bb-kapper-prize-rise pointer-events-none absolute bottom-[16%] left-[6%] right-[6%] z-20 flex justify-center">
+                <div className="max-w-[96%] rounded-2xl border border-stone-200 bg-white px-4 py-3.5 text-center shadow-[0_12px_32px_rgba(15,23,42,0.1)]">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-500">
+                    Jouw voordeel
                   </p>
-                  <p className="mt-1.5 text-[clamp(0.95rem,3.8vw,1.15rem)] font-extrabold leading-tight text-amber-950">
+                  <p className="mt-2 text-[clamp(0.95rem,3.8vw,1.1rem)] font-bold leading-snug text-stone-900">
                     {winner.text}
                   </p>
                 </div>
@@ -123,7 +131,7 @@ export function KapperPrizeBox({
       </div>
 
       {canTap ? (
-        <p className="mt-3 max-w-[18rem] text-center text-[11px] font-medium leading-snug text-amber-900/70">
+        <p className="mt-4 max-w-[19rem] text-center text-[12px] font-medium leading-relaxed text-stone-600">
           {idleHint}
         </p>
       ) : null}

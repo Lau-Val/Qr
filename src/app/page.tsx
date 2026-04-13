@@ -87,7 +87,7 @@ export default function Home() {
             </span>
             <h2 className="mt-3 text-xl font-bold">Kappers / barbier</h2>
             <p className="mt-2 flex-1 text-sm leading-relaxed text-white/55">
-              Aparte gast-flow met salon-prijzen (knip, wash &amp; blow, kleur) — eigen demo naast horeca.
+              Lichte, rustige stijl: ingepakt pakje dat opengaat — geen prijzenlijst eronder, je voordeel verschijnt in het pakje — los van het rad in de bar.
             </p>
             <span className="mt-4 text-sm font-semibold text-rose-200/90 group-hover:underline">
               Salon-flow openen →
