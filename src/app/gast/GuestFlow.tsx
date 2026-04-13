@@ -378,7 +378,7 @@ function GuestFlowInner({
                     text,
                   }))}
                   onBoxPress={() => startUnlockAnimation()}
-                  idleHint="Tik op de box — hij gaat open en je prijs komt tevoorschijn."
+                  idleHint="Schuif de knop naar rechts: het pakje opent mee; daarna schiet het deksel omhoog en zie je je voordeel."
                 />
               ) : (
                 <LuckWheel
