@@ -12,9 +12,9 @@ import {
   useState,
   type FormEvent,
 } from "react";
-import { BAR_NAME } from "@/data/bar";
 import { buildUpgradedDeal } from "@/data/deal-upgrades";
-import { MOCK_DEALS } from "@/data/mock/deals";
+import type { GastTemplateId } from "@/data/gast-templates";
+import { getGastTemplate } from "@/data/gast-templates";
 import type { Deal } from "@/data/types";
 import { BartenderDealScreen } from "@/components/barboost/BartenderDealScreen";
 import { PrizeShowcaseCard } from "@/components/barboost/PrizeShowcaseCard";
@@ -34,56 +34,6 @@ import {
 import { isValidDutchMobile, normalizeDutchPhone } from "@/lib/phone-nl";
 import { cn } from "@/lib/cn";
 import { fireFallConfetti, fireWinConfetti } from "@/lib/win-confetti";
-
-const DEAL_POOL = MOCK_DEALS.filter((d) => d.category !== "retry");
-
-/**
- * 3 deals op rad + lijst. Gewichten: lager voordeel = vaker (hogere kans).
- * Cocktaildeal (d6) = zeldzamer dan shots (d2) dan bier (d1).
- */
-const UNLOCK_SHOWCASE: {
-  text: string;
-  wheelColor: string;
-  normaal: string;
-  dealId: string;
-  weight: number;
-}[] = [
-  {
-    text: "2 bier voor €6",
-    wheelColor: "#6366f1",
-    normaal: "€12",
-    dealId: "d1",
-    weight: 0.52,
-  },
-  {
-    text: "3 shots voor €10",
-    wheelColor: "#a855f7",
-    normaal: "€18",
-    dealId: "d2",
-    weight: 0.33,
-  },
-  {
-    text: "2 cocktails voor €10",
-    wheelColor: "#14b8a6",
-    normaal: "€16",
-    dealId: "d6",
-    weight: 0.15,
-  },
-];
-
-/** Score voor rad + label op baseDeal — band sluit aan bij gekozen deal */
-function luckScoreBandForDealId(dealId: string): number {
-  switch (dealId) {
-    case "d1":
-      return 6 + Math.floor(Math.random() * 32);
-    case "d2":
-      return 38 + Math.floor(Math.random() * 28);
-    case "d6":
-      return 70 + Math.floor(Math.random() * 28);
-    default:
-      return Math.floor(Math.random() * 101);
-  }
-}
 
 type Step =
   | "welcome"
@@ -117,7 +67,10 @@ function stripSpinQueryFromAddressBar() {
   window.history.replaceState(window.history.state, "", path);
 }
 
-export function GuestFlow(props: { initialStep?: Step }) {
+export function GuestFlow(props: {
+  initialStep?: Step;
+  templateId?: GastTemplateId;
+}) {
   return (
     <div className="flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
       <Suspense
@@ -133,8 +86,15 @@ export function GuestFlow(props: { initialStep?: Step }) {
   );
 }
 
-function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
+function GuestFlowInner({
+  initialStep = "welcome",
+  templateId = "horeca",
+}: {
+  initialStep?: Step;
+  templateId?: GastTemplateId;
+}) {
   const searchParams = useSearchParams();
+  const tpl = useMemo(() => getGastTemplate(templateId), [templateId]);
   const [step, setStep] = useState<Step>(initialStep);
   const [baseDeal, setBaseDeal] = useState<Deal | null>(null);
   const [isUpgraded, setIsUpgraded] = useState(false);
@@ -152,13 +112,13 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
 
   const startWheelSpin = useCallback(() => {
     const dealId = pickWeightedDealId(
-      UNLOCK_SHOWCASE.map(({ dealId, weight }) => ({ dealId, weight })),
+      tpl.unlockShowcase.map(({ dealId, weight }) => ({ dealId, weight })),
     );
-    const deal = resolveDealById(DEAL_POOL, dealId);
+    const deal = resolveDealById(tpl.dealPool, dealId);
     if (!deal) {
       return;
     }
-    const luck = luckScoreBandForDealId(dealId);
+    const luck = tpl.luckBand(dealId);
     setSpinning(true);
     setWheelRotation((r) => r + 360 * 10 + luck * 4.2);
     window.setTimeout(() => {
@@ -174,7 +134,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
         revealAdvanceRef.current = null;
       }, 4200);
     }, 5850);
-  }, []);
+  }, [tpl]);
 
   const effectiveDeal = useMemo(() => {
     if (!baseDeal) return null;
@@ -244,7 +204,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
 
   useEffect(() => {
     if (!revealDealId) return;
-    const row = UNLOCK_SHOWCASE.find((r) => r.dealId === revealDealId);
+    const row = tpl.unlockShowcase.find((r) => r.dealId === revealDealId);
     const hex = row?.wheelColor ?? "#a855f7";
 
     let cancelled = false;
@@ -258,11 +218,11 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
       cancelled = true;
       cancelAnimationFrame(raf);
     };
-  }, [revealDealId]);
+  }, [revealDealId, tpl.unlockShowcase]);
 
   useEffect(() => {
     if (step !== "baseDeal" || !baseDeal) return;
-    const row = UNLOCK_SHOWCASE.find((r) => r.dealId === baseDeal.id);
+    const row = tpl.unlockShowcase.find((r) => r.dealId === baseDeal.id);
     const hex = row?.wheelColor ?? "#a855f7";
 
     let cancelled = false;
@@ -278,7 +238,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
       cancelAnimationFrame(raf);
       stopFall?.();
     };
-  }, [step, baseDeal]);
+  }, [step, baseDeal, tpl.unlockShowcase]);
 
   const handleUpgradeSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
@@ -310,33 +270,35 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
           <section className="flex h-full min-h-0 min-w-0 flex-1 flex-col justify-between gap-2 overflow-hidden text-center [@media(max-height:640px)]:gap-1.5">
             <div className="min-h-0 shrink">
               <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45">
-                BarBoost
+                {tpl.brandLabel}
               </p>
               <h1 className="mt-3 text-[clamp(1.25rem,4.8vw,1.6rem)] font-bold leading-snug tracking-tight text-white [@media(max-height:640px)]:mt-2">
-                Jouw deal van vanavond
+                {tpl.welcome.title}
               </h1>
               <p className="mt-2 text-[clamp(0.8rem,3.2vw,0.875rem)] leading-relaxed text-white/52 [@media(max-height:640px)]:mt-1.5">
-                Scan de QR bij je tafel — daarna claim je direct aan de bar. Geen app nodig.
+                {tpl.welcome.subtitle}
               </p>
               <div className="mt-4 flex flex-wrap justify-center gap-1.5 [@media(max-height:640px)]:mt-3 [@media(max-height:640px)]:gap-1">
-                <Badge tone="hot">Alleen vanavond</Badge>
-                <Badge tone="info">Aan de bar tonen</Badge>
-                <Badge tone="success">Geschikt voor groepen</Badge>
+                {tpl.welcome.badges.map((b) => (
+                  <Badge key={b.text} tone={b.tone}>
+                    {b.text}
+                  </Badge>
+                ))}
               </div>
             </div>
             <div className="shrink-0 space-y-2 pt-2 [@media(max-height:640px)]:space-y-1.5 [@media(max-height:640px)]:pt-1">
               <Link
-                href="/gast/unlock"
+                href={`${tpl.basePath}/unlock`}
                 prefetch
                 className={buttonClassName(
                   "primary",
                   "w-full justify-center py-3.5 text-base text-center no-underline [@media(max-height:640px)]:py-3",
                 )}
               >
-                Start met deal
+                {tpl.welcome.cta}
               </Link>
               <p className="text-[11px] text-white/38 sm:text-xs">
-                Gemiddeld onder een minuut
+                {tpl.welcome.footerHint}
               </p>
             </div>
           </section>
@@ -352,7 +314,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                 unlockLayout
                 emphasized={spinning}
                 showCaption={false}
-                segmentColors={UNLOCK_SHOWCASE.map((r) => r.wheelColor)}
+                segmentColors={tpl.unlockShowcase.map((r) => r.wheelColor)}
               />
               {spinning ? (
                 <p className="mt-1.5 text-center text-[clamp(0.78rem,3.2vw,0.95rem)] font-bold tracking-tight text-transparent bg-gradient-to-r from-violet-200 via-fuchsia-200 to-violet-300 bg-clip-text">
@@ -375,7 +337,9 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
               )}
             >
               <h2 className="shrink-0 text-[clamp(0.78rem,3.3vw,1.08rem)] font-bold leading-tight tracking-tight text-white">
-                {revealDealId ? "Dit wordt jouw deal" : "Wat kan je winnen?"}
+                {revealDealId
+                  ? tpl.unlock.listHeadingReveal
+                  : tpl.unlock.listHeading}
               </h2>
               <div
                 className={cn(
@@ -383,7 +347,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                   revealDealId && "gap-3.5 sm:gap-4",
                 )}
               >
-                {UNLOCK_SHOWCASE.map((row, i) => {
+                {tpl.unlockShowcase.map((row, i) => {
                   const isWinner = revealDealId === row.dealId;
                   const emphasis = revealDealId
                     ? isWinner
@@ -447,7 +411,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                 </div>
               ) : (
                 <Link
-                  href={`/gast/unlock?${SPIN_QUERY}=1`}
+                  href={`${tpl.basePath}/unlock?${SPIN_QUERY}=1`}
                   prefetch={false}
                   className={buttonClassName(
                     "primary",
@@ -480,7 +444,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                       normaal {pc.normal}
                     </p>
                     <p className="mt-2 text-[clamp(0.8rem,3.2vw,1rem)] font-medium text-white/70 [@media(max-height:760px)]:mt-1.5">
-                      Nog {mins} minuten · alleen in {BAR_NAME}
+                      Nog {mins} {tpl.baseDeal.contextLine} {tpl.barName}
                     </p>
                   </div>
 
@@ -507,13 +471,13 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                       </div>
                       <div className="relative z-[3] flex min-h-0 flex-1 flex-col overflow-hidden">
                         <h3 className="shrink-0 text-center text-[clamp(1rem,4vw,1.35rem)] font-extrabold leading-tight tracking-tight text-white">
-                          <span aria-hidden>🔥</span> Pak de beste deal van vanavond
+                          <span aria-hidden>🔥</span> {tpl.baseDeal.upgradeHeadline}
                         </h3>
 
                         <div className="mt-2 shrink-0 space-y-2 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:space-y-1.5">
                           <div>
                             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/38 [@media(max-height:760px)]:text-[9px]">
-                              Jouw deal nu
+                              {tpl.baseDeal.upgradeSubStandard}
                             </p>
                             <p className="mt-1 text-[clamp(0.9rem,3.5vw,1.05rem)] font-semibold leading-snug text-white/70 [@media(max-height:760px)]:mt-0.5">
                               {baseDeal.title}
@@ -522,7 +486,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                           <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                           <div>
                             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-200/90 [@media(max-height:760px)]:text-[9px]">
-                              <span aria-hidden>🔥</span> Met upgrade
+                              <span aria-hidden>🔥</span> {tpl.baseDeal.upgradeSubUpgraded}
                             </p>
                             <p className="mt-1 text-[clamp(1rem,4vw,1.35rem)] font-bold leading-snug text-white [@media(max-height:760px)]:mt-0.5">
                               {upgraded.title}
@@ -544,7 +508,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                                 htmlFor="phone"
                                 className="mb-1 block w-full px-2 text-center text-[10px] font-semibold leading-snug text-white sm:px-3 sm:text-[11px]"
                               >
-                                Laat je nummer achter om de deal te activeren.
+                                {tpl.baseDeal.phoneLabel}
                               </label>
                               <input
                                 id="phone"
@@ -584,7 +548,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                             type="submit"
                             className="w-full shrink-0 py-4 text-[clamp(1rem,3.8vw,1.15rem)] font-extrabold shadow-lg shadow-violet-900/40 [@media(max-height:760px)]:py-3.5"
                           >
-                            Activeer betere deal
+                            {tpl.baseDeal.upgradeSubmit}
                           </Button>
                           <p className="shrink-0 px-1 text-center text-[9px] leading-relaxed text-white/38 sm:text-[10px]">
                             Je ontvangt de nieuwste deals en nieuwsbrieven.
@@ -598,7 +562,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                       className="mt-2 w-full shrink-0 py-2 text-[13px] leading-snug text-white/45 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:py-1.5 [@media(max-height:760px)]:text-[12px]"
                       onClick={goClaim}
                     >
-                      Nee, ik ga door met de minder goede deal hierboven
+                      {tpl.baseDeal.skipUpgrade}
                     </Button>
                   </div>
                 </>
@@ -645,7 +609,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
                     Binnenkort terug?
                   </p>
                   <p className="mt-1 text-[clamp(0.85rem,3.5vw,1.05rem)] text-white/60 [@media(max-height:700px)]:mt-1">
-                    Kom binnen 5 dagen — dan krijg je een extraatje aan de bar.
+                    {tpl.retention.comebackBody}
                   </p>
                   <Button
                     className="mt-3 w-full py-3 text-base font-bold [@media(max-height:700px)]:mt-2 [@media(max-height:700px)]:py-2.5"
@@ -660,7 +624,7 @@ function GuestFlowInner({ initialStep = "welcome" }: { initialStep?: Step }) {
             </div>
 
             <Link
-              href="/gast"
+              href={tpl.basePath}
               className={buttonClassName(
                 "ghost",
                 "shrink-0 w-full justify-center py-2 text-center text-sm no-underline [@media(max-height:700px)]:py-1.5",

@@ -5,7 +5,8 @@ export type DealCategory =
   | "food"
   | "groep"
   | "comeback"
-  | "retry";
+  | "retry"
+  | "kapper";
 
 export interface Deal {
   id: string;

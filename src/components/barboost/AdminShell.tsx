@@ -11,12 +11,16 @@ const NAV = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/dashboard/beheer", label: "Dealbeheer" },
   { href: "/campagnes", label: "Campagnes" },
-  { href: "/gast", label: "Gastflow" },
+  { href: "/gast", label: "Gast (bar)" },
+  { href: "/gast/kapper", label: "Gast (salon)" },
 ] as const;
 
 function navActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
   if (href === "/dashboard") return pathname === "/dashboard";
+  if (href === "/gast") return pathname === "/gast" || pathname.startsWith("/gast/unlock");
+  if (href === "/gast/kapper")
+    return pathname.startsWith("/gast/kapper");
   return pathname.startsWith(href);
 }
 

@@ -53,6 +53,24 @@ const UPGRADE_COPY: Record<
     description: "Geactiveerd via BarBoost.",
     tag: "Geüpgraded",
   },
+  k1: {
+    title: "Knip + wenkbrauw touch-up pakket",
+    subtitle: "Extra verzorging inbegrepen",
+    description: "Geldig bij je volgende bezoek — toon de voucher.",
+    tag: "Geüpgraded",
+  },
+  k2: {
+    title: "Wash, masker & blowdry + oliebehandeling",
+    subtitle: "Langdurige glans",
+    description: "Upgrade op het standaard pakket — alleen op afspraak.",
+    tag: "Geüpgraded",
+  },
+  k3: {
+    title: "Kleuren + glans + mini styling-set mee naar huis",
+    subtitle: "Compleet pakket",
+    description: "Inclusief verzorgingsadvies van je stylist.",
+    tag: "Geüpgraded",
+  },
 };
 
 export function buildUpgradedDeal(base: Deal): Deal {

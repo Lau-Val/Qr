@@ -29,7 +29,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="mt-14 grid flex-1 gap-4 sm:grid-cols-3">
+        <div className="mt-14 grid flex-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Link
             href="/gast"
             className="group flex flex-col rounded-3xl border border-white/[0.09] bg-gradient-to-br from-violet-950/50 to-[#0c0b14] p-6 transition-all hover:border-violet-400/35 hover:shadow-[0_24px_60px_rgba(99,102,241,0.12)]"
@@ -75,6 +75,22 @@ export default function Home() {
             </p>
             <span className="mt-4 text-sm font-semibold text-sky-200/90 group-hover:underline">
               Campagnes bekijken →
+            </span>
+          </Link>
+
+          <Link
+            href="/gast/kapper"
+            className="group flex flex-col rounded-3xl border border-white/[0.09] bg-gradient-to-br from-rose-950/40 to-[#0c0b14] p-6 transition-all hover:border-rose-400/35 hover:shadow-[0_24px_60px_rgba(244,114,182,0.12)]"
+          >
+            <span className="text-xs font-semibold uppercase tracking-widest text-rose-300/85">
+              Template salon
+            </span>
+            <h2 className="mt-3 text-xl font-bold">Kappers / barbier</h2>
+            <p className="mt-2 flex-1 text-sm leading-relaxed text-white/55">
+              Aparte gast-flow met salon-prijzen (knip, wash &amp; blow, kleur) — eigen demo naast horeca.
+            </p>
+            <span className="mt-4 text-sm font-semibold text-rose-200/90 group-hover:underline">
+              Salon-flow openen →
             </span>
           </Link>
         </div>
