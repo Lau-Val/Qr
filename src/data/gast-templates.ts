@@ -12,12 +12,8 @@ export type UnlockShowcaseRow = {
   weight: number;
 };
 
-export type UnlockMode = "wheel" | "giftBox";
-
 export interface GastTemplate {
   id: GastTemplateId;
-  /** Rad (horeca) of cadeaudoos (kapper) */
-  unlockMode: UnlockMode;
   /** Pad zonder trailing slash, bv. `/gast` of `/gast/kapper` */
   basePath: string;
   /** Getoonde zaaknaam in copy */
@@ -26,8 +22,6 @@ export interface GastTemplate {
   brandLabel: string;
   dealPool: Deal[];
   unlockShowcase: UnlockShowcaseRow[];
-  /** Scoreband voor rad (0–100) per deal-id */
-  luckBand: (dealId: string) => number;
   welcome: {
     title: string;
     subtitle: string;
@@ -38,8 +32,10 @@ export interface GastTemplate {
   unlock: {
     listHeading: string;
     listHeadingReveal: string;
-    /** Tijdens animatie (rad of doos) */
+    /** Tijdens animatie (mystery box) */
     openingHint: string;
+    /** Tekst boven de hoofdknop (uitleg: openen via knop) */
+    boxIdleHint: string;
     /** Hoofdknop onderaan (start animatie) */
     primaryCta: string;
   };
@@ -107,42 +103,14 @@ const KAPPER_UNLOCK: UnlockShowcaseRow[] = [
   },
 ];
 
-function luckHoreca(dealId: string): number {
-  switch (dealId) {
-    case "d1":
-      return 6 + Math.floor(Math.random() * 32);
-    case "d2":
-      return 38 + Math.floor(Math.random() * 28);
-    case "d6":
-      return 70 + Math.floor(Math.random() * 28);
-    default:
-      return Math.floor(Math.random() * 101);
-  }
-}
-
-function luckKapper(dealId: string): number {
-  switch (dealId) {
-    case "k1":
-      return 6 + Math.floor(Math.random() * 32);
-    case "k2":
-      return 38 + Math.floor(Math.random() * 28);
-    case "k3":
-      return 70 + Math.floor(Math.random() * 28);
-    default:
-      return Math.floor(Math.random() * 101);
-  }
-}
-
 const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
   horeca: {
     id: "horeca",
-    unlockMode: "wheel",
     basePath: "/gast",
     barName: "Café Nova",
     brandLabel: "BarBoost",
     dealPool: HORECA_POOL,
     unlockShowcase: HORECA_UNLOCK,
-    luckBand: luckHoreca,
     welcome: {
       title: "Jouw deal van vanavond",
       subtitle:
@@ -158,8 +126,9 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
     unlock: {
       listHeading: "Wat kan je winnen?",
       listHeadingReveal: "Dit wordt jouw deal",
-      openingHint: "Het rad draait…",
-      primaryCta: "Draai nu",
+      openingHint: "De mystery box opent…",
+      boxIdleHint: "Klik op de knop hieronder om je mystery box te openen.",
+      primaryCta: "Klik om te openen",
     },
     baseDeal: {
       contextLine: "minuten · alleen in",
@@ -177,17 +146,15 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
   },
   kapper: {
     id: "kapper",
-    unlockMode: "giftBox",
     basePath: "/gast/kapper",
     barName: "Salon Nova",
     brandLabel: "BarBoost · Salon",
     dealPool: KAPPER_DEALS,
     unlockShowcase: KAPPER_UNLOCK,
-    luckBand: luckKapper,
     welcome: {
       title: "Jouw salon-voordeel",
       subtitle:
-        "Scan de QR bij binnenkomst — open de cadeaudoos en ontdek je prijs. Toon je voucher bij de balie. Geen app nodig.",
+        "Scan de QR bij binnenkomst — open je mystery box met de knop en ontdek je prijs. Toon je voucher bij de balie. Geen app nodig.",
       badges: [
         { tone: "hot", text: "Alleen vandaag" },
         { tone: "info", text: "Afspraak aanbevolen" },
@@ -199,8 +166,9 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
     unlock: {
       listHeading: "Wat zit erin?",
       listHeadingReveal: "Jouw prijs",
-      openingHint: "De doos opent…",
-      primaryCta: "Open de box",
+      openingHint: "De mystery box opent…",
+      boxIdleHint: "Klik op de knop hieronder om je mystery box te openen.",
+      primaryCta: "Klik om te openen",
     },
     baseDeal: {
       contextLine: "minuten · alleen bij",

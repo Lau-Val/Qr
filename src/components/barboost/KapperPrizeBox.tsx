@@ -12,7 +12,7 @@ function easeOutCubic(t: number) {
 }
 
 /**
- * Eenvoudig cadeaupakje: tik om te openen; deksel schuift omhoog, prijs verschijnt erboven.
+ * Mystery box: animatie opent het deksel; start via onderliggende knop (geen tik op de doos).
  */
 export function KapperPrizeBox({
   opening,
@@ -20,19 +20,27 @@ export function KapperPrizeBox({
   showcase,
   onBoxPress,
   idleHint,
+  variant = "light",
+  interactiveBox = false,
 }: {
   opening: boolean;
   revealDealId: string | null;
   showcase: Row[];
-  onBoxPress: () => void;
+  /** Alleen gebruikt als `interactiveBox` true is (legacy / alternatief). */
+  onBoxPress?: () => void;
   idleHint: string;
+  /** `light` = salon; `dark` = bar / horeca op donkere achtergrond */
+  variant?: "light" | "dark";
+  /** Als true: tik op de doos start (standaard false: alleen knop eronder). */
+  interactiveBox?: boolean;
 }) {
   const showPrize = Boolean(revealDealId && !opening);
   const winner = revealDealId
     ? showcase.find((s) => s.dealId === revealDealId)
     : null;
 
-  const canTap = !opening && !revealDealId;
+  const canTap = interactiveBox && !opening && !revealDealId;
+  const showIdleHint = !opening && !revealDealId;
   const [flyProgress, setFlyProgress] = useState(0);
 
   useEffect(() => {
@@ -54,6 +62,89 @@ export function KapperPrizeBox({
   const lidOff =
     revealDealId != null && !opening ? 1 : opening ? flyProgress : 0;
 
+  const dark = variant === "dark";
+
+  const boxInner = (
+    <div className="relative w-full pb-[88%]">
+      <div
+        className={cn(
+          "pointer-events-none absolute bottom-[3%] left-1/2 h-[9%] w-[70%] -translate-x-1/2 rounded-full blur-md",
+          dark ? "bg-black/45" : "bg-stone-900/12",
+        )}
+        aria-hidden
+      />
+
+      <div
+        className={cn(
+          "absolute bottom-0 left-[10%] right-[10%] top-[42%] rounded-[0.85rem] border shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_16px_rgba(0,0,0,0.35)]",
+          dark
+            ? "border-white/12 bg-gradient-to-b from-slate-800 to-slate-950"
+            : "border-stone-300/90 bg-gradient-to-b from-stone-50 to-stone-200/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_8px_16px_rgba(28,25,23,0.08)]",
+        )}
+        aria-hidden
+      />
+
+      <div
+        className={cn(
+          "pointer-events-none absolute bottom-1 left-1/2 top-[46%] z-[1] w-[20%] -translate-x-1/2 rounded-sm shadow-sm",
+          dark
+            ? "bg-[linear-gradient(180deg,#4c1d95_0%,#7c3aed_50%,#4c1d95_100%)]"
+            : "bg-[linear-gradient(180deg,#6b2d36_0%,#a84852_50%,#6b2d36_100%)]",
+        )}
+        aria-hidden
+      />
+      <div
+        className={cn(
+          "pointer-events-none absolute bottom-[18%] left-[10%] right-[10%] z-[1] h-[13%] rounded-sm shadow-sm",
+          dark
+            ? "bg-[linear-gradient(90deg,#5b21b6_0%,#a78bfa_50%,#5b21b6_100%)]"
+            : "bg-[linear-gradient(90deg,#5c2830_0%,#c45f6a_50%,#5c2830_100%)]",
+        )}
+        aria-hidden
+      />
+
+      <div
+        className={cn(
+          "absolute left-[6%] right-[6%] top-[7%] z-[2] h-[37%] overflow-hidden rounded-t-[0.9rem] border border-b-0 will-change-transform",
+          dark
+            ? "border-white/14 bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 shadow-[inset_0_2px_0_rgba(255,255,255,0.08),0_6px_14px_rgba(0,0,0,0.45)]"
+            : "border-stone-300/85 bg-gradient-to-b from-white via-stone-50 to-stone-200/90 shadow-[inset_0_2px_0_rgba(255,255,255,0.95),0_6px_14px_rgba(28,25,23,0.1)]",
+        )}
+        style={{
+          transform: `translateY(calc(-${lidOff * 7.5}rem))`,
+          transition: opening ? "none" : "transform 280ms ease-out",
+        }}
+        aria-hidden
+      >
+        <div
+          className={cn(
+            "pointer-events-none absolute inset-0",
+            dark
+              ? "bg-gradient-to-br from-violet-500/15 via-transparent to-fuchsia-500/10"
+              : "bg-gradient-to-br from-white/80 via-transparent to-stone-400/10",
+          )}
+        />
+        <div
+          className={cn(
+            "pointer-events-none absolute left-0 top-0 h-[35%] w-[55%] rounded-br-[100%]",
+            dark
+              ? "bg-gradient-to-br from-white/10 to-transparent"
+              : "bg-gradient-to-br from-white/90 to-transparent",
+          )}
+        />
+        <div
+          className={cn(
+            "pointer-events-none absolute bottom-0 left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent to-transparent",
+            dark ? "via-violet-400/25" : "via-stone-400/35",
+          )}
+        />
+        <div className="pointer-events-none absolute left-1/2 top-[22%] z-[3] -translate-x-1/2 text-[clamp(1.35rem,7vw,1.85rem)] font-black tabular-nums leading-none text-white/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+          ?
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex w-full flex-col items-center px-1">
       <div
@@ -66,70 +157,65 @@ export function KapperPrizeBox({
         aria-live="polite"
       >
         {showPrize && winner ? (
-          <div className="bb-kapper-prize-rise w-full max-w-[min(240px,78vw)] rounded-2xl border border-stone-200 bg-white px-4 py-3.5 text-center shadow-lg shadow-stone-900/5">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-500">
+          <div
+            className={cn(
+              "bb-kapper-prize-rise w-full max-w-[min(240px,78vw)] rounded-2xl border px-4 py-3.5 text-center shadow-lg",
+              dark
+                ? "border-violet-500/25 bg-slate-900/95 shadow-black/40"
+                : "border-stone-200 bg-white shadow-stone-900/5",
+            )}
+          >
+            <p
+              className={cn(
+                "text-[10px] font-semibold uppercase tracking-[0.18em]",
+                dark ? "text-violet-200/85" : "text-stone-500",
+              )}
+            >
               Jouw voordeel
             </p>
-            <p className="mt-2 text-[clamp(0.95rem,3.8vw,1.1rem)] font-bold leading-snug text-stone-900">
+            <p
+              className={cn(
+                "mt-2 text-[clamp(0.95rem,3.8vw,1.1rem)] font-bold leading-snug",
+                dark ? "text-white" : "text-stone-900",
+              )}
+            >
               {winner.text}
             </p>
           </div>
         ) : null}
       </div>
 
-      <button
-        type="button"
-        disabled={!canTap}
-        onClick={() => {
-          if (canTap) onBoxPress();
-        }}
-        className={cn(
-          "relative mx-auto w-full max-w-[220px] touch-manipulation outline-none [-webkit-tap-highlight-color:transparent]",
-          canTap && "cursor-pointer active:scale-[0.98]",
-          !canTap && "cursor-default",
-        )}
-        aria-label={canTap ? "Tik om het pakje te openen" : undefined}
-      >
-        <div className="relative w-full pb-[88%]">
-          <div
-            className="pointer-events-none absolute bottom-[3%] left-1/2 h-[9%] w-[70%] -translate-x-1/2 rounded-full bg-stone-900/12 blur-md"
-            aria-hidden
-          />
-
-          {/* Onderkant */}
-          <div
-            className="absolute bottom-0 left-[10%] right-[10%] top-[42%] rounded-[0.85rem] border border-stone-300/90 bg-gradient-to-b from-stone-50 to-stone-200/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_8px_16px_rgba(28,25,23,0.08)]"
-            aria-hidden
-          />
-
-          {/* Lint alleen op de onderkant (kruis op de bodem) */}
-          <div
-            className="pointer-events-none absolute bottom-1 left-1/2 top-[46%] z-[1] w-[20%] -translate-x-1/2 rounded-sm bg-[linear-gradient(180deg,#6b2d36_0%,#a84852_50%,#6b2d36_100%)] shadow-sm"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute bottom-[18%] left-[10%] right-[10%] z-[1] h-[13%] rounded-sm bg-[linear-gradient(90deg,#5c2830_0%,#c45f6a_50%,#5c2830_100%)] shadow-sm"
-            aria-hidden
-          />
-
-          {/* Deksel — neutrale doos, geen rood (strakker dan ‘ingepakt’) */}
-          <div
-            className="absolute left-[6%] right-[6%] top-[7%] z-[2] h-[37%] overflow-hidden rounded-t-[0.9rem] border border-b-0 border-stone-300/85 bg-gradient-to-b from-white via-stone-50 to-stone-200/90 shadow-[inset_0_2px_0_rgba(255,255,255,0.95),0_6px_14px_rgba(28,25,23,0.1)] will-change-transform"
-            style={{
-              transform: `translateY(calc(-${lidOff * 7.5}rem))`,
-              transition: opening ? "none" : "transform 280ms ease-out",
-            }}
-            aria-hidden
-          >
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/80 via-transparent to-stone-400/10" />
-            <div className="pointer-events-none absolute left-0 top-0 h-[35%] w-[55%] rounded-br-[100%] bg-gradient-to-br from-white/90 to-transparent" />
-            <div className="pointer-events-none absolute bottom-0 left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-stone-400/35 to-transparent" />
-          </div>
-        </div>
-      </button>
-
       {canTap ? (
-        <p className="mt-4 max-w-[19rem] text-center text-[12px] font-medium leading-relaxed text-stone-600">
+        <button
+          type="button"
+          onClick={() => {
+            if (canTap) onBoxPress?.();
+          }}
+          className={cn(
+            "relative mx-auto w-full max-w-[220px] touch-manipulation outline-none [-webkit-tap-highlight-color:transparent]",
+            "cursor-pointer active:scale-[0.98]",
+          )}
+          aria-label="Tik om de mystery box te openen"
+        >
+          {boxInner}
+        </button>
+      ) : (
+        <div
+          className="relative mx-auto w-full max-w-[220px]"
+          role="presentation"
+          aria-hidden
+        >
+          {boxInner}
+        </div>
+      )}
+
+      {showIdleHint ? (
+        <p
+          className={cn(
+            "mt-4 max-w-[19rem] text-center text-[12px] font-medium leading-relaxed",
+            dark ? "text-white/55" : "text-stone-600",
+          )}
+        >
           {idleHint}
         </p>
       ) : null}

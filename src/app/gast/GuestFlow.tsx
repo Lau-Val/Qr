@@ -22,7 +22,6 @@ import { Button, buttonClassName } from "@/components/barboost/ui/Button";
 import { Badge } from "@/components/barboost/ui/Badge";
 import { KapperPrizeBox } from "@/components/barboost/KapperPrizeBox";
 import { MobileShell } from "@/components/barboost/ui/MobileShell";
-import { LuckWheel } from "@/components/barboost/LuckWheel";
 import {
   pickWeightedDealId,
   resolveDealById,
@@ -104,15 +103,13 @@ function GuestFlowInner({
   const [voucherUsed, setVoucherUsed] = useState(false);
   const [claimExpiresAt, setClaimExpiresAt] = useState<number | null>(null);
   const [comebackActivated, setComebackActivated] = useState(false);
-  const [wheelRotation, setWheelRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
   /** Na rad: welke deal-id wint — toont reveal voordat we naar baseDeal gaan */
   const [revealDealId, setRevealDealId] = useState<string | null>(null);
   const revealAdvanceRef = useRef<number | null>(null);
   const consumedUrlSpin = useRef(false);
 
-  const GIFT_BOX_OPEN_MS = 2800;
-  const WHEEL_SPIN_MS = 5850;
+  const MYSTERY_BOX_OPEN_MS = 2800;
 
   const startUnlockAnimation = useCallback(() => {
     const dealId = pickWeightedDealId(
@@ -123,24 +120,6 @@ function GuestFlowInner({
       return;
     }
     setSpinning(true);
-    if (tpl.unlockMode === "giftBox") {
-      window.setTimeout(() => {
-        setSpinning(false);
-        setRevealDealId(deal.id);
-        if (revealAdvanceRef.current) {
-          window.clearTimeout(revealAdvanceRef.current);
-        }
-        revealAdvanceRef.current = window.setTimeout(() => {
-          setBaseDeal(deal);
-          setStep("baseDeal");
-          setRevealDealId(null);
-          revealAdvanceRef.current = null;
-        }, 4200);
-      }, GIFT_BOX_OPEN_MS);
-      return;
-    }
-    const luck = tpl.luckBand(dealId);
-    setWheelRotation((r) => r + 360 * 10 + luck * 4.2);
     window.setTimeout(() => {
       setSpinning(false);
       setRevealDealId(deal.id);
@@ -153,7 +132,7 @@ function GuestFlowInner({
         setRevealDealId(null);
         revealAdvanceRef.current = null;
       }, 4200);
-    }, WHEEL_SPIN_MS);
+    }, MYSTERY_BOX_OPEN_MS);
   }, [tpl]);
 
   const effectiveDeal = useMemo(() => {
@@ -260,7 +239,7 @@ function GuestFlowInner({
     };
   }, [step, baseDeal, tpl.unlockShowcase]);
 
-  const salonStyle = tpl.unlockMode === "giftBox";
+  const salonStyle = tpl.id === "kapper";
 
   const handleUpgradeSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
@@ -369,28 +348,17 @@ function GuestFlowInner({
         {step === "unlock" ? (
           <section className="bb-gast-unlock flex h-full min-h-0 min-w-0 flex-1 flex-col gap-1 overflow-hidden pb-0">
             <div className="flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center pt-0">
-              {tpl.unlockMode === "giftBox" ? (
-                <KapperPrizeBox
-                  opening={spinning}
-                  revealDealId={revealDealId}
-                  showcase={tpl.unlockShowcase.map(({ dealId, text }) => ({
-                    dealId,
-                    text,
-                  }))}
-                  onBoxPress={() => startUnlockAnimation()}
-                  idleHint="Tik op het pakje om het te openen — daarna zie je je voordeel."
-                />
-              ) : (
-                <LuckWheel
-                  rotationDeg={wheelRotation}
-                  spinning={spinning}
-                  mini
-                  unlockLayout
-                  emphasized={spinning}
-                  showCaption={false}
-                  segmentColors={tpl.unlockShowcase.map((r) => r.wheelColor)}
-                />
-              )}
+              <KapperPrizeBox
+                opening={spinning}
+                revealDealId={revealDealId}
+                showcase={tpl.unlockShowcase.map(({ dealId, text }) => ({
+                  dealId,
+                  text,
+                }))}
+                variant={salonStyle ? "light" : "dark"}
+                interactiveBox={false}
+                idleHint={tpl.unlock.boxIdleHint}
+              />
               {spinning ? (
                 <p
                   className={cn(
