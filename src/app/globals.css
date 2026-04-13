@@ -306,6 +306,28 @@ body canvas {
   pointer-events: none;
 }
 
+/* Salon upgrade: goud/amber wash (bij “Pak het salon-voordeel”) */
+.bb-upgrade-bg-drift-salon {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: linear-gradient(
+    122deg,
+    rgba(120, 53, 15, 0.2) 0%,
+    rgba(217, 119, 6, 0.22) 18%,
+    rgba(180, 83, 9, 0.18) 34%,
+    rgba(253, 230, 138, 0.32) 50%,
+    rgba(146, 64, 14, 0.2) 66%,
+    rgba(251, 191, 36, 0.26) 82%,
+    rgba(113, 63, 18, 0.22) 100%
+  );
+  background-size: 380% 380%;
+  animation: bb-upgrade-bg-drift 9.5s ease-in-out infinite;
+  mix-blend-mode: multiply;
+  opacity: 0.72;
+  pointer-events: none;
+}
+
 /* Bartender deal card: zelfde drift-idee als paarse box, in emerald/groen */
 .bb-bartender-bg-drift {
   position: absolute;
@@ -443,6 +465,7 @@ body canvas {
   }
 
   .bb-upgrade-bg-drift,
+  .bb-upgrade-bg-drift-salon,
   .bb-bartender-bg-drift,
   .bb-bartender-expired-bg-drift,
   .prize-showcase-drift-layer {

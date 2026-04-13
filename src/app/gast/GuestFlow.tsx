@@ -471,7 +471,7 @@ function GuestFlowInner({
                       className={cn(
                         "relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border-2 p-3 sm:rounded-3xl sm:p-4 [@media(max-height:760px)]:p-2.5",
                         salonStyle
-                          ? "border-stone-200 shadow-[0_12px_40px_rgba(15,23,42,0.06)]"
+                          ? "border-amber-400/70 shadow-[0_16px_48px_rgba(180,83,9,0.16),0_4px_20px_rgba(251,191,36,0.12),0_0_0_1px_rgba(253,230,138,0.45)]"
                           : "border-violet-400/55 shadow-[0_0_0_1px_rgba(167,139,250,0.2),0_20px_50px_rgba(0,0,0,0.55),0_0_80px_rgba(124,58,237,0.22)]",
                       )}
                     >
@@ -479,22 +479,33 @@ function GuestFlowInner({
                         className={cn(
                           "pointer-events-none absolute inset-0",
                           salonStyle
-                            ? "bg-gradient-to-b from-white via-stone-50 to-[#f4f1ec]"
+                            ? "bg-gradient-to-br from-[#fffbeb] via-amber-100/95 to-amber-200/90"
                             : "bg-gradient-to-b from-violet-950/90 via-[#15101f] to-black/50",
                         )}
                         aria-hidden
                       />
                       <div
-                        className="bb-upgrade-bg-drift pointer-events-none absolute inset-0 rounded-3xl"
+                        className={cn(
+                          "pointer-events-none absolute inset-0 rounded-3xl",
+                          salonStyle
+                            ? "bb-upgrade-bg-drift-salon"
+                            : "bb-upgrade-bg-drift",
+                        )}
                         aria-hidden
                       />
                       <div
                         className={cn(
                           "pointer-events-none absolute -right-16 -top-16 z-[1] h-40 w-40 rounded-full blur-3xl",
-                          salonStyle ? "bg-stone-200/50" : "bg-violet-500/25",
+                          salonStyle ? "bg-amber-400/40" : "bg-violet-500/25",
                         )}
                         aria-hidden
                       />
+                      {salonStyle ? (
+                        <div
+                          className="pointer-events-none absolute -left-10 bottom-0 z-[1] h-32 w-32 rounded-full bg-amber-300/25 blur-2xl"
+                          aria-hidden
+                        />
+                      ) : null}
                       <div
                         className="pointer-events-none absolute inset-0 z-[2] overflow-hidden rounded-3xl"
                         aria-hidden
@@ -506,7 +517,9 @@ function GuestFlowInner({
                         <h3
                           className={cn(
                             "shrink-0 text-center text-[clamp(1rem,4vw,1.35rem)] font-extrabold leading-tight tracking-tight",
-                            salonStyle ? "text-stone-900" : "text-white",
+                            salonStyle
+                              ? "text-amber-950 drop-shadow-[0_1px_0_rgba(255,251,235,0.9)]"
+                              : "text-white",
                           )}
                         >
                           <span aria-hidden>{salonStyle ? "✨" : "🔥"}</span>{" "}
@@ -519,7 +532,7 @@ function GuestFlowInner({
                               className={cn(
                                 "text-[10px] font-bold uppercase tracking-[0.2em] [@media(max-height:760px)]:text-[9px]",
                                 salonStyle
-                                  ? "text-stone-500"
+                                  ? "text-amber-900/75"
                                   : "text-white/38",
                               )}
                             >
@@ -529,7 +542,7 @@ function GuestFlowInner({
                               className={cn(
                                 "mt-1 text-[clamp(0.9rem,3.5vw,1.05rem)] font-semibold leading-snug [@media(max-height:760px)]:mt-0.5",
                                 salonStyle
-                                  ? "text-stone-700"
+                                  ? "text-amber-950/90"
                                   : "text-white/70",
                               )}
                             >
@@ -540,7 +553,7 @@ function GuestFlowInner({
                             className={cn(
                               "h-px w-full bg-gradient-to-r from-transparent to-transparent",
                               salonStyle
-                                ? "via-stone-300/70"
+                                ? "via-amber-600/35"
                                 : "via-white/20",
                             )}
                           />
@@ -549,7 +562,7 @@ function GuestFlowInner({
                               className={cn(
                                 "text-[10px] font-bold uppercase tracking-[0.2em] [@media(max-height:760px)]:text-[9px]",
                                 salonStyle
-                                  ? "text-stone-600"
+                                  ? "text-amber-950/85"
                                   : "text-amber-200/90",
                               )}
                             >
@@ -559,7 +572,9 @@ function GuestFlowInner({
                             <p
                               className={cn(
                                 "mt-1 text-[clamp(1rem,4vw,1.35rem)] font-bold leading-snug [@media(max-height:760px)]:mt-0.5",
-                                salonStyle ? "text-stone-900" : "text-white",
+                                salonStyle
+                                  ? "text-amber-950"
+                                  : "text-white",
                               )}
                             >
                               {upgraded.title}
@@ -576,7 +591,7 @@ function GuestFlowInner({
                             <p
                               className={cn(
                                 "text-center text-[clamp(0.95rem,3.8vw,1.15rem)] font-bold leading-snug",
-                                salonStyle ? "text-stone-900" : "text-white",
+                                salonStyle ? "text-amber-950" : "text-white",
                               )}
                             >
                               Ontvang direct je betere deal
@@ -586,7 +601,7 @@ function GuestFlowInner({
                                 htmlFor="phone"
                                 className={cn(
                                   "mb-1 block w-full px-2 text-center text-[10px] font-semibold leading-snug sm:px-3 sm:text-[11px]",
-                                  salonStyle ? "text-stone-600" : "text-white",
+                                  salonStyle ? "text-amber-900/80" : "text-white",
                                 )}
                               >
                                 {tpl.baseDeal.phoneLabel}
@@ -614,7 +629,7 @@ function GuestFlowInner({
                                 className={cn(
                                   "w-full rounded-2xl border px-4 py-3 text-[clamp(1rem,4.2vw,1.25rem)] leading-snug shadow-inner outline-none focus:ring-2 [@media(max-height:760px)]:py-2.5",
                                   salonStyle
-                                    ? "border-stone-300 bg-white text-stone-900 ring-stone-400/35 placeholder:text-stone-400 focus:border-stone-400"
+                                    ? "border-amber-300/80 bg-white/95 text-amber-950 ring-amber-400/40 placeholder:text-amber-900/35 focus:border-amber-500"
                                     : "border-white/25 bg-black/50 text-white ring-violet-400/40 placeholder:text-white/35 focus:border-violet-400/55",
                                 )}
                               />
@@ -640,7 +655,7 @@ function GuestFlowInner({
                             className={cn(
                               "w-full shrink-0 py-4 text-[clamp(1rem,3.8vw,1.15rem)] font-extrabold [@media(max-height:760px)]:py-3.5",
                               salonStyle
-                                ? "!border-stone-800 !bg-stone-900 !text-white shadow-md shadow-stone-900/15 hover:!bg-stone-800"
+                                ? "!border-amber-700 !bg-gradient-to-b !from-amber-600 !to-amber-900 !text-amber-50 shadow-lg shadow-amber-900/25 hover:!from-amber-500 hover:!to-amber-800"
                                 : "shadow-lg shadow-violet-900/40",
                             )}
                           >
@@ -650,7 +665,7 @@ function GuestFlowInner({
                             className={cn(
                               "shrink-0 px-1 text-center text-[9px] leading-relaxed sm:text-[10px]",
                               salonStyle
-                                ? "text-stone-500"
+                                ? "text-amber-900/55"
                                 : "text-white/38",
                             )}
                           >
@@ -665,7 +680,7 @@ function GuestFlowInner({
                       className={cn(
                         "mt-2 w-full shrink-0 py-2 text-[13px] leading-snug [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:py-1.5 [@media(max-height:760px)]:text-[12px]",
                         salonStyle
-                          ? "text-stone-500 hover:text-stone-800"
+                          ? "text-amber-900/60 hover:text-amber-950"
                           : "text-white/45",
                       )}
                       onClick={goClaim}
