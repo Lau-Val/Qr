@@ -22,28 +22,35 @@ function easeOutCubic(t: number) {
   return 1 - (1 - t) ** 3;
 }
 
-/** Papier + wijnlint — warm kraft met duidelijke hoogte/lichtval */
-const PAPER_FACE =
-  "linear-gradient(168deg,#fffdfa 0%,#f3e8dc 28%,#ddc9b4 58%,#c4a990 100%)";
-const PAPER_FACE_TOP =
-  "linear-gradient(208deg,#fffcf9 0%,#f5ebe3 35%,#e2d2c2 70%,#cdb59e 100%)";
-const RIBBON =
-  "linear-gradient(90deg,#1f0a0e 0%,#6b2430 18%,#b84a56 45%,#f0c4c8 50%,#b84a56 55%,#6b2430 82%,#1f0a0e 100%)";
+/** Warm kraft + wijnlint + goud — zelfde palet als voorheen, strakker dan “papier-look” */
+const BOX_MAIN =
+  "linear-gradient(100deg,#faf6f1 0%,#efe4d8 42%,#d9c9b6 72%,#b8a08c 100%)";
+const LID_TOP =
+  "linear-gradient(195deg,#ffffff 0%,#f8f2ec 28%,#ebe0d4 62%,#d2c2b0 100%)";
+const RIBBON_H =
+  "linear-gradient(90deg,#6b2832 0%,#a84852 22%,#d87882 50%,#a84852 78%,#6b2832 100%)";
 const RIBBON_V =
-  "linear-gradient(180deg,#1f0a0e 0%,#6b2430 22%,#b84a56 48%,#f0c4c8 50%,#b84a56 52%,#6b2430 78%,#1f0a0e 100%)";
+  "linear-gradient(180deg,#5c242c 0%,#8f3d47 35%,#e8a0a8 50%,#8f3d47 65%,#5c242c 100%)";
 
-function ParcelBow({ className }: { className?: string }) {
+/** Strik: vier glanzende lussen (referentie) + gouden knoop */
+function GiftBow({ className }: { className?: string }) {
+  const loop =
+    "rounded-[50%] bg-gradient-to-br from-[#c75f68] via-[#8a303c] to-[#4a181e] shadow-[inset_0_2px_4px_rgba(255,230,232,0.5),0_3px_8px_rgba(40,10,14,0.32)]";
   return (
     <div
       className={cn(
-        "pointer-events-none relative flex h-10 w-[4.25rem] items-center justify-center",
+        "pointer-events-none relative h-[3.1rem] w-[3.5rem]",
         className,
       )}
       aria-hidden
     >
-      <div className="absolute h-8 w-11 -translate-x-[92%] rounded-[45%] bg-gradient-to-br from-[#8b3a46] via-[#5c1f28] to-[#2a0c10] shadow-[inset_0_2px_5px_rgba(255,230,232,0.4),0_5px_10px_rgba(30,8,12,0.45)] -rotate-[26deg]" />
-      <div className="relative z-10 h-6 w-[1.65rem] rounded-full bg-gradient-to-br from-[#c45460] via-[#722f37] to-[#3d1218] shadow-[inset_0_2px_4px_rgba(255,220,224,0.65)] ring-[2.5px] ring-[#f5e6e8]/55" />
-      <div className="absolute h-8 w-11 translate-x-[92%] rounded-[45%] bg-gradient-to-bl from-[#8b3a46] via-[#5c1f28] to-[#2a0c10] shadow-[inset_0_2px_5px_rgba(255,230,232,0.4),0_5px_10px_rgba(30,8,12,0.45)] rotate-[26deg]" />
+      <div className="grid grid-cols-2 gap-x-1 gap-y-0.5 px-0.5 pt-0.5">
+        <div className={cn("h-6 w-7 -rotate-[16deg]", loop)} />
+        <div className={cn("h-6 w-7 rotate-[16deg]", loop)} />
+        <div className={cn("h-6 w-7 rotate-[14deg]", loop)} />
+        <div className={cn("h-6 w-7 -rotate-[14deg]", loop)} />
+      </div>
+      <div className="absolute left-1/2 top-[46%] z-20 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-[#fcecc8] via-[#d4a24a] to-[#8a6020] shadow-[inset_0_2px_3px_rgba(255,255,255,0.65),0_2px_6px_rgba(40,20,8,0.35)] ring-2 ring-[#faf3e6]/90" />
     </div>
   );
 }
@@ -183,109 +190,68 @@ export function KapperPrizeBox({
         ) : null}
       </div>
 
-      <div className="relative mx-auto w-full max-w-[min(300px,86vw)]">
-        <div className="relative w-full pb-[92%]">
-          {/* Vloer-schaduw (plat; buiten 3D-draai voor “grond”) */}
+      <div className="relative mx-auto w-full max-w-[min(280px,84vw)]">
+        <div className="relative w-full pb-[100%]">
+          {/* Grondschaduw — zacht, zoals de referentie */}
           <div
-            className="pointer-events-none absolute bottom-[2%] left-1/2 z-0 h-[11%] w-[76%] -translate-x-1/2 rounded-[100%] bg-[radial-gradient(ellipse_at_center,rgba(35,24,18,0.45)_0%,rgba(35,24,18,0.12)_55%,transparent_72%)] blur-[18px]"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute bottom-[3%] left-1/2 z-0 h-[8%] w-[68%] rounded-[100%] bg-stone-900/25 blur-md"
-            style={{
-              transform: "translateX(-50%) scaleX(1.08) skewX(-8deg)",
-            }}
+            className="pointer-events-none absolute bottom-[3%] left-1/2 z-0 h-[10%] w-[70%] -translate-x-1/2 rounded-[100%] bg-[radial-gradient(ellipse_at_center,rgba(30,22,18,0.38)_0%,rgba(30,22,18,0.1)_58%,transparent_75%)] blur-[14px]"
             aria-hidden
           />
 
-          {/* 3D-scène: papier + diepte */}
           <div
-            className="bb-kapper-parcel-scene absolute inset-[2%] z-[1]"
+            className="bb-kapper-parcel-scene absolute inset-[3%] z-[1]"
             style={{ transformStyle: "preserve-3d" }}
           >
-            {/* Onderkant — massief blok met zij-hoek */}
+            {/* —— Onderkant: hoog blok, afgeronde hoeken, glans (referentie-vorm) —— */}
             <div
-              className="absolute bottom-0 left-[3%] right-[3%] top-[42%] overflow-hidden rounded-b-[1.5rem] rounded-t-[0.45rem] border border-[#6b5344]/35"
+              className="absolute bottom-0 left-[10%] right-[10%] top-[44%] overflow-hidden rounded-[1.15rem] border border-stone-800/8"
               style={{
-                background: PAPER_FACE,
+                background: BOX_MAIN,
                 boxShadow: `
-                  inset 0 3px 2px rgba(255,252,248,0.9),
-                  inset 3px 0 14px rgba(255,255,255,0.12),
-                  inset -10px -4px 22px rgba(42,30,22,0.18),
-                  0 18px 36px rgba(32,22,16,0.28),
-                  0 4px 0 rgba(90,70,56,0.12)
+                  inset 0 2px 1px rgba(255,255,255,0.95),
+                  inset 0 -14px 24px rgba(60,48,38,0.08),
+                  inset -18px 0 28px rgba(90,72,58,0.12),
+                  0 12px 24px rgba(28,22,18,0.15)
                 `,
               }}
               aria-hidden
             >
+              <div className="pointer-events-none absolute inset-0 rounded-[1.1rem] bg-gradient-to-br from-white/55 via-transparent to-transparent opacity-90" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-stone-900/7" />
+              {/* Verticaal lint (onderste deel) */}
               <div
-                className="pointer-events-none absolute inset-0 opacity-[0.09]"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E")`,
-                }}
-              />
-              {/* Linker zijkant donkerder = 3D-kant */}
-              <div className="pointer-events-none absolute inset-y-2 bottom-2 left-1 top-2 w-[16%] rounded-bl-[1.05rem] bg-gradient-to-r from-black/28 via-black/08 to-transparent" />
-              <div className="pointer-events-none absolute inset-y-2 bottom-2 right-1 top-2 w-[12%] rounded-br-[0.9rem] bg-gradient-to-l from-white/18 to-transparent" />
-              {/* Licht van links-boven */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/35 via-transparent to-transparent opacity-70" />
-              <div className="pointer-events-none absolute left-0 top-0 h-[42%] w-[55%] rounded-br-[100%] bg-gradient-to-br from-white/25 to-transparent opacity-90" />
-
-              {/* Wijnkleurig lint + satijnglans */}
-              <div
-                className="absolute inset-y-2.5 left-1/2 w-[26%] -translate-x-1/2 rounded-[4px]"
+                className="absolute bottom-1 left-1/2 top-2 z-[2] w-[21%] -translate-x-1/2 rounded-[3px]"
                 style={{
                   background: RIBBON_V,
                   boxShadow:
-                    "inset 0 2px 3px rgba(255,220,224,0.35), inset 0 -2px 4px rgba(20,4,8,0.45), 0 0 0 1px rgba(20,6,10,0.25)",
+                    "inset 0 1px 2px rgba(255,224,228,0.5), 0 0 0 1px rgba(50,18,22,0.12)",
                 }}
-                aria-hidden
               />
-              <div
-                className="absolute left-3 right-3 top-1/2 h-[20%] -translate-y-1/2 rounded-[4px]"
-                style={{
-                  background: RIBBON,
-                  boxShadow:
-                    "inset 0 2px 3px rgba(255,220,224,0.3), inset 0 -2px 4px rgba(20,4,8,0.4), 0 0 0 1px rgba(20,6,10,0.22)",
-                }}
-                aria-hidden
-              />
-              {/* Goud accent rozet */}
-              <div
-                className="absolute left-1/2 top-1/2 z-[1] h-7 w-7 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-[#fde8c8] via-[#d4a057] to-[#8a5c1e] shadow-[0_4px_10px_rgba(40,20,8,0.35),inset_0_2px_3px_rgba(255,255,255,0.65)] ring-2 ring-[#f8ecd8]/90"
-                aria-hidden
-              />
-              <div
-                className="absolute left-1/2 top-1/2 z-[2] h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-[#fff8ed]/90 to-[#c9953e]/80 opacity-90"
-                aria-hidden
-              />
-
-              {/* Opening / binnenkant */}
               <div
                 className={cn(
-                  "absolute inset-x-6 bottom-3.5 top-5 rounded-xl border border-[#a89888]/55 bg-gradient-to-b from-[#faf6f1] via-[#ebe3da] to-[#d8cfc4] shadow-[inset_0_3px_8px_rgba(42,32,26,0.12)] transition-opacity duration-300",
-                  seamOpen > 0.05 ? "opacity-100" : "opacity-0",
+                  "absolute inset-x-[14%] bottom-[12%] top-[18%] z-[1] rounded-xl border border-[#c4b5a4]/60 bg-gradient-to-b from-[#faf7f3] to-[#e5ddd4] shadow-[inset_0_2px_10px_rgba(42,34,28,0.08)] transition-opacity duration-300",
+                  seamOpen > 0.06 ? "opacity-100" : "opacity-0",
                 )}
-                aria-hidden
-              />
-              {/* Voorkant “dikte”-illusie */}
-              <div
-                className="pointer-events-none absolute bottom-0 left-[6%] right-[6%] h-2 rounded-b-[1rem] bg-gradient-to-b from-[#5c4638]/35 to-[#3d2e26]/55"
-                aria-hidden
               />
             </div>
 
-            {/* Bovenkant — deksel met strik + specular */}
+            {/* Horizontaal lint op de naad (overgang deksel ↔ bodem) */}
             <div
-              className="absolute left-[2%] right-[2%] top-[5%] h-[39%] origin-[50%_100%] overflow-hidden rounded-t-[1.45rem] border border-[#6b5344]/38 border-b-0 will-change-transform"
+              className="pointer-events-none absolute left-[6%] right-[6%] top-[43.5%] z-[4] h-[13%] -translate-y-1/2 rounded-[3px]"
               style={{
-                background: PAPER_FACE_TOP,
-                boxShadow: `
-                  inset 0 4px 3px rgba(255,255,255,0.95),
-                  inset -8px -6px 18px rgba(62,48,38,0.12),
-                  0 14px 28px rgba(28,20,14,0.22)
-                `,
-                transform: `translate3d(0,calc(-${topLiftRem}rem - ${topFlyRem}rem),0) rotateX(${-seamOpen * 14}deg)`,
+                background: RIBBON_H,
+                boxShadow:
+                  "inset 0 2px 2px rgba(255,224,228,0.4), 0 0 0 1px rgba(50,18,22,0.1)",
+                opacity: 0.97,
+              }}
+              aria-hidden
+            />
+
+            {/* —— Deksel: iets breder, afgerond, lip + strik (referentie) —— */}
+            <div
+              className="absolute left-[6%] right-[6%] top-[6%] z-[5] h-[38%] origin-[50%_100%] overflow-visible rounded-t-[1.25rem] will-change-transform"
+              style={{
+                transform: `translate3d(0,calc(-${topLiftRem}rem - ${topFlyRem}rem),0) rotateX(${-seamOpen * 12}deg)`,
                 transition:
                   isDragging || opening
                     ? "none"
@@ -294,34 +260,53 @@ export function KapperPrizeBox({
               aria-hidden
             >
               <div
-                className="pointer-events-none absolute inset-0 opacity-[0.08]"
+                className="relative h-[86%] overflow-hidden rounded-t-[1.25rem] border border-stone-800/10 border-b-0"
                 style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E")`,
+                  background: LID_TOP,
+                  boxShadow: `
+                    inset 0 3px 2px rgba(255,255,255,1),
+                    inset -12px -8px 20px rgba(70,56,44,0.07),
+                    0 10px 22px rgba(28,22,18,0.12)
+                  `,
                 }}
-              />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-[#8a735f]/15" />
-              <div className="pointer-events-none absolute -left-1/4 top-0 h-[55%] w-[70%] rotate-12 bg-gradient-to-br from-white/45 to-transparent opacity-80" />
-
-              <div className="absolute left-1/2 top-[14%] z-[2] -translate-x-1/2">
-                <ParcelBow className="scale-[1.02] drop-shadow-[0_6px_12px_rgba(40,10,14,0.35)]" />
+              >
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/70 via-white/15 to-transparent" />
+                <div className="pointer-events-none absolute left-0 top-0 h-[38%] w-[65%] rounded-br-[100%] bg-gradient-to-br from-white/80 to-transparent" />
+                {/* Verticaal lint op deksel */}
+                <div
+                  className="absolute bottom-1 left-1/2 top-2 z-[2] w-[21%] -translate-x-1/2 rounded-[3px]"
+                  style={{
+                    background: RIBBON_V,
+                    boxShadow:
+                      "inset 0 1px 2px rgba(255,224,228,0.55), 0 0 0 1px rgba(50,18,22,0.12)",
+                  }}
+                />
+                {/* Horizontaal op deksel */}
+                <div
+                  className="absolute bottom-[18%] left-[5%] right-[5%] z-[3] h-[22%] rounded-[3px]"
+                  style={{
+                    background: RIBBON_H,
+                    boxShadow:
+                      "inset 0 2px 2px rgba(255,224,228,0.4), 0 0 0 1px rgba(50,18,22,0.1)",
+                  }}
+                />
+                <div className="absolute left-1/2 top-[10%] z-[6] -translate-x-1/2">
+                  <GiftBow />
+                </div>
               </div>
-
+              {/* Lip / rand onder het deksel */}
               <div
-                className="pointer-events-none absolute bottom-0 left-5 right-5 h-[2px] bg-gradient-to-r from-transparent via-[#5c4638]/45 to-transparent"
-                aria-hidden
-              />
-              <div
-                className="pointer-events-none absolute bottom-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/55 to-transparent opacity-70"
-                aria-hidden
+                className="pointer-events-none absolute bottom-0 left-[2%] right-[2%] h-[13%] rounded-b-[0.65rem] border border-t-0 border-stone-800/10 bg-gradient-to-b from-[#d4c4b2] to-[#b8a694]"
+                style={{
+                  boxShadow: "inset 0 3px 4px rgba(0,0,0,0.12)",
+                }}
               />
             </div>
 
-            {/* Naad-glans */}
             <div
-              className="pointer-events-none absolute left-[8%] right-[8%] top-[42%] h-[3.5%] rounded-full bg-gradient-to-r from-transparent via-white/75 to-transparent"
+              className="pointer-events-none absolute left-[9%] right-[9%] top-[43.5%] z-[6] h-[2.5%] rounded-full bg-gradient-to-r from-transparent via-white/80 to-transparent"
               style={{
-                opacity: seamOpen * (1 - flyAway) * 0.9,
-                transform: `translateZ(24px) scaleY(${0.35 + seamOpen * 0.95})`,
+                opacity: seamOpen * (1 - flyAway) * 0.85,
               }}
               aria-hidden
             />
