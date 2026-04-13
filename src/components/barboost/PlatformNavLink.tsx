@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export function PlatformNavLink() {
+export function PlatformNavLink({ light = false }: { light?: boolean }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -18,7 +18,11 @@ export function PlatformNavLink() {
   return (
     <Link
       href="/admin"
-      className="rounded-xl px-3 py-2 text-sm font-medium text-amber-200/90 transition-colors hover:bg-amber-500/15"
+      className={
+        light
+          ? "rounded-xl px-3 py-2 text-sm font-medium text-amber-900/90 transition-colors hover:bg-amber-100/90"
+          : "rounded-xl px-3 py-2 text-sm font-medium text-amber-200/90 transition-colors hover:bg-amber-500/15"
+      }
     >
       Platformbeheer
     </Link>

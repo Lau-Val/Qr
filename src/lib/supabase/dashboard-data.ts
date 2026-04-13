@@ -13,6 +13,8 @@ import {
   rangeTodayAmsterdam,
   rangeWeekAmsterdam,
 } from "@/lib/time-amsterdam";
+import type { VenueType } from "@/lib/dashboard/payload-types";
+import { parseVenueType } from "@/lib/venue-type";
 
 export type {
   DashboardData,
@@ -232,7 +234,7 @@ export async function getDashboardData(barSlug: string): Promise<DashboardData> 
   const supabase = createServiceClient();
   const { data: bar, error: barErr } = await supabase
     .from("bars")
-    .select("id, name, slug")
+    .select("id, name, slug, venue_type")
     .eq("slug", barSlug)
     .maybeSingle();
   if (barErr) throw barErr;
@@ -270,10 +272,15 @@ export async function getDashboardData(barSlug: string): Promise<DashboardData> 
     reviewDate: r.review_date,
   }));
 
+  const venueType: VenueType = parseVenueType(
+    (bar as { venue_type?: string }).venue_type,
+  );
+
   return {
     configured: true,
     barSlug: bar.slug,
     barName: bar.name,
+    venueType,
     periods: {
       today,
       week,

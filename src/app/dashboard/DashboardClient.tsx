@@ -20,18 +20,48 @@ function BigNumber({
   label,
   value,
   hint,
+  light,
 }: {
   label: string;
   value: string | number;
   hint?: string;
+  light?: boolean;
 }) {
   return (
-    <div className="rounded-2xl border border-white/[0.1] bg-white/[0.04] px-4 py-5 sm:px-5 sm:py-6">
-      <p className="text-[13px] font-medium leading-snug text-white/55">{label}</p>
-      <p className="mt-2 text-4xl font-bold tabular-nums tracking-tight text-white sm:text-5xl">
+    <div
+      className={cn(
+        "rounded-2xl px-4 py-5 sm:px-5 sm:py-6",
+        light
+          ? "border border-stone-200 bg-white shadow-sm"
+          : "border border-white/[0.1] bg-white/[0.04]",
+      )}
+    >
+      <p
+        className={cn(
+          "text-[13px] font-medium leading-snug",
+          light ? "text-stone-500" : "text-white/55",
+        )}
+      >
+        {label}
+      </p>
+      <p
+        className={cn(
+          "mt-2 text-4xl font-bold tabular-nums tracking-tight sm:text-5xl",
+          light ? "text-stone-900" : "text-white",
+        )}
+      >
         {value}
       </p>
-      {hint ? <p className="mt-2 text-xs leading-relaxed text-white/38">{hint}</p> : null}
+      {hint ? (
+        <p
+          className={cn(
+            "mt-2 text-xs leading-relaxed",
+            light ? "text-stone-500" : "text-white/38",
+          )}
+        >
+          {hint}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -71,6 +101,7 @@ function DashboardReady({
   setPeriod: (p: PeriodKey) => void;
 }) {
   const stats = data.periods[period];
+  const salon = data.venueType === "kapper";
 
   const conversionLabel = useMemo(() => {
     if (stats.scans <= 0) return "—";
@@ -79,18 +110,41 @@ function DashboardReady({
   }, [stats.scans, stats.claims]);
 
   return (
-    <AdminShell>
-      <div className="flex min-h-0 flex-1 flex-col text-white">
-        <header className="border-b border-white/10 bg-[#0b0a12]/90 backdrop-blur-xl">
+    <AdminShell venueType={data.venueType}>
+      <div
+        className={cn(
+          "flex min-h-0 flex-1 flex-col",
+          salon ? "text-stone-900" : "text-white",
+        )}
+      >
+        <header
+          className={cn(
+            "border-b backdrop-blur-xl",
+            salon
+              ? "border-stone-200 bg-white/95"
+              : "border-white/10 bg-[#0b0a12]/90",
+          )}
+        >
           <div className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-8">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300/85">
+              <p
+                className={cn(
+                  "text-xs font-semibold uppercase tracking-[0.2em]",
+                  salon ? "text-rose-800/85" : "text-emerald-300/85",
+                )}
+              >
                 Jouw cijfers
               </p>
               <h1 className="mt-2 text-3xl font-bold tracking-tight">{data.barName}</h1>
-              <p className="mt-2 max-w-xl text-base leading-relaxed text-white/55">
-                Hoe vaak gasten je QR openen, hoeveel deals aan de bar worden gebruikt, en hoeveel
-                mensen hun telefoon geven voor een betere deal. Zonder ingewikkelde termen.
+              <p
+                className={cn(
+                  "mt-2 max-w-xl text-base leading-relaxed",
+                  salon ? "text-stone-600" : "text-white/55",
+                )}
+              >
+                {salon
+                  ? "Hoe vaak gasten je QR openen, hoeveel deals bij jullie worden gebruikt, en hoeveel mensen hun telefoon geven voor een betere deal. Zonder ingewikkelde termen."
+                  : "Hoe vaak gasten je QR openen, hoeveel deals aan de bar worden gebruikt, en hoeveel mensen hun telefoon geven voor een betere deal. Zonder ingewikkelde termen."}
               </p>
             </div>
 
@@ -102,9 +156,13 @@ function DashboardReady({
                   onClick={() => setPeriod(key)}
                   className={cn(
                     "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
-                    period === key
-                      ? "bg-white text-black"
-                      : "bg-white/[0.06] text-white/65 hover:bg-white/10 hover:text-white",
+                    salon
+                      ? period === key
+                        ? "bg-stone-900 text-white"
+                        : "bg-stone-200/80 text-stone-600 hover:bg-stone-300/90 hover:text-stone-900"
+                      : period === key
+                        ? "bg-white text-black"
+                        : "bg-white/[0.06] text-white/65 hover:bg-white/10 hover:text-white",
                   )}
                 >
                   {PERIOD_LABEL[key]}
@@ -124,72 +182,164 @@ function DashboardReady({
                 label="QR gescand"
                 value={stats.scans}
                 hint="Iemand opent de link vanaf jullie QR."
+                light={salon}
               />
               <BigNumber
-                label="Deal gebruikt aan de bar"
+                label={salon ? "Deal gebruikt bij jullie" : "Deal gebruikt aan de bar"}
                 value={stats.claims}
-                hint="Gast toont de deal en jullie verzilveren die."
+                hint={
+                  salon
+                    ? "Gast toont de deal en jullie verzilveren die."
+                    : "Gast toont de deal en jullie verzilveren die."
+                }
+                light={salon}
               />
               <BigNumber
                 label="Met telefoon voor betere deal"
                 value={stats.upgrades}
                 hint="Upgrade-stap of deal met upgrade — telt mee als iemand die stap zet."
+                light={salon}
               />
               <BigNumber
                 label="Van scan naar deal"
                 value={conversionLabel}
                 hint="Hoeveel scans eindigen met een gebruikte deal."
+                light={salon}
               />
             </div>
           </section>
 
-          <section className="rounded-2xl border border-white/[0.08] bg-[#0c0b14] p-5">
-            <h3 className="text-sm font-semibold text-white/80">Ook geteld</h3>
-            <ul className="mt-4 space-y-3 text-sm text-white/65">
-              <li className="flex justify-between gap-4 border-b border-white/[0.06] pb-3">
+          <section
+            className={cn(
+              "rounded-2xl border p-5",
+              salon
+                ? "border-stone-200 bg-white shadow-sm"
+                : "border-white/[0.08] bg-[#0c0b14]",
+            )}
+          >
+            <h3
+              className={cn(
+                "text-sm font-semibold",
+                salon ? "text-stone-800" : "text-white/80",
+              )}
+            >
+              Ook geteld
+            </h3>
+            <ul
+              className={cn(
+                "mt-4 space-y-3 text-sm",
+                salon ? "text-stone-600" : "text-white/65",
+              )}
+            >
+              <li
+                className={cn(
+                  "flex justify-between gap-4 border-b pb-3",
+                  salon ? "border-stone-200" : "border-white/[0.06]",
+                )}
+              >
                 <span>Terugkomen (comeback)</span>
-                <span className="font-semibold tabular-nums text-white">{stats.comebacks}</span>
+                <span
+                  className={cn(
+                    "font-semibold tabular-nums",
+                    salon ? "text-stone-900" : "text-white",
+                  )}
+                >
+                  {stats.comebacks}
+                </span>
               </li>
-              <li className="flex justify-between gap-4 border-b border-white/[0.06] pb-3">
+              <li
+                className={cn(
+                  "flex justify-between gap-4 border-b pb-3",
+                  salon ? "border-stone-200" : "border-white/[0.06]",
+                )}
+              >
                 <span>Toestemming voor WhatsApp</span>
-                <span className="font-semibold tabular-nums text-white">
+                <span
+                  className={cn(
+                    "font-semibold tabular-nums",
+                    salon ? "text-stone-900" : "text-white",
+                  )}
+                >
                   {stats.whatsappOptIns}
                 </span>
               </li>
               <li className="flex justify-between gap-4">
                 <span>Geschatte dealwaarde (claims)</span>
-                <span className="font-semibold tabular-nums text-emerald-200/95">
+                <span
+                  className={cn(
+                    "font-semibold tabular-nums",
+                    salon ? "text-emerald-800" : "text-emerald-200/95",
+                  )}
+                >
                   €{stats.estimatedDealValue.toLocaleString("nl-NL")}
                 </span>
               </li>
             </ul>
-            <p className="mt-4 text-xs leading-relaxed text-white/35">
+            <p
+              className={cn(
+                "mt-4 text-xs leading-relaxed",
+                salon ? "text-stone-500" : "text-white/35",
+              )}
+            >
               De dealwaarde is een indicatie op basis van jullie ingestelde schattingen per deal —
               geen belofte van omzet.
             </p>
           </section>
 
           <section>
-            <h3 className="text-lg font-bold text-white">QR-codes (deze maand)</h3>
-            <p className="mt-1 text-sm text-white/45">
+            <h3 className={cn("text-lg font-bold", salon ? "text-stone-900" : "text-white")}>
+              QR-codes (deze maand)
+            </h3>
+            <p
+              className={cn("mt-1 text-sm", salon ? "text-stone-600" : "text-white/45")}
+            >
               Elk bordje of tafel kan een eigen code hebben — zo zie je waar het druk wordt.
             </p>
             {data.qrRows.length === 0 ? (
-              <p className="mt-4 text-sm text-white/40">Nog geen QR-codes voor deze bar.</p>
+              <p className={cn("mt-4 text-sm", salon ? "text-stone-500" : "text-white/40")}>
+                Nog geen QR-codes voor deze zaak.
+              </p>
             ) : (
               <ul className="mt-4 space-y-2">
                 {data.qrRows.map((row) => (
                   <li
                     key={row.slug}
-                    className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/[0.07] bg-white/[0.03] px-4 py-3 text-sm"
+                    className={cn(
+                      "flex flex-wrap items-center justify-between gap-2 rounded-xl border px-4 py-3 text-sm",
+                      salon
+                        ? "border-stone-200 bg-white shadow-sm"
+                        : "border-white/[0.07] bg-white/[0.03]",
+                    )}
                   >
-                    <span className="font-medium text-white">
+                    <span
+                      className={cn("font-medium", salon ? "text-stone-900" : "text-white")}
+                    >
                       {row.label ?? row.slug}
-                      <span className="ml-2 text-white/35">({row.slug})</span>
+                      <span
+                        className={cn("ml-2", salon ? "text-stone-500" : "text-white/35")}
+                      >
+                        ({row.slug})
+                      </span>
                     </span>
-                    <span className="text-white/55">
-                      <span className="tabular-nums text-white">{row.scans}</span> scans ·{" "}
-                      <span className="tabular-nums text-white">{row.claims}</span> deals
+                    <span className={salon ? "text-stone-600" : "text-white/55"}>
+                      <span
+                        className={cn(
+                          "tabular-nums",
+                          salon ? "text-stone-900" : "text-white",
+                        )}
+                      >
+                        {row.scans}
+                      </span>{" "}
+                      scans ·{" "}
+                      <span
+                        className={cn(
+                          "tabular-nums",
+                          salon ? "text-stone-900" : "text-white",
+                        )}
+                      >
+                        {row.claims}
+                      </span>{" "}
+                      deals
                     </span>
                   </li>
                 ))}
@@ -198,24 +348,56 @@ function DashboardReady({
           </section>
 
           <section>
-            <h3 className="text-lg font-bold text-white">Welke deals doen het (deze maand)</h3>
-            <p className="mt-1 text-sm text-white/45">Hoe vaak een deal is geclaimd.</p>
+            <h3 className={cn("text-lg font-bold", salon ? "text-stone-900" : "text-white")}>
+              Welke deals doen het (deze maand)
+            </h3>
+            <p
+              className={cn("mt-1 text-sm", salon ? "text-stone-600" : "text-white/45")}
+            >
+              Hoe vaak een deal is geclaimd.
+            </p>
             {data.dealRows.length === 0 ? (
-              <p className="mt-4 text-sm text-white/40">Nog geen claims deze maand.</p>
+              <p className={cn("mt-4 text-sm", salon ? "text-stone-500" : "text-white/40")}>
+                Nog geen claims deze maand.
+              </p>
             ) : (
               <ol className="mt-4 space-y-2">
                 {data.dealRows.map((d, i) => (
                   <li
                     key={d.externalKey}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.07] bg-white/[0.03] px-4 py-3 text-sm"
+                    className={cn(
+                      "flex items-center justify-between gap-3 rounded-xl border px-4 py-3 text-sm",
+                      salon
+                        ? "border-stone-200 bg-white shadow-sm"
+                        : "border-white/[0.07] bg-white/[0.03]",
+                    )}
                   >
                     <span className="min-w-0 flex items-center gap-3">
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-xs font-bold text-white/80">
+                      <span
+                        className={cn(
+                          "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold",
+                          salon
+                            ? "bg-stone-200 text-stone-700"
+                            : "bg-white/[0.08] text-white/80",
+                        )}
+                      >
                         {i + 1}
                       </span>
-                      <span className="truncate font-medium text-white">{d.title}</span>
+                      <span
+                        className={cn(
+                          "truncate font-medium",
+                          salon ? "text-stone-900" : "text-white",
+                        )}
+                      >
+                        {d.title}
+                      </span>
                     </span>
-                    <span className="shrink-0 tabular-nums font-semibold text-emerald-200/90">
+                    <span
+                      className={cn(
+                        "shrink-0 tabular-nums font-semibold",
+                        salon ? "text-emerald-800" : "text-emerald-200/90",
+                      )}
+                    >
                       {d.claims}×
                     </span>
                   </li>
@@ -226,16 +408,35 @@ function DashboardReady({
 
           {data.reviews.length > 0 ? (
             <section>
-              <h3 className="text-lg font-bold text-white">Recente reacties</h3>
+              <h3 className={cn("text-lg font-bold", salon ? "text-stone-900" : "text-white")}>
+                Recente reacties
+              </h3>
               <ul className="mt-4 space-y-3">
                 {data.reviews.map((r, idx) => (
                   <li
                     key={`${r.author}-${idx}`}
-                    className="rounded-xl border border-white/[0.07] bg-white/[0.03] px-4 py-3 text-sm text-white/75"
+                    className={cn(
+                      "rounded-xl border px-4 py-3 text-sm",
+                      salon
+                        ? "border-stone-200 bg-white text-stone-700 shadow-sm"
+                        : "border-white/[0.07] bg-white/[0.03] text-white/75",
+                    )}
                   >
-                    <p className="font-medium text-white">{r.author}</p>
+                    <p
+                      className={cn(
+                        "font-medium",
+                        salon ? "text-stone-900" : "text-white",
+                      )}
+                    >
+                      {r.author}
+                    </p>
                     <p className="mt-1 leading-relaxed">{r.text}</p>
-                    <p className="mt-2 text-xs text-white/35">
+                    <p
+                      className={cn(
+                        "mt-2 text-xs",
+                        salon ? "text-stone-500" : "text-white/35",
+                      )}
+                    >
                       {r.rating}★ · {r.reviewDate}
                     </p>
                   </li>
@@ -244,16 +445,31 @@ function DashboardReady({
             </section>
           ) : null}
 
-          <div className="flex flex-col gap-3 border-t border-white/10 pt-8 sm:flex-row sm:justify-between">
+          <div
+            className={cn(
+              "flex flex-col gap-3 border-t pt-8 sm:flex-row sm:justify-between",
+              salon ? "border-stone-200" : "border-white/10",
+            )}
+          >
             <Link
               href="/dashboard/beheer"
-              className="inline-flex items-center justify-center rounded-xl bg-violet-500/20 px-5 py-3 text-sm font-semibold text-violet-100 ring-1 ring-violet-400/30 hover:bg-violet-500/30"
+              className={cn(
+                "inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold ring-1",
+                salon
+                  ? "bg-rose-50 text-rose-900 ring-rose-200 hover:bg-rose-100"
+                  : "bg-violet-500/20 text-violet-100 ring-violet-400/30 hover:bg-violet-500/30",
+              )}
             >
               Deals aanpassen
             </Link>
             <Link
               href="/campagnes"
-              className="inline-flex items-center justify-center rounded-xl bg-white/[0.06] px-5 py-3 text-sm font-semibold text-white/85 hover:bg-white/10"
+              className={cn(
+                "inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold",
+                salon
+                  ? "border border-stone-300 bg-white text-stone-800 shadow-sm hover:bg-stone-50"
+                  : "bg-white/[0.06] text-white/85 hover:bg-white/10",
+              )}
             >
               WhatsApp-berichten
             </Link>

@@ -29,10 +29,14 @@ export interface ReviewRow {
   reviewDate: string;
 }
 
+export type VenueType = "horeca" | "kapper";
+
 export interface DashboardPayload {
   configured: true;
   barSlug: string;
   barName: string;
+  /** Bar = donker dashboard; Kapper = licht dashboard + salon gast-flow. */
+  venueType: VenueType;
   periods: Record<PeriodKey, PeriodStats>;
   qrRows: QrRowStat[];
   dealRows: DealRowStat[];

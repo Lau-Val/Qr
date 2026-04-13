@@ -11,4 +11,5 @@ export type {
   PeriodStats,
   QrRowStat,
   ReviewRow,
+  VenueType,
 } from "@/lib/dashboard/payload-types";

@@ -50,6 +50,24 @@ export function PlatformForm() {
         />
       </div>
       <div>
+        <label htmlFor="venueType" className="block text-xs text-white/45">
+          Type zaak
+        </label>
+        <select
+          id="venueType"
+          name="venueType"
+          required
+          className="mt-1 w-full rounded-xl border border-white/15 bg-black/40 px-3 py-2.5 text-sm"
+          defaultValue="horeca"
+        >
+          <option value="horeca">Bar / horeca — donker dashboard, gast-flow met rad</option>
+          <option value="kapper">Kapper / salon — licht dashboard, gast-flow met cadeaupakje</option>
+        </select>
+        <p className="mt-1.5 text-[11px] leading-relaxed text-white/38">
+          Dit bepaalt hoe het dashboard eruitziet en welke demo-gastflow past bij de zaak.
+        </p>
+      </div>
+      <div>
         <label htmlFor="slug" className="block text-xs text-white/45">
           URL-slug (uniek)
         </label>

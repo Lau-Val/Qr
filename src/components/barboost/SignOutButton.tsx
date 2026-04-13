@@ -11,12 +11,15 @@ export type SignOutButtonProps = {
   redirectTo?: string;
   /** Volle breedte (o.a. mobiele footer) */
   fullWidth?: boolean;
+  /** Licht thema (salon-dashboard) */
+  light?: boolean;
 };
 
 export function SignOutButton({
   className,
   redirectTo = "/login",
   fullWidth = false,
+  light = false,
 }: SignOutButtonProps) {
   const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -49,7 +52,10 @@ export function SignOutButton({
         type="button"
         onClick={() => setConfirmOpen(true)}
         className={cn(
-          "rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-red-950/40 transition hover:bg-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07060f]",
+          "rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-red-950/40 transition hover:bg-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2",
+          light
+            ? "focus-visible:ring-offset-stone-100"
+            : "focus-visible:ring-offset-[#07060f]",
           fullWidth && "w-full",
           className,
         )}
@@ -67,20 +73,35 @@ export function SignOutButton({
             role="dialog"
             aria-modal="true"
             aria-labelledby="signout-dialog-title"
-            className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#14121c] p-6 text-white shadow-2xl"
+            className={cn(
+              "w-full max-w-sm rounded-2xl border p-6 shadow-2xl",
+              light
+                ? "border-stone-200 bg-white text-stone-900"
+                : "border-white/10 bg-[#14121c] text-white",
+            )}
             onClick={(e) => e.stopPropagation()}
           >
             <h2 id="signout-dialog-title" className="text-lg font-semibold">
               Uitloggen?
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-white/65">
+            <p
+              className={cn(
+                "mt-2 text-sm leading-relaxed",
+                light ? "text-stone-600" : "text-white/65",
+              )}
+            >
               Weet je zeker dat je wilt uitloggen?
             </p>
             <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <button
                 type="button"
                 onClick={() => setConfirmOpen(false)}
-                className="rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                className={cn(
+                  "rounded-xl border px-4 py-2.5 text-sm font-semibold transition",
+                  light
+                    ? "border-stone-300 bg-stone-100 text-stone-800 hover:bg-stone-200"
+                    : "border-white/15 bg-white/[0.06] text-white hover:bg-white/10",
+                )}
               >
                 Annuleren
               </button>

@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { BAR_NAME } from "@/data/bar";
+import type { VenueType } from "@/lib/dashboard/payload-types";
 import { AdminShell } from "@/components/barboost/AdminShell";
 import { Button } from "@/components/barboost/ui/Button";
 import { Badge } from "@/components/barboost/ui/Badge";
 import Link from "next/link";
+import { cn } from "@/lib/cn";
 
 type DealType =
   | "Bier deal"
@@ -78,9 +80,10 @@ const TYPES: DealType[] = [
   "Comeback deal",
 ];
 
-export function DealBeheerClient() {
+export function DealBeheerClient({ venueType }: { venueType: VenueType }) {
   const [rows, setRows] = useState<DealRow[]>(INITIAL);
   const [saved, setSaved] = useState(false);
+  const salon = venueType === "kapper";
 
   const update = (id: string, patch: Partial<DealRow>) => {
     setRows((r) => r.map((x) => (x.id === id ? { ...x, ...patch } : x)));
@@ -88,20 +91,42 @@ export function DealBeheerClient() {
   };
 
   return (
-    <AdminShell>
-      <div className="flex min-h-0 flex-1 flex-col text-white">
-        <header className="border-b border-white/10 bg-[#0b0a12]/90 px-4 py-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-violet-300/80">
+    <AdminShell venueType={venueType}>
+      <div
+        className={cn(
+          "flex min-h-0 flex-1 flex-col",
+          salon ? "text-stone-900" : "text-white",
+        )}
+      >
+        <header
+          className={cn(
+            "border-b px-4 py-6",
+            salon
+              ? "border-stone-200 bg-white/95"
+              : "border-white/10 bg-[#0b0a12]/90",
+          )}
+        >
+          <p
+            className={cn(
+              "text-xs font-semibold uppercase tracking-[0.25em]",
+              salon ? "text-rose-800/80" : "text-violet-300/80",
+            )}
+          >
             BarBoost · Beheer
           </p>
           <h1 className="mt-2 text-2xl font-bold">Deals voor {BAR_NAME}</h1>
-          <p className="mt-1 text-sm text-white/50">
+          <p
+            className={cn("mt-1 text-sm", salon ? "text-stone-600" : "text-white/50")}
+          >
             Kies vooraf ingestelde dealtypes — geen rommelige vrije invoer. Alles is
             demo-state op dit apparaat.
           </p>
           <Link
             href="/dashboard"
-            className="mt-4 inline-block text-sm text-violet-300 hover:underline"
+            className={cn(
+              "mt-4 inline-block text-sm",
+              salon ? "text-rose-800 hover:underline" : "text-violet-300 hover:underline",
+            )}
           >
             ← Terug naar dashboard
           </Link>
@@ -109,7 +134,14 @@ export function DealBeheerClient() {
 
         <main className="mx-auto w-full max-w-4xl flex-1 space-y-6 px-4 py-8">
           {saved ? (
-            <p className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100">
+            <p
+              className={cn(
+                "rounded-xl border px-4 py-3 text-sm",
+                salon
+                  ? "border-emerald-200 bg-emerald-50 text-emerald-900"
+                  : "border-emerald-500/30 bg-emerald-500/10 text-emerald-100",
+              )}
+            >
               Opgeslagen (demo) — instellingen zijn lokaal.
             </p>
           ) : null}
@@ -118,7 +150,12 @@ export function DealBeheerClient() {
             {rows.map((row) => (
               <div
                 key={row.id}
-                className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-4"
+                className={cn(
+                  "rounded-2xl border p-4",
+                  salon
+                    ? "border-stone-200 bg-white shadow-sm"
+                    : "border-white/[0.07] bg-white/[0.02]",
+                )}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <Badge tone={row.actief ? "success" : "neutral"}>
@@ -127,21 +164,36 @@ export function DealBeheerClient() {
                   <button
                     type="button"
                     onClick={() => update(row.id, { actief: !row.actief })}
-                    className="text-xs font-medium text-white/50 hover:text-white"
+                    className={cn(
+                      "text-xs font-medium",
+                      salon
+                        ? "text-stone-500 hover:text-stone-900"
+                        : "text-white/50 hover:text-white",
+                    )}
                   >
                     {row.actief ? "Deactiveren" : "Activeren"}
                   </button>
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <label className="block text-xs text-white/45">
+                  <label
+                    className={cn(
+                      "block text-xs",
+                      salon ? "text-stone-600" : "text-white/45",
+                    )}
+                  >
                     Type
                     <select
                       value={row.type}
                       onChange={(e) =>
                         update(row.id, { type: e.target.value as DealType })
                       }
-                      className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-2 py-2 text-sm"
+                      className={cn(
+                        "mt-1 w-full rounded-lg border px-2 py-2 text-sm",
+                        salon
+                          ? "border-stone-300 bg-white text-stone-900"
+                          : "border-white/10 bg-black/40",
+                      )}
                     >
                       {TYPES.map((t) => (
                         <option key={t} value={t}>
@@ -150,48 +202,98 @@ export function DealBeheerClient() {
                       ))}
                     </select>
                   </label>
-                  <label className="block text-xs text-white/45">
+                  <label
+                    className={cn(
+                      "block text-xs",
+                      salon ? "text-stone-600" : "text-white/45",
+                    )}
+                  >
                     Dealnaam
                     <input
                       value={row.naam}
                       onChange={(e) => update(row.id, { naam: e.target.value })}
-                      className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-2 py-2 text-sm"
+                      className={cn(
+                        "mt-1 w-full rounded-lg border px-2 py-2 text-sm",
+                        salon
+                          ? "border-stone-300 bg-white text-stone-900"
+                          : "border-white/10 bg-black/40",
+                      )}
                     />
                   </label>
-                  <label className="sm:col-span-2 block text-xs text-white/45">
+                  <label
+                    className={cn(
+                      "sm:col-span-2 block text-xs",
+                      salon ? "text-stone-600" : "text-white/45",
+                    )}
+                  >
                     Korte omschrijving
                     <input
                       value={row.omschrijving}
                       onChange={(e) =>
                         update(row.id, { omschrijving: e.target.value })
                       }
-                      className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-2 py-2 text-sm"
+                      className={cn(
+                        "mt-1 w-full rounded-lg border px-2 py-2 text-sm",
+                        salon
+                          ? "border-stone-300 bg-white text-stone-900"
+                          : "border-white/10 bg-black/40",
+                      )}
                     />
                   </label>
-                  <label className="block text-xs text-white/45">
+                  <label
+                    className={cn(
+                      "block text-xs",
+                      salon ? "text-stone-600" : "text-white/45",
+                    )}
+                  >
                     Prijs / voordeel
                     <input
                       value={row.prijs}
                       onChange={(e) => update(row.id, { prijs: e.target.value })}
-                      className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-2 py-2 text-sm"
+                      className={cn(
+                        "mt-1 w-full rounded-lg border px-2 py-2 text-sm",
+                        salon
+                          ? "border-stone-300 bg-white text-stone-900"
+                          : "border-white/10 bg-black/40",
+                      )}
                     />
                   </label>
-                  <label className="block text-xs text-white/45">
+                  <label
+                    className={cn(
+                      "block text-xs",
+                      salon ? "text-stone-600" : "text-white/45",
+                    )}
+                  >
                     Tijdslimiet
                     <input
                       value={row.tijdslimiet}
                       onChange={(e) =>
                         update(row.id, { tijdslimiet: e.target.value })
                       }
-                      className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-2 py-2 text-sm"
+                      className={cn(
+                        "mt-1 w-full rounded-lg border px-2 py-2 text-sm",
+                        salon
+                          ? "border-stone-300 bg-white text-stone-900"
+                          : "border-white/10 bg-black/40",
+                      )}
                     />
                   </label>
-                  <label className="sm:col-span-2 block text-xs text-white/45">
+                  <label
+                    className={cn(
+                      "sm:col-span-2 block text-xs",
+                      salon ? "text-stone-600" : "text-white/45",
+                    )}
+                  >
                     Label (zoals op voucher)
                     <input
                       value={row.label}
                       onChange={(e) => update(row.id, { label: e.target.value })}
-                      className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-2 py-2 text-sm"
+                      className={cn(
+                        "mt-1 w-full rounded-lg border px-2 py-2 text-sm",
+                        salon
+                          ? "border-stone-300 bg-white text-stone-900"
+                          : "border-white/10 bg-black/40",
+                      )}
                     />
                   </label>
                 </div>

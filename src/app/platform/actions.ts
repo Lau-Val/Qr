@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isPlatformAdminUser } from "@/lib/auth/platform-admin";
+import { parseVenueType } from "@/lib/venue-type";
 import { createServerSupabase } from "@/utils/supabase/server";
 
 export type CreateBarResult =
@@ -28,6 +29,7 @@ export async function createBarWithOwner(
     .trim()
     .toLowerCase();
   const password = String(formData.get("password") ?? "");
+  const venueType = parseVenueType(String(formData.get("venueType") ?? "horeca"));
 
   if (!name || !slug || !ownerEmail || !password) {
     return { ok: false, error: "Vul alle velden in." };
@@ -66,7 +68,7 @@ export async function createBarWithOwner(
 
   const { data: bar, error: barErr } = await admin
     .from("bars")
-    .insert({ slug, name, settings: {} })
+    .insert({ slug, name, settings: {}, venue_type: venueType })
     .select("id")
     .single();
 
