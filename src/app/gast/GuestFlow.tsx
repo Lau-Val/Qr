@@ -20,6 +20,7 @@ import { BartenderDealScreen } from "@/components/barboost/BartenderDealScreen";
 import { PrizeShowcaseCard } from "@/components/barboost/PrizeShowcaseCard";
 import { Button, buttonClassName } from "@/components/barboost/ui/Button";
 import { Badge } from "@/components/barboost/ui/Badge";
+import { KapperPrizeBox } from "@/components/barboost/KapperPrizeBox";
 import { MobileShell } from "@/components/barboost/ui/MobileShell";
 import { LuckWheel } from "@/components/barboost/LuckWheel";
 import {
@@ -110,7 +111,10 @@ function GuestFlowInner({
   const revealAdvanceRef = useRef<number | null>(null);
   const consumedUrlSpin = useRef(false);
 
-  const startWheelSpin = useCallback(() => {
+  const GIFT_BOX_OPEN_MS = 2800;
+  const WHEEL_SPIN_MS = 5850;
+
+  const startUnlockAnimation = useCallback(() => {
     const dealId = pickWeightedDealId(
       tpl.unlockShowcase.map(({ dealId, weight }) => ({ dealId, weight })),
     );
@@ -118,8 +122,24 @@ function GuestFlowInner({
     if (!deal) {
       return;
     }
-    const luck = tpl.luckBand(dealId);
     setSpinning(true);
+    if (tpl.unlockMode === "giftBox") {
+      window.setTimeout(() => {
+        setSpinning(false);
+        setRevealDealId(deal.id);
+        if (revealAdvanceRef.current) {
+          window.clearTimeout(revealAdvanceRef.current);
+        }
+        revealAdvanceRef.current = window.setTimeout(() => {
+          setBaseDeal(deal);
+          setStep("baseDeal");
+          setRevealDealId(null);
+          revealAdvanceRef.current = null;
+        }, 4200);
+      }, GIFT_BOX_OPEN_MS);
+      return;
+    }
+    const luck = tpl.luckBand(dealId);
     setWheelRotation((r) => r + 360 * 10 + luck * 4.2);
     window.setTimeout(() => {
       setSpinning(false);
@@ -133,7 +153,7 @@ function GuestFlowInner({
         setRevealDealId(null);
         revealAdvanceRef.current = null;
       }, 4200);
-    }, 5850);
+    }, WHEEL_SPIN_MS);
   }, [tpl]);
 
   const effectiveDeal = useMemo(() => {
@@ -161,12 +181,12 @@ function GuestFlowInner({
     if (consumedUrlSpin.current) return;
     if (spinning || revealDealId) return;
     consumedUrlSpin.current = true;
-    startWheelSpin();
+    startUnlockAnimation();
     /* State eerst laten committen; daarna alleen history — geen Next-router (voorkomt remount). */
     queueMicrotask(() => {
       stripSpinQueryFromAddressBar();
     });
-  }, [step, searchParams, spinning, revealDealId, startWheelSpin]);
+  }, [step, searchParams, spinning, revealDealId, startUnlockAnimation]);
 
   const goClaim = useCallback(() => {
     setStep("claim");
@@ -240,6 +260,8 @@ function GuestFlowInner({
     };
   }, [step, baseDeal, tpl.unlockShowcase]);
 
+  const salonStyle = tpl.unlockMode === "giftBox";
+
   const handleUpgradeSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -257,7 +279,13 @@ function GuestFlowInner({
   );
 
   return (
-    <MobileShell>
+    <MobileShell
+      className={
+        salonStyle
+          ? "border-amber-200/20 shadow-[0_28px_70px_rgba(50,35,8,0.55)] bg-gradient-to-b from-[#353026] via-[#252014] to-[#141008]"
+          : undefined
+      }
+    >
       <div className="relative flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         <span
           className="pointer-events-none absolute left-0 top-0 z-[200] select-none font-mono text-[8px] tabular-nums leading-none text-white/40 sm:text-[9px]"
@@ -267,15 +295,35 @@ function GuestFlowInner({
           {gastFlowPageNumber(step)}
         </span>
         {step === "welcome" ? (
-          <section className="flex h-full min-h-0 min-w-0 flex-1 flex-col justify-between gap-2 overflow-hidden text-center [@media(max-height:640px)]:gap-1.5">
+          <section
+            className={cn(
+              "flex h-full min-h-0 min-w-0 flex-1 flex-col justify-between gap-2 overflow-hidden text-center [@media(max-height:640px)]:gap-1.5",
+              salonStyle && "text-amber-50",
+            )}
+          >
             <div className="min-h-0 shrink">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45">
+              <p
+                className={cn(
+                  "text-[10px] font-semibold uppercase tracking-[0.35em]",
+                  salonStyle ? "text-amber-200/75" : "text-white/45",
+                )}
+              >
                 {tpl.brandLabel}
               </p>
-              <h1 className="mt-3 text-[clamp(1.25rem,4.8vw,1.6rem)] font-bold leading-snug tracking-tight text-white [@media(max-height:640px)]:mt-2">
+              <h1
+                className={cn(
+                  "mt-3 text-[clamp(1.25rem,4.8vw,1.6rem)] font-bold leading-snug tracking-tight [@media(max-height:640px)]:mt-2",
+                  salonStyle ? "text-amber-50" : "text-white",
+                )}
+              >
                 {tpl.welcome.title}
               </h1>
-              <p className="mt-2 text-[clamp(0.8rem,3.2vw,0.875rem)] leading-relaxed text-white/52 [@media(max-height:640px)]:mt-1.5">
+              <p
+                className={cn(
+                  "mt-2 text-[clamp(0.8rem,3.2vw,0.875rem)] leading-relaxed [@media(max-height:640px)]:mt-1.5",
+                  salonStyle ? "text-amber-100/80" : "text-white/52",
+                )}
+              >
                 {tpl.welcome.subtitle}
               </p>
               <div className="mt-4 flex flex-wrap justify-center gap-1.5 [@media(max-height:640px)]:mt-3 [@media(max-height:640px)]:gap-1">
@@ -290,14 +338,23 @@ function GuestFlowInner({
               <Link
                 href={`${tpl.basePath}/unlock`}
                 prefetch
-                className={buttonClassName(
-                  "primary",
-                  "w-full justify-center py-3.5 text-base text-center no-underline [@media(max-height:640px)]:py-3",
+                className={cn(
+                  salonStyle
+                    ? "flex w-full cursor-pointer touch-manipulation select-none items-center justify-center rounded-xl border border-amber-400/35 bg-amber-500 px-5 py-3.5 text-center text-base font-semibold tracking-tight text-stone-900 shadow-lg shadow-amber-950/35 no-underline transition hover:bg-amber-400 active:bg-amber-600 [@media(max-height:640px)]:py-3"
+                    : buttonClassName(
+                        "primary",
+                        "w-full justify-center py-3.5 text-base text-center no-underline [@media(max-height:640px)]:py-3",
+                      ),
                 )}
               >
                 {tpl.welcome.cta}
               </Link>
-              <p className="text-[11px] text-white/38 sm:text-xs">
+              <p
+                className={cn(
+                  "text-[11px] sm:text-xs",
+                  salonStyle ? "text-amber-200/50" : "text-white/38",
+                )}
+              >
                 {tpl.welcome.footerHint}
               </p>
             </div>
@@ -307,22 +364,47 @@ function GuestFlowInner({
         {step === "unlock" ? (
           <section className="bb-gast-unlock flex h-full min-h-0 min-w-0 flex-1 flex-col gap-1 overflow-hidden pb-0">
             <div className="flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center pt-0">
-              <LuckWheel
-                rotationDeg={wheelRotation}
-                spinning={spinning}
-                mini
-                unlockLayout
-                emphasized={spinning}
-                showCaption={false}
-                segmentColors={tpl.unlockShowcase.map((r) => r.wheelColor)}
-              />
+              {tpl.unlockMode === "giftBox" ? (
+                <KapperPrizeBox
+                  opening={spinning}
+                  revealDealId={revealDealId}
+                  showcase={tpl.unlockShowcase.map(({ dealId, text }) => ({
+                    dealId,
+                    text,
+                  }))}
+                  onBoxPress={() => startUnlockAnimation()}
+                  idleHint="Tik op de box — hij gaat open en je prijs komt tevoorschijn."
+                />
+              ) : (
+                <LuckWheel
+                  rotationDeg={wheelRotation}
+                  spinning={spinning}
+                  mini
+                  unlockLayout
+                  emphasized={spinning}
+                  showCaption={false}
+                  segmentColors={tpl.unlockShowcase.map((r) => r.wheelColor)}
+                />
+              )}
               {spinning ? (
-                <p className="mt-1.5 text-center text-[clamp(0.78rem,3.2vw,0.95rem)] font-bold tracking-tight text-transparent bg-gradient-to-r from-violet-200 via-fuchsia-200 to-violet-300 bg-clip-text">
-                  Het rad draait…
+                <p
+                  className={cn(
+                    "mt-2 text-center text-[clamp(0.78rem,3.2vw,0.95rem)] font-bold tracking-tight",
+                    salonStyle
+                      ? "text-amber-200"
+                      : "bg-gradient-to-r from-violet-200 via-fuchsia-200 to-violet-300 bg-clip-text text-transparent",
+                  )}
+                >
+                  {tpl.unlock.openingHint}
                 </p>
               ) : null}
               {revealDealId && !spinning ? (
-                <p className="mt-1.5 text-center text-[10px] font-medium leading-tight text-white/45">
+                <p
+                  className={cn(
+                    "mt-1.5 text-center text-[10px] font-medium leading-tight",
+                    salonStyle ? "text-amber-200/70" : "text-white/45",
+                  )}
+                >
                   Zo meteen volgt je deal op het volgende scherm
                 </p>
               ) : null}
@@ -330,13 +412,23 @@ function GuestFlowInner({
 
             <div
               className={cn(
-                "flex max-h-[min(318px,40dvh)] min-h-0 w-full shrink-0 flex-col overflow-hidden rounded-xl border border-white/[0.08] px-2 py-2 transition-all duration-500 sm:max-h-[min(340px,42dvh)] sm:rounded-[1.1rem] sm:px-2.5 sm:py-2.5",
-                spinning && "pointer-events-none bg-white/[0.025] opacity-[0.92]",
-                !spinning && !revealDealId && "bg-white/[0.035]",
-                revealDealId && "relative bg-black/40 ring-1 ring-white/10",
+                "flex max-h-[min(318px,40dvh)] min-h-0 w-full shrink-0 flex-col overflow-hidden rounded-xl border px-2 py-2 transition-all duration-500 sm:max-h-[min(340px,42dvh)] sm:rounded-[1.1rem] sm:px-2.5 sm:py-2.5",
+                salonStyle
+                  ? "border-amber-200/15 bg-amber-950/20 ring-1 ring-amber-400/10"
+                  : "border-white/[0.08]",
+                spinning && "pointer-events-none opacity-[0.92]",
+                !spinning && !revealDealId && !salonStyle && "bg-white/[0.035]",
+                !spinning && !revealDealId && salonStyle && "bg-amber-950/15",
+                revealDealId && !salonStyle && "relative bg-black/40 ring-1 ring-white/10",
+                revealDealId && salonStyle && "relative bg-amber-950/35 ring-1 ring-amber-400/20",
               )}
             >
-              <h2 className="shrink-0 text-[clamp(0.78rem,3.3vw,1.08rem)] font-bold leading-tight tracking-tight text-white">
+              <h2
+                className={cn(
+                  "shrink-0 text-[clamp(0.78rem,3.3vw,1.08rem)] font-bold leading-tight tracking-tight",
+                  salonStyle ? "text-amber-50" : "text-white",
+                )}
+              >
                 {revealDealId
                   ? tpl.unlock.listHeadingReveal
                   : tpl.unlock.listHeading}
@@ -371,13 +463,21 @@ function GuestFlowInner({
                         dense
                       >
                         {isWinner && revealDealId ? (
-                          <p className="mb-0.5 text-center text-[8px] font-bold uppercase tracking-[0.22em] text-emerald-300/95">
+                          <p
+                            className={cn(
+                              "mb-0.5 text-center text-[8px] font-bold uppercase tracking-[0.22em]",
+                              salonStyle
+                                ? "text-amber-200"
+                                : "text-emerald-300/95",
+                            )}
+                          >
                             Jouw prijs
                           </p>
                         ) : null}
                         <p
                           className={cn(
-                            "font-semibold leading-snug tracking-tight text-white",
+                            "font-semibold leading-snug tracking-tight",
+                            salonStyle ? "text-amber-50" : "text-white",
                             isWinner && revealDealId
                               ? "text-[clamp(0.88rem,3.5vw,1.18rem)]"
                               : "text-[clamp(0.8rem,3.1vw,1.05rem)]",
@@ -385,9 +485,21 @@ function GuestFlowInner({
                         >
                           {row.text}
                         </p>
-                        <p className="mt-1 text-[10px] leading-tight text-white/50 sm:text-[11px]">
+                        <p
+                          className={cn(
+                            "mt-1 text-[10px] leading-tight sm:text-[11px]",
+                            salonStyle ? "text-amber-200/55" : "text-white/50",
+                          )}
+                        >
                           Normaal{" "}
-                          <span className="font-medium text-white/65 line-through decoration-white/35">
+                          <span
+                            className={cn(
+                              "font-medium line-through",
+                              salonStyle
+                                ? "text-amber-100/70 decoration-amber-200/35"
+                                : "text-white/65 decoration-white/35",
+                            )}
+                          >
                             {row.normaal}
                           </span>
                         </p>
@@ -401,9 +513,13 @@ function GuestFlowInner({
             <div className="shrink-0 pt-0.5">
               {spinning || revealDealId ? (
                 <div
-                  className={buttonClassName(
-                    "primary",
-                    "w-full cursor-default justify-center py-2.5 text-sm font-semibold opacity-90 sm:py-3 sm:text-base",
+                  className={cn(
+                    buttonClassName(
+                      "primary",
+                      "w-full cursor-default justify-center py-2.5 text-sm font-semibold opacity-90 sm:py-3 sm:text-base",
+                    ),
+                    salonStyle &&
+                      "!bg-amber-600/90 !text-amber-50 !shadow-amber-950/40",
                   )}
                   aria-live="polite"
                 >
@@ -413,12 +529,16 @@ function GuestFlowInner({
                 <Link
                   href={`${tpl.basePath}/unlock?${SPIN_QUERY}=1`}
                   prefetch={false}
-                  className={buttonClassName(
-                    "primary",
-                    "w-full justify-center py-2.5 text-center text-sm font-semibold no-underline sm:py-3 sm:text-base",
+                  className={cn(
+                    salonStyle
+                      ? "flex w-full touch-manipulation select-none items-center justify-center rounded-xl border border-amber-400/40 bg-amber-500 py-2.5 text-center text-sm font-semibold text-stone-900 shadow-md shadow-amber-950/35 no-underline transition hover:bg-amber-400 sm:py-3 sm:text-base"
+                      : buttonClassName(
+                          "primary",
+                          "w-full justify-center py-2.5 text-center text-sm font-semibold no-underline sm:py-3 sm:text-base",
+                        ),
                   )}
                 >
-                  Draai nu
+                  {tpl.unlock.primaryCta}
                 </Link>
               )}
             </div>
@@ -433,25 +553,66 @@ function GuestFlowInner({
               const mins = Math.max(1, Math.ceil(baseDeal.timerSeconds / 60));
               return (
                 <>
-                  <div className="shrink-0 rounded-xl border border-white/10 bg-white/[0.04] px-2.5 py-2 text-center sm:rounded-2xl sm:px-3 sm:py-2.5 [@media(max-height:760px)]:py-2">
-                    <p className="text-[clamp(0.95rem,3.8vw,1.125rem)] font-bold text-emerald-300/95">
+                  <div
+                    className={cn(
+                      "shrink-0 rounded-xl border px-2.5 py-2 text-center sm:rounded-2xl sm:px-3 sm:py-2.5 [@media(max-height:760px)]:py-2",
+                      salonStyle
+                        ? "border-amber-300/25 bg-amber-950/30"
+                        : "border-white/10 bg-white/[0.04]",
+                    )}
+                  >
+                    <p
+                      className={cn(
+                        "text-[clamp(0.95rem,3.8vw,1.125rem)] font-bold",
+                        salonStyle ? "text-amber-200" : "text-emerald-300/95",
+                      )}
+                    >
                       Dit heb je gewonnen
                     </p>
-                    <h2 className="mt-1.5 text-[clamp(1.15rem,5vw,1.75rem)] font-bold leading-tight text-white [@media(max-height:760px)]:mt-1">
+                    <h2
+                      className={cn(
+                        "mt-1.5 text-[clamp(1.15rem,5vw,1.75rem)] font-bold leading-tight [@media(max-height:760px)]:mt-1",
+                        salonStyle ? "text-amber-50" : "text-white",
+                      )}
+                    >
                       {baseDeal.title}
                     </h2>
-                    <p className="mt-2 text-[clamp(0.9rem,3.5vw,1.125rem)] text-white/45 line-through decoration-white/30 [@media(max-height:760px)]:mt-1.5">
+                    <p
+                      className={cn(
+                        "mt-2 text-[clamp(0.9rem,3.5vw,1.125rem)] line-through [@media(max-height:760px)]:mt-1.5",
+                        salonStyle
+                          ? "text-amber-200/45 decoration-amber-300/35"
+                          : "text-white/45 decoration-white/30",
+                      )}
+                    >
                       normaal {pc.normal}
                     </p>
-                    <p className="mt-2 text-[clamp(0.8rem,3.2vw,1rem)] font-medium text-white/70 [@media(max-height:760px)]:mt-1.5">
+                    <p
+                      className={cn(
+                        "mt-2 text-[clamp(0.8rem,3.2vw,1rem)] font-medium [@media(max-height:760px)]:mt-1.5",
+                        salonStyle ? "text-amber-100/80" : "text-white/70",
+                      )}
+                    >
                       Nog {mins} {tpl.baseDeal.contextLine} {tpl.barName}
                     </p>
                   </div>
 
                   <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-                    <div className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border-2 border-violet-400/55 p-3 shadow-[0_0_0_1px_rgba(167,139,250,0.2),0_20px_50px_rgba(0,0,0,0.55),0_0_80px_rgba(124,58,237,0.22)] sm:rounded-3xl sm:p-4 [@media(max-height:760px)]:p-2.5">
+                    <div
+                      className={cn(
+                        "relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border-2 p-3 sm:rounded-3xl sm:p-4 [@media(max-height:760px)]:p-2.5",
+                        salonStyle
+                          ? "border-amber-400/45 shadow-[0_0_0_1px_rgba(217,119,6,0.25),0_20px_50px_rgba(0,0,0,0.5),0_0_70px_rgba(245,158,11,0.18)]"
+                          : "border-violet-400/55 shadow-[0_0_0_1px_rgba(167,139,250,0.2),0_20px_50px_rgba(0,0,0,0.55),0_0_80px_rgba(124,58,237,0.22)]",
+                      )}
+                    >
                       <div
-                        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-violet-950/90 via-[#15101f] to-black/50"
+                        className={cn(
+                          "pointer-events-none absolute inset-0",
+                          salonStyle
+                            ? "bg-gradient-to-b from-amber-950/85 via-[#1c160c] to-black/55"
+                            : "bg-gradient-to-b from-violet-950/90 via-[#15101f] to-black/50",
+                        )}
                         aria-hidden
                       />
                       <div
@@ -459,7 +620,10 @@ function GuestFlowInner({
                         aria-hidden
                       />
                       <div
-                        className="pointer-events-none absolute -right-16 -top-16 z-[1] h-40 w-40 rounded-full bg-violet-500/25 blur-3xl"
+                        className={cn(
+                          "pointer-events-none absolute -right-16 -top-16 z-[1] h-40 w-40 rounded-full blur-3xl",
+                          salonStyle ? "bg-amber-500/30" : "bg-violet-500/25",
+                        )}
                         aria-hidden
                       />
                       <div
@@ -470,25 +634,58 @@ function GuestFlowInner({
                         <div className="bb-upgrade-gloss-ray bb-upgrade-gloss-ray--secondary" />
                       </div>
                       <div className="relative z-[3] flex min-h-0 flex-1 flex-col overflow-hidden">
-                        <h3 className="shrink-0 text-center text-[clamp(1rem,4vw,1.35rem)] font-extrabold leading-tight tracking-tight text-white">
-                          <span aria-hidden>🔥</span> {tpl.baseDeal.upgradeHeadline}
+                        <h3
+                          className={cn(
+                            "shrink-0 text-center text-[clamp(1rem,4vw,1.35rem)] font-extrabold leading-tight tracking-tight",
+                            salonStyle ? "text-amber-50" : "text-white",
+                          )}
+                        >
+                          <span aria-hidden>{salonStyle ? "✨" : "🔥"}</span>{" "}
+                          {tpl.baseDeal.upgradeHeadline}
                         </h3>
 
                         <div className="mt-2 shrink-0 space-y-2 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:space-y-1.5">
                           <div>
-                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/38 [@media(max-height:760px)]:text-[9px]">
+                            <p
+                              className={cn(
+                                "text-[10px] font-bold uppercase tracking-[0.2em] [@media(max-height:760px)]:text-[9px]",
+                                salonStyle
+                                  ? "text-amber-200/55"
+                                  : "text-white/38",
+                              )}
+                            >
                               {tpl.baseDeal.upgradeSubStandard}
                             </p>
-                            <p className="mt-1 text-[clamp(0.9rem,3.5vw,1.05rem)] font-semibold leading-snug text-white/70 [@media(max-height:760px)]:mt-0.5">
+                            <p
+                              className={cn(
+                                "mt-1 text-[clamp(0.9rem,3.5vw,1.05rem)] font-semibold leading-snug [@media(max-height:760px)]:mt-0.5",
+                                salonStyle
+                                  ? "text-amber-100/85"
+                                  : "text-white/70",
+                              )}
+                            >
                               {baseDeal.title}
                             </p>
                           </div>
-                          <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                          <div
+                            className={cn(
+                              "h-px w-full bg-gradient-to-r from-transparent to-transparent",
+                              salonStyle
+                                ? "via-amber-300/25"
+                                : "via-white/20",
+                            )}
+                          />
                           <div>
                             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-200/90 [@media(max-height:760px)]:text-[9px]">
-                              <span aria-hidden>🔥</span> {tpl.baseDeal.upgradeSubUpgraded}
+                              <span aria-hidden>{salonStyle ? "✨" : "🔥"}</span>{" "}
+                              {tpl.baseDeal.upgradeSubUpgraded}
                             </p>
-                            <p className="mt-1 text-[clamp(1rem,4vw,1.35rem)] font-bold leading-snug text-white [@media(max-height:760px)]:mt-0.5">
+                            <p
+                              className={cn(
+                                "mt-1 text-[clamp(1rem,4vw,1.35rem)] font-bold leading-snug [@media(max-height:760px)]:mt-0.5",
+                                salonStyle ? "text-amber-50" : "text-white",
+                              )}
+                            >
                               {upgraded.title}
                             </p>
                           </div>
@@ -500,13 +697,21 @@ function GuestFlowInner({
                           autoComplete="on"
                         >
                           <div className="min-h-0 space-y-2">
-                            <p className="text-center text-[clamp(0.95rem,3.8vw,1.15rem)] font-bold leading-snug text-white">
+                            <p
+                              className={cn(
+                                "text-center text-[clamp(0.95rem,3.8vw,1.15rem)] font-bold leading-snug",
+                                salonStyle ? "text-amber-50" : "text-white",
+                              )}
+                            >
                               Ontvang direct je betere deal
                             </p>
                             <div>
                               <label
                                 htmlFor="phone"
-                                className="mb-1 block w-full px-2 text-center text-[10px] font-semibold leading-snug text-white sm:px-3 sm:text-[11px]"
+                                className={cn(
+                                  "mb-1 block w-full px-2 text-center text-[10px] font-semibold leading-snug sm:px-3 sm:text-[11px]",
+                                  salonStyle ? "text-amber-100/85" : "text-white",
+                                )}
                               >
                                 {tpl.baseDeal.phoneLabel}
                               </label>
@@ -530,7 +735,12 @@ function GuestFlowInner({
                                 aria-describedby={
                                   phoneError ? "phone-error" : undefined
                                 }
-                                className="w-full rounded-2xl border border-white/25 bg-black/50 px-4 py-3 text-[clamp(1rem,4.2vw,1.25rem)] leading-snug text-white shadow-inner outline-none ring-violet-400/40 placeholder:text-white/35 focus:border-violet-400/55 focus:ring-2 [@media(max-height:760px)]:py-2.5"
+                                className={cn(
+                                  "w-full rounded-2xl border px-4 py-3 text-[clamp(1rem,4.2vw,1.25rem)] leading-snug shadow-inner outline-none focus:ring-2 [@media(max-height:760px)]:py-2.5",
+                                  salonStyle
+                                    ? "border-amber-400/35 bg-stone-950/60 text-amber-50 ring-amber-400/30 placeholder:text-amber-200/35 focus:border-amber-400/60"
+                                    : "border-white/25 bg-black/50 text-white ring-violet-400/40 placeholder:text-white/35 focus:border-violet-400/55",
+                                )}
                               />
                               {phoneError ? (
                                 <p
@@ -546,11 +756,23 @@ function GuestFlowInner({
 
                           <Button
                             type="submit"
-                            className="w-full shrink-0 py-4 text-[clamp(1rem,3.8vw,1.15rem)] font-extrabold shadow-lg shadow-violet-900/40 [@media(max-height:760px)]:py-3.5"
+                            className={cn(
+                              "w-full shrink-0 py-4 text-[clamp(1rem,3.8vw,1.15rem)] font-extrabold [@media(max-height:760px)]:py-3.5",
+                              salonStyle
+                                ? "!bg-amber-500 !text-stone-900 shadow-lg shadow-amber-950/40 hover:!bg-amber-400"
+                                : "shadow-lg shadow-violet-900/40",
+                            )}
                           >
                             {tpl.baseDeal.upgradeSubmit}
                           </Button>
-                          <p className="shrink-0 px-1 text-center text-[9px] leading-relaxed text-white/38 sm:text-[10px]">
+                          <p
+                            className={cn(
+                              "shrink-0 px-1 text-center text-[9px] leading-relaxed sm:text-[10px]",
+                              salonStyle
+                                ? "text-amber-200/40"
+                                : "text-white/38",
+                            )}
+                          >
                             Je ontvangt de nieuwste deals en nieuwsbrieven.
                           </p>
                         </form>
@@ -559,7 +781,12 @@ function GuestFlowInner({
 
                     <Button
                       variant="ghost"
-                      className="mt-2 w-full shrink-0 py-2 text-[13px] leading-snug text-white/45 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:py-1.5 [@media(max-height:760px)]:text-[12px]"
+                      className={cn(
+                        "mt-2 w-full shrink-0 py-2 text-[13px] leading-snug [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:py-1.5 [@media(max-height:760px)]:text-[12px]",
+                        salonStyle
+                          ? "text-amber-200/50 hover:text-amber-100/80"
+                          : "text-white/45",
+                      )}
                       onClick={goClaim}
                     >
                       {tpl.baseDeal.skipUpgrade}
@@ -596,23 +823,54 @@ function GuestFlowInner({
         {step === "retention" ? (
           <section className="flex h-full min-h-0 min-w-0 flex-1 flex-col justify-between gap-2 overflow-hidden [@media(max-height:700px)]:gap-1.5">
             <div className="min-h-0 shrink">
-              <h2 className="text-[clamp(1.25rem,5vw,1.5rem)] font-bold text-white">
+              <h2
+                className={cn(
+                  "text-[clamp(1.25rem,5vw,1.5rem)] font-bold",
+                  salonStyle ? "text-amber-50" : "text-white",
+                )}
+              >
                 Nog iets extra?
               </h2>
-              <p className="mt-1 text-[clamp(0.9rem,3.8vw,1.05rem)] text-white/55 [@media(max-height:700px)]:mt-0.5">
+              <p
+                className={cn(
+                  "mt-1 text-[clamp(0.9rem,3.8vw,1.05rem)] [@media(max-height:700px)]:mt-0.5",
+                  salonStyle ? "text-amber-100/65" : "text-white/55",
+                )}
+              >
                 Mag je overslaan.
               </p>
 
               <div className="mt-3 space-y-3 [@media(max-height:700px)]:mt-2 [@media(max-height:700px)]:space-y-2">
-                <div className="rounded-2xl border border-white/[0.1] bg-white/[0.04] p-3 [@media(max-height:700px)]:p-2.5">
-                  <p className="text-[clamp(1rem,4vw,1.125rem)] font-bold text-white">
+                <div
+                  className={cn(
+                    "rounded-2xl border p-3 [@media(max-height:700px)]:p-2.5",
+                    salonStyle
+                      ? "border-amber-300/20 bg-amber-950/25"
+                      : "border-white/[0.1] bg-white/[0.04]",
+                  )}
+                >
+                  <p
+                    className={cn(
+                      "text-[clamp(1rem,4vw,1.125rem)] font-bold",
+                      salonStyle ? "text-amber-50" : "text-white",
+                    )}
+                  >
                     Binnenkort terug?
                   </p>
-                  <p className="mt-1 text-[clamp(0.85rem,3.5vw,1.05rem)] text-white/60 [@media(max-height:700px)]:mt-1">
+                  <p
+                    className={cn(
+                      "mt-1 text-[clamp(0.85rem,3.5vw,1.05rem)] [@media(max-height:700px)]:mt-1",
+                      salonStyle ? "text-amber-100/70" : "text-white/60",
+                    )}
+                  >
                     {tpl.retention.comebackBody}
                   </p>
                   <Button
-                    className="mt-3 w-full py-3 text-base font-bold [@media(max-height:700px)]:mt-2 [@media(max-height:700px)]:py-2.5"
+                    className={cn(
+                      "mt-3 w-full py-3 text-base font-bold [@media(max-height:700px)]:mt-2 [@media(max-height:700px)]:py-2.5",
+                      salonStyle &&
+                        "!border-amber-400/30 !bg-amber-500/20 !text-amber-50 hover:!bg-amber-500/30",
+                    )}
                     variant="secondary"
                     disabled={comebackActivated}
                     onClick={() => setComebackActivated(true)}
@@ -627,7 +885,10 @@ function GuestFlowInner({
               href={tpl.basePath}
               className={buttonClassName(
                 "ghost",
-                "shrink-0 w-full justify-center py-2 text-center text-sm no-underline [@media(max-height:700px)]:py-1.5",
+                cn(
+                  "shrink-0 w-full justify-center py-2 text-center text-sm no-underline [@media(max-height:700px)]:py-1.5",
+                  salonStyle && "text-amber-200/75 hover:text-amber-100",
+                ),
               )}
             >
               Terug naar start

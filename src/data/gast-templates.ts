@@ -12,8 +12,12 @@ export type UnlockShowcaseRow = {
   weight: number;
 };
 
+export type UnlockMode = "wheel" | "giftBox";
+
 export interface GastTemplate {
   id: GastTemplateId;
+  /** Rad (horeca) of cadeaudoos (kapper) */
+  unlockMode: UnlockMode;
   /** Pad zonder trailing slash, bv. `/gast` of `/gast/kapper` */
   basePath: string;
   /** Getoonde zaaknaam in copy */
@@ -34,6 +38,10 @@ export interface GastTemplate {
   unlock: {
     listHeading: string;
     listHeadingReveal: string;
+    /** Tijdens animatie (rad of doos) */
+    openingHint: string;
+    /** Hoofdknop onderaan (start animatie) */
+    primaryCta: string;
   };
   baseDeal: {
     contextLine: string;
@@ -78,21 +86,21 @@ const HORECA_UNLOCK: UnlockShowcaseRow[] = [
 const KAPPER_UNLOCK: UnlockShowcaseRow[] = [
   {
     text: "Knipbeurt met €8 korting",
-    wheelColor: "#6366f1",
+    wheelColor: "#d97706",
     normaal: "€48",
     dealId: "k1",
     weight: 0.52,
   },
   {
     text: "Wash, masker & blowdry voor €32",
-    wheelColor: "#c084fc",
+    wheelColor: "#ca8a04",
     normaal: "€55",
     dealId: "k2",
     weight: 0.33,
   },
   {
     text: "Kleuren + glans met 20% korting",
-    wheelColor: "#f472b6",
+    wheelColor: "#b45309",
     normaal: "€95",
     dealId: "k3",
     weight: 0.15,
@@ -128,6 +136,7 @@ function luckKapper(dealId: string): number {
 const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
   horeca: {
     id: "horeca",
+    unlockMode: "wheel",
     basePath: "/gast",
     barName: "Café Nova",
     brandLabel: "BarBoost",
@@ -149,6 +158,8 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
     unlock: {
       listHeading: "Wat kan je winnen?",
       listHeadingReveal: "Dit wordt jouw deal",
+      openingHint: "Het rad draait…",
+      primaryCta: "Draai nu",
     },
     baseDeal: {
       contextLine: "minuten · alleen in",
@@ -166,16 +177,17 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
   },
   kapper: {
     id: "kapper",
+    unlockMode: "giftBox",
     basePath: "/gast/kapper",
     barName: "Salon Nova",
-    brandLabel: "BarBoost · Kappers",
+    brandLabel: "BarBoost · Salon",
     dealPool: KAPPER_DEALS,
     unlockShowcase: KAPPER_UNLOCK,
     luckBand: luckKapper,
     welcome: {
-      title: "Jouw salon-deal",
+      title: "Jouw salon-voordeel",
       subtitle:
-        "Scan de QR in de salon — win een prijs op het rad en claim je voordeel bij de balie. Geen app nodig.",
+        "Scan de QR bij binnenkomst — open de cadeaudoos en ontdek je prijs. Toon je voucher bij de balie. Geen app nodig.",
       badges: [
         { tone: "hot", text: "Alleen vandaag" },
         { tone: "info", text: "Afspraak aanbevolen" },
@@ -185,8 +197,10 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
       footerHint: "Gemiddeld onder een minuut",
     },
     unlock: {
-      listHeading: "Wat kun je winnen?",
-      listHeadingReveal: "Dit wordt jouw prijs",
+      listHeading: "Wat zit erin?",
+      listHeadingReveal: "Jouw prijs",
+      openingHint: "De doos opent…",
+      primaryCta: "Open de box",
     },
     baseDeal: {
       contextLine: "minuten · alleen bij",
