@@ -470,7 +470,7 @@ function GuestFlowInner({
                 <>
                   <div
                     className={cn(
-                      "shrink-0 rounded-xl border px-2.5 py-2 text-center sm:rounded-2xl sm:px-3 sm:py-2.5 [@media(max-height:760px)]:py-2",
+                      "min-h-0 max-h-[min(38vh,320px)] shrink-0 overflow-y-auto overscroll-contain rounded-xl border px-2.5 py-2 text-center sm:rounded-2xl sm:px-3 sm:py-2.5 [-webkit-overflow-scrolling:touch] [@media(max-height:760px)]:max-h-[min(34vh,280px)] [@media(max-height:760px)]:py-2",
                       salonStyle
                         ? "border-stone-200 bg-white shadow-sm"
                         : "border-white/10 bg-white/[0.04]",
@@ -486,7 +486,7 @@ function GuestFlowInner({
                     </p>
                     <h2
                       className={cn(
-                        "mt-1.5 text-[clamp(1.15rem,5vw,1.75rem)] font-bold leading-tight [@media(max-height:760px)]:mt-1",
+                        "mt-1.5 break-words text-[clamp(1.15rem,5vw,1.75rem)] font-bold leading-snug [@media(max-height:760px)]:mt-1",
                         salonStyle ? "text-stone-900" : "text-white",
                       )}
                     >
@@ -559,78 +559,90 @@ function GuestFlowInner({
                       <div className="relative z-[3] flex min-h-0 flex-1 flex-col overflow-hidden">
                         <h3
                           className={cn(
-                            "shrink-0 text-center text-[clamp(1rem,4vw,1.35rem)] font-extrabold leading-tight tracking-tight",
+                            "shrink-0 px-0.5 text-center text-[clamp(0.95rem,4vw,1.3rem)] font-extrabold leading-tight tracking-tight [@media(max-height:760px)]:text-[clamp(0.92rem,3.8vw,1.15rem)]",
                             salonStyle
                               ? "text-amber-950 drop-shadow-[0_1px_0_rgba(255,251,235,0.9)]"
                               : "text-white",
                           )}
                         >
                           <span aria-hidden>{salonStyle ? "✨" : "🔥"}</span>{" "}
-                          {tpl.baseDeal.upgradeHeadline}
+                          <span className="break-words">{tpl.baseDeal.upgradeHeadline}</span>
                         </h3>
 
-                        <div className="mt-2 shrink-0 space-y-2 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:space-y-1.5">
-                          <div>
-                            <p
+                        <div
+                          className={cn(
+                            "mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain pr-0.5 [-webkit-overflow-scrolling:touch]",
+                            "[scrollbar-gutter:stable]",
+                          )}
+                        >
+                          <div className="space-y-2 pb-1 [@media(max-height:760px)]:space-y-1.5">
+                            <div>
+                              <p
+                                className={cn(
+                                  "text-[10px] font-bold uppercase tracking-[0.2em] [@media(max-height:760px)]:text-[9px]",
+                                  salonStyle
+                                    ? "text-amber-900/75"
+                                    : "text-white/38",
+                                )}
+                              >
+                                {tpl.baseDeal.upgradeSubStandard}
+                              </p>
+                              <p
+                                className={cn(
+                                  "mt-1 break-words text-[clamp(0.85rem,3.5vw,1.05rem)] font-semibold leading-snug [@media(max-height:760px)]:mt-0.5",
+                                  salonStyle
+                                    ? "text-amber-950/90"
+                                    : "text-white/70",
+                                )}
+                              >
+                                {baseDeal.title}
+                              </p>
+                            </div>
+                            <div
                               className={cn(
-                                "text-[10px] font-bold uppercase tracking-[0.2em] [@media(max-height:760px)]:text-[9px]",
+                                "h-px w-full shrink-0 bg-gradient-to-r from-transparent to-transparent",
                                 salonStyle
-                                  ? "text-amber-900/75"
-                                  : "text-white/38",
+                                  ? "via-amber-600/35"
+                                  : "via-white/20",
                               )}
-                            >
-                              {tpl.baseDeal.upgradeSubStandard}
-                            </p>
-                            <p
-                              className={cn(
-                                "mt-1 text-[clamp(0.9rem,3.5vw,1.05rem)] font-semibold leading-snug [@media(max-height:760px)]:mt-0.5",
-                                salonStyle
-                                  ? "text-amber-950/90"
-                                  : "text-white/70",
-                              )}
-                            >
-                              {baseDeal.title}
-                            </p>
-                          </div>
-                          <div
-                            className={cn(
-                              "h-px w-full bg-gradient-to-r from-transparent to-transparent",
-                              salonStyle
-                                ? "via-amber-600/35"
-                                : "via-white/20",
-                            )}
-                          />
-                          <div>
-                            <p
-                              className={cn(
-                                "text-[10px] font-bold uppercase tracking-[0.2em] [@media(max-height:760px)]:text-[9px]",
-                                salonStyle
-                                  ? "text-amber-950/85"
-                                  : "text-amber-200/90",
-                              )}
-                            >
-                              <span aria-hidden>{salonStyle ? "✨" : "🔥"}</span>{" "}
-                              {tpl.baseDeal.upgradeSubUpgraded}
-                            </p>
-                            <p
-                              className={cn(
-                                "mt-1 text-[clamp(1rem,4vw,1.35rem)] font-bold leading-snug [@media(max-height:760px)]:mt-0.5",
-                                salonStyle
-                                  ? "text-amber-950"
-                                  : "text-white",
-                              )}
-                            >
-                              {upgraded.title}
-                            </p>
+                            />
+                            <div>
+                              <p
+                                className={cn(
+                                  "text-[10px] font-bold uppercase tracking-[0.2em] [@media(max-height:760px)]:text-[9px]",
+                                  salonStyle
+                                    ? "text-amber-950/85"
+                                    : "text-amber-200/90",
+                                )}
+                              >
+                                <span aria-hidden>{salonStyle ? "✨" : "🔥"}</span>{" "}
+                                {tpl.baseDeal.upgradeSubUpgraded}
+                              </p>
+                              <p
+                                className={cn(
+                                  "mt-1 break-words text-[clamp(0.95rem,4vw,1.3rem)] font-bold leading-snug [@media(max-height:760px)]:mt-0.5 [@media(max-height:760px)]:text-[clamp(0.9rem,3.8vw,1.15rem)]",
+                                  salonStyle
+                                    ? "text-amber-950"
+                                    : "text-white",
+                                )}
+                              >
+                                {upgraded.title}
+                              </p>
+                            </div>
                           </div>
                         </div>
 
                         <form
-                          className="mt-2 flex min-h-0 min-w-0 flex-1 flex-col justify-end gap-2 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:gap-1.5"
+                          className={cn(
+                            "mt-2 flex min-h-0 w-full min-w-0 shrink-0 flex-col gap-2 border-t pt-2 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:gap-1.5",
+                            salonStyle
+                              ? "border-amber-800/20"
+                              : "border-white/10",
+                          )}
                           onSubmit={handleUpgradeSubmit}
                           autoComplete="on"
                         >
-                          <div className="min-h-0 space-y-2">
+                          <div className="w-full min-w-0 space-y-2">
                             <p
                               className={cn(
                                 "text-center text-[clamp(0.95rem,3.8vw,1.15rem)] font-bold leading-snug",
