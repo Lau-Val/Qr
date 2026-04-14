@@ -598,7 +598,7 @@ function GuestFlowInner({
                             </p>
                             <div>
                               <label
-                                htmlFor="phone"
+                                htmlFor="guest-tel"
                                 className={cn(
                                   "mb-1 block w-full px-2 text-center text-[10px] font-semibold leading-snug sm:px-3 sm:text-[11px]",
                                   salonStyle ? "text-amber-900/80" : "text-white",
@@ -607,11 +607,11 @@ function GuestFlowInner({
                                 {tpl.baseDeal.phoneLabel}
                               </label>
                               <input
-                                id="phone"
-                                name="phone"
+                                id="guest-tel"
+                                name="tel"
                                 type="tel"
                                 inputMode="tel"
-                                autoComplete="tel"
+                                autoComplete="section-contact tel-national"
                                 enterKeyHint="go"
                                 autoCapitalize="none"
                                 autoCorrect="off"
@@ -624,7 +624,7 @@ function GuestFlowInner({
                                 }}
                                 aria-invalid={phoneError ? true : undefined}
                                 aria-describedby={
-                                  phoneError ? "phone-error" : undefined
+                                  phoneError ? "guest-tel-error" : undefined
                                 }
                                 className={cn(
                                   "w-full rounded-2xl border px-4 py-3 text-[clamp(1rem,4.2vw,1.25rem)] leading-snug shadow-inner outline-none focus:ring-2 [@media(max-height:760px)]:py-2.5",
@@ -635,7 +635,7 @@ function GuestFlowInner({
                               />
                               {phoneError ? (
                                 <p
-                                  id="phone-error"
+                                  id="guest-tel-error"
                                   className={cn(
                                     "mt-1 text-[13px] font-medium",
                                     salonStyle
