@@ -4,6 +4,24 @@ import { MOCK_DEALS } from "./mock/deals";
 
 export type GastTemplateId = "horeca" | "kapper";
 
+/** Kanalen voor retentiepagina (pagina 5) — lege lijst = sectie verborgen */
+export type RetentionSocialPlatform =
+  | "instagram"
+  | "facebook"
+  | "tiktok"
+  | "whatsapp"
+  | "youtube"
+  | "linkedin"
+  | "x"
+  | "website"
+  | "maps";
+
+export type RetentionSocialLink = {
+  platform: RetentionSocialPlatform;
+  /** Volledige https-URL */
+  href: string;
+};
+
 export type UnlockShowcaseRow = {
   text: string;
   wheelColor: string;
@@ -48,6 +66,9 @@ export interface GastTemplate {
   };
   retention: {
     comebackBody: string;
+    /** Titel boven het social-raster, bv. "Volg Café Nova" */
+    socialHeading: string;
+    socialLinks: RetentionSocialLink[];
   };
 }
 
@@ -138,6 +159,29 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
     retention: {
       comebackBody:
         "Kom binnen 5 dagen — dan krijg je een extraatje aan de bar.",
+      socialHeading: "Volg Café Nova online",
+      socialLinks: [
+        {
+          platform: "instagram",
+          href: "https://www.instagram.com/",
+        },
+        {
+          platform: "facebook",
+          href: "https://www.facebook.com/",
+        },
+        {
+          platform: "tiktok",
+          href: "https://www.tiktok.com/",
+        },
+        {
+          platform: "whatsapp",
+          href: "https://wa.me/31612345678",
+        },
+        {
+          platform: "website",
+          href: "https://example.com",
+        },
+      ],
     },
   },
   kapper: {
@@ -176,6 +220,29 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
     retention: {
       comebackBody:
         "Kom binnen 6 weken terug — dan ontvang je een extraatje bij je volgende bezoek.",
+      socialHeading: "Volg Salon Nova online",
+      socialLinks: [
+        {
+          platform: "instagram",
+          href: "https://www.instagram.com/",
+        },
+        {
+          platform: "facebook",
+          href: "https://www.facebook.com/",
+        },
+        {
+          platform: "website",
+          href: "https://example.com",
+        },
+        {
+          platform: "maps",
+          href: "https://maps.google.com/",
+        },
+        {
+          platform: "whatsapp",
+          href: "https://wa.me/31612345678",
+        },
+      ],
     },
   },
 };

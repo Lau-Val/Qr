@@ -26,6 +26,7 @@ import { BartenderDealScreen } from "@/components/barboost/BartenderDealScreen";
 import { Button, buttonClassName } from "@/components/barboost/ui/Button";
 import { Badge } from "@/components/barboost/ui/Badge";
 import { KapperPrizeBox } from "@/components/barboost/KapperPrizeBox";
+import { RetentionSocialLinks } from "@/components/barboost/RetentionSocialLinks";
 import { MobileShell } from "@/components/barboost/ui/MobileShell";
 import {
   pickWeightedDealId,
@@ -772,8 +773,8 @@ function GuestFlowInner({
         ) : null}
 
         {step === "retention" ? (
-          <section className="flex h-full min-h-0 min-w-0 flex-1 flex-col justify-between gap-2 overflow-hidden [@media(max-height:700px)]:gap-1.5">
-            <div className="min-h-0 shrink">
+          <section className="flex h-full min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-hidden [@media(max-height:700px)]:gap-1.5">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-0.5 [-webkit-overflow-scrolling:touch]">
               <h2
                 className={cn(
                   "text-[clamp(1.25rem,5vw,1.5rem)] font-bold",
@@ -830,6 +831,12 @@ function GuestFlowInner({
                   </Button>
                 </div>
               </div>
+
+              <RetentionSocialLinks
+                heading={tpl.retention.socialHeading}
+                links={tpl.retention.socialLinks}
+                salonStyle={salonStyle}
+              />
             </div>
 
             <Link
