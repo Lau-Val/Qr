@@ -310,7 +310,6 @@ body canvas {
 .bb-upgrade-bg-drift-salon {
   position: absolute;
   inset: 0;
-  border-radius: inherit;
   background-image: linear-gradient(
     122deg,
     rgba(120, 53, 15, 0.2) 0%,

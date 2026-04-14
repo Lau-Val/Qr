@@ -512,24 +512,24 @@ function GuestFlowInner({
                   <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                     <div
                       className={cn(
-                        "relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border-2 p-3 sm:rounded-3xl sm:p-4 [@media(max-height:760px)]:p-2.5",
+                        "relative isolate flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border-2 p-3 sm:rounded-3xl sm:p-4 [@media(max-height:760px)]:p-2.5",
                         salonStyle
-                          ? "border-amber-400/70 shadow-[0_16px_48px_rgba(180,83,9,0.16),0_4px_20px_rgba(251,191,36,0.12),0_0_0_1px_rgba(253,230,138,0.45)]"
-                          : "border-violet-400/55 shadow-[0_0_0_1px_rgba(167,139,250,0.2),0_20px_50px_rgba(0,0,0,0.55),0_0_80px_rgba(124,58,237,0.22)]",
+                          ? "border-amber-400/70 bg-[#fff7e8] shadow-[0_16px_48px_rgba(180,83,9,0.16),0_4px_20px_rgba(251,191,36,0.12),0_0_0_1px_rgba(253,230,138,0.45)]"
+                          : "border-violet-400/55 bg-[#1a0f2e] shadow-[0_0_0_1px_rgba(167,139,250,0.2),0_20px_50px_rgba(0,0,0,0.55),0_0_80px_rgba(124,58,237,0.22)]",
                       )}
                     >
                       <div
                         className={cn(
-                          "pointer-events-none absolute inset-0",
+                          "pointer-events-none absolute inset-0 rounded-2xl sm:rounded-3xl",
                           salonStyle
                             ? "bg-gradient-to-br from-[#fffbeb] via-amber-100/95 to-amber-200/90"
-                            : "bg-gradient-to-b from-violet-950/90 via-[#15101f] to-black/50",
+                            : "bg-gradient-to-b from-violet-950 via-[#1a1228] to-[#12081f]",
                         )}
                         aria-hidden
                       />
                       <div
                         className={cn(
-                          "pointer-events-none absolute inset-0 rounded-3xl",
+                          "pointer-events-none absolute inset-0 rounded-2xl sm:rounded-3xl",
                           salonStyle
                             ? "bb-upgrade-bg-drift-salon"
                             : "bb-upgrade-bg-drift",
@@ -550,7 +550,7 @@ function GuestFlowInner({
                         />
                       ) : null}
                       <div
-                        className="pointer-events-none absolute inset-0 z-[2] overflow-hidden rounded-3xl"
+                        className="pointer-events-none absolute inset-0 z-[2] overflow-hidden rounded-2xl sm:rounded-3xl"
                         aria-hidden
                       >
                         <div className="bb-upgrade-gloss-ray" />
