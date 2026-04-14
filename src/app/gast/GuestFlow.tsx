@@ -12,6 +12,12 @@ import {
   useState,
   type FormEvent,
 } from "react";
+import {
+  clearGastFlowPersist,
+  readGastFlowPersist,
+  resolveDealFromPersist,
+  writeGastFlowPersist,
+} from "@/lib/gast-flow-session";
 import { buildUpgradedDeal } from "@/data/deal-upgrades";
 import type { GastTemplateId } from "@/data/gast-templates";
 import { getGastTemplate } from "@/data/gast-templates";
@@ -108,6 +114,35 @@ function GuestFlowInner({
   const revealAdvanceRef = useRef<number | null>(null);
   const consumedUrlSpin = useRef(false);
 
+  /** Na reload: flow hervatten zodat mystery box niet opnieuw kan. */
+  useLayoutEffect(() => {
+    if (initialStep !== "unlock") return;
+    const p = readGastFlowPersist(templateId);
+    if (!p) return;
+    const deal = resolveDealFromPersist(templateId, p);
+    if (!deal) {
+      clearGastFlowPersist(templateId);
+      return;
+    }
+    setBaseDeal(deal);
+    setStep(p.step);
+    setIsUpgraded(p.isUpgraded);
+  }, [initialStep, templateId]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (
+      baseDeal &&
+      (step === "baseDeal" || step === "claim" || step === "retention")
+    ) {
+      writeGastFlowPersist(templateId, {
+        dealId: baseDeal.id,
+        step,
+        isUpgraded,
+      });
+    }
+  }, [templateId, step, baseDeal, isUpgraded]);
+
   const MYSTERY_BOX_OPEN_MS = 2800;
 
   const startUnlockAnimation = useCallback(() => {
@@ -144,6 +179,7 @@ function GuestFlowInner({
       consumedUrlSpin.current = false;
       return;
     }
+    if (baseDeal) return;
     /* Echte URL én Next searchParams: op iOS/hydration loopt dat soms uiteen. */
     const fromBar =
       typeof window !== "undefined"
@@ -164,7 +200,14 @@ function GuestFlowInner({
     queueMicrotask(() => {
       stripSpinQueryFromAddressBar();
     });
-  }, [step, searchParams, spinning, revealDealId, startUnlockAnimation]);
+  }, [
+    step,
+    searchParams,
+    spinning,
+    revealDealId,
+    startUnlockAnimation,
+    baseDeal,
+  ]);
 
   const goClaim = useCallback(() => {
     setStep("claim");
@@ -779,6 +822,7 @@ function GuestFlowInner({
 
             <Link
               href={tpl.basePath}
+              onClick={() => clearGastFlowPersist(templateId)}
               className={buttonClassName(
                 "ghost",
                 cn(
