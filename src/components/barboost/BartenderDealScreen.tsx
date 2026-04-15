@@ -3,15 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/cn";
 import { Button } from "@/components/barboost/ui/Button";
+import { formatMmSs } from "@/lib/format-mm-ss";
 
 type Status = "active" | "expired" | "used";
-
-function formatMmSs(totalSeconds: number): string {
-  const s = Math.max(0, totalSeconds);
-  const mm = String(Math.floor(s / 60)).padStart(2, "0");
-  const ss = String(s % 60).padStart(2, "0");
-  return `${mm}:${ss}`;
-}
 
 export function BartenderDealScreen({
   dealTitle,

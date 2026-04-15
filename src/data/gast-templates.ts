@@ -52,7 +52,6 @@ export interface GastTemplate {
     primaryCta: string;
   };
   baseDeal: {
-    contextLine: string;
     upgradeHeadline: string;
     upgradeSubStandard: string;
     upgradeSubUpgraded: string;
@@ -157,7 +156,6 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
       primaryCta: "Klik om te openen",
     },
     baseDeal: {
-      contextLine: "minuten · alleen in",
       upgradeHeadline: "🔥 Unlock betere deal 🔥",
       upgradeSubStandard: "Jouw deal nu",
       upgradeSubUpgraded: "Met upgrade",
@@ -197,7 +195,6 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
       primaryCta: "Klik om te openen",
     },
     baseDeal: {
-      contextLine: "minuten · alleen bij",
       upgradeHeadline: "🔥 Unlock betere deal 🔥",
       upgradeSubStandard: "Jouw prijs nu",
       upgradeSubUpgraded: "Met upgrade",

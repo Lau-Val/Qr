@@ -37,6 +37,7 @@ import {
   getBartenderTotalLabel,
   getDealPriceCompare,
 } from "@/lib/deal-pricing";
+import { formatMmSs } from "@/lib/format-mm-ss";
 import { isValidDutchMobile, normalizeDutchPhone } from "@/lib/phone-nl";
 import { cn } from "@/lib/cn";
 import { fireFallConfetti, fireWinConfetti } from "@/lib/win-confetti";
@@ -108,6 +109,11 @@ function GuestFlowInner({
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const [voucherUsed, setVoucherUsed] = useState(false);
   const [claimExpiresAt, setClaimExpiresAt] = useState<number | null>(null);
+  /** Één deadline per gewonnen deal (deel met claim-scherm via sessionStorage). */
+  const [baseDealDeadlineMs, setBaseDealDeadlineMs] = useState<number | null>(
+    null,
+  );
+  const [nowMs, setNowMs] = useState(() => Date.now());
   const [spinning, setSpinning] = useState(false);
   /** Na rad: welke deal-id wint — toont reveal voordat we naar baseDeal gaan */
   const [revealDealId, setRevealDealId] = useState<string | null>(null);
@@ -221,6 +227,35 @@ function GuestFlowInner({
 
   const voucherUsedEffective = voucherUsed || persistedVoucherUsed;
 
+  /* Deadline voor gewonnen deal: zelfde eindtijd op baseDeal- en claim-stap. */
+  useLayoutEffect(() => {
+    if (typeof window === "undefined") return;
+    if (step !== "baseDeal" || !baseDeal) {
+      setBaseDealDeadlineMs(null);
+      return;
+    }
+    const key = `bb_deal_deadline_${templateId}_${baseDeal.id}`;
+    const raw = sessionStorage.getItem(key);
+    if (raw) {
+      const n = Number(raw);
+      if (!Number.isNaN(n)) {
+        setBaseDealDeadlineMs(n);
+        setNowMs(Date.now());
+        return;
+      }
+    }
+    const at = Date.now() + baseDeal.timerSeconds * 1000;
+    sessionStorage.setItem(key, String(at));
+    setBaseDealDeadlineMs(at);
+    setNowMs(Date.now());
+  }, [step, baseDeal, templateId]);
+
+  useEffect(() => {
+    if (step !== "baseDeal" || baseDealDeadlineMs == null) return;
+    const id = window.setInterval(() => setNowMs(Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, [step, baseDealDeadlineMs]);
+
   /* Client-only: read/write sessionStorage for countdown end time (demo persistence). */
   /* eslint-disable react-hooks/set-state-in-effect -- sync expiry into state once per claim step */
   useLayoutEffect(() => {
@@ -228,19 +263,34 @@ function GuestFlowInner({
     if (step !== "claim" || !effectiveDeal) {
       return;
     }
-    const key = `bb_claim_${effectiveDeal.claimCode}`;
-    const expStr = sessionStorage.getItem(`${key}_exp`);
-    if (expStr) {
-      const n = Number(expStr);
+    const sharedKey = `bb_deal_deadline_${templateId}_${effectiveDeal.id}`;
+    const claimKey = `bb_claim_${effectiveDeal.claimCode}`;
+    const claimExpKey = `${claimKey}_exp`;
+
+    const existingClaim = sessionStorage.getItem(claimExpKey);
+    if (existingClaim) {
+      const n = Number(existingClaim);
       if (!Number.isNaN(n)) {
         setClaimExpiresAt(n);
         return;
       }
     }
+
+    const sharedRaw = sessionStorage.getItem(sharedKey);
+    if (sharedRaw) {
+      const n = Number(sharedRaw);
+      if (!Number.isNaN(n)) {
+        sessionStorage.setItem(claimExpKey, String(n));
+        setClaimExpiresAt(n);
+        return;
+      }
+    }
+
     const at = Date.now() + effectiveDeal.timerSeconds * 1000;
-    sessionStorage.setItem(`${key}_exp`, String(at));
+    sessionStorage.setItem(claimExpKey, String(at));
+    sessionStorage.setItem(sharedKey, String(at));
     setClaimExpiresAt(at);
-  }, [step, effectiveDeal]);
+  }, [step, effectiveDeal, templateId]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
@@ -465,7 +515,13 @@ function GuestFlowInner({
             {(() => {
               const pc = getDealPriceCompare(baseDeal);
               const upgraded = buildUpgradedDeal(baseDeal);
-              const mins = Math.max(1, Math.ceil(baseDeal.timerSeconds / 60));
+              const remainingSec =
+                baseDealDeadlineMs != null
+                  ? Math.max(
+                      0,
+                      Math.floor((baseDealDeadlineMs - nowMs) / 1000),
+                    )
+                  : 0;
               return (
                 <>
                   <div
@@ -499,14 +555,31 @@ function GuestFlowInner({
                         normaal {pc.normal}
                       </p>
                     ) : null}
-                    <p
+                    <div
                       className={cn(
-                        "mt-2 text-[clamp(0.8rem,3.2vw,1rem)] font-medium [@media(max-height:760px)]:mt-1.5",
-                        salonStyle ? "text-stone-600" : "text-white/70",
+                        "mt-2 space-y-0.5 [@media(max-height:760px)]:mt-1.5",
                       )}
                     >
-                      Nog {mins} {tpl.baseDeal.contextLine} {tpl.barName}
-                    </p>
+                      <p
+                        className={cn(
+                          "text-[clamp(0.75rem,3vw,0.9rem)] font-medium leading-snug",
+                          salonStyle ? "text-stone-500" : "text-white/55",
+                        )}
+                      >
+                        Je deal verloopt over
+                      </p>
+                      <p
+                        className={cn(
+                          "font-mono text-[clamp(1.25rem,5vw,1.75rem)] font-bold tabular-nums tracking-tight",
+                          salonStyle ? "text-stone-800" : "text-emerald-200/95",
+                        )}
+                        aria-live="polite"
+                      >
+                        {baseDealDeadlineMs != null
+                          ? formatMmSs(remainingSec)
+                          : "—"}
+                      </p>
+                    </div>
                   </div>
 
                   <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
