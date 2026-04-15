@@ -10,11 +10,7 @@ export type RetentionSocialPlatform =
   | "facebook"
   | "tiktok"
   | "whatsapp"
-  | "youtube"
-  | "linkedin"
-  | "x"
-  | "website"
-  | "maps";
+  | "website";
 
 export type RetentionSocialLink = {
   platform: RetentionSocialPlatform;
@@ -126,17 +122,13 @@ const KAPPER_UNLOCK: UnlockShowcaseRow[] = [
   },
 ];
 
-/** Alle social-platformcategorieën (demo-URL’s — per zaak vervangen). */
-const ALL_SOCIAL_CATEGORIES_DEMO: RetentionSocialLink[] = [
+/** Standaard vijf kanalen (demo-URL’s — per zaak vervangen). */
+const DEFAULT_SOCIAL_LINKS_DEMO: RetentionSocialLink[] = [
   { platform: "instagram", href: "https://www.instagram.com/" },
   { platform: "facebook", href: "https://www.facebook.com/" },
   { platform: "tiktok", href: "https://www.tiktok.com/" },
   { platform: "whatsapp", href: "https://wa.me/31612345678" },
-  { platform: "youtube", href: "https://www.youtube.com/" },
-  { platform: "linkedin", href: "https://www.linkedin.com/" },
-  { platform: "x", href: "https://x.com/" },
   { platform: "website", href: "https://example.com" },
-  { platform: "maps", href: "https://maps.google.com/" },
 ];
 
 const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
@@ -178,7 +170,7 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
       subtitle:
         "Acties, events en nieuws — tik op het kanaal dat jij gebruikt.",
       socialHeading: "Alle kanalen",
-      socialLinks: ALL_SOCIAL_CATEGORIES_DEMO,
+      socialLinks: DEFAULT_SOCIAL_LINKS_DEMO,
     },
   },
   kapper: {
@@ -219,7 +211,7 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
       subtitle:
         "Inspiratie, voor- en na-foto’s en afspraken — vind ons op al onze kanalen.",
       socialHeading: "Alle kanalen",
-      socialLinks: ALL_SOCIAL_CATEGORIES_DEMO,
+      socialLinks: DEFAULT_SOCIAL_LINKS_DEMO,
     },
   },
 };
