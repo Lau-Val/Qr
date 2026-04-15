@@ -61,7 +61,7 @@ function ExternalArrowIcon({ className }: { className?: string }) {
 }
 
 function Icon({ platform }: { platform: RetentionSocialPlatform }) {
-  const common = "h-4 w-4 shrink-0 sm:h-[1.125rem] sm:w-[1.125rem]";
+  const common = "h-5 w-5 shrink-0 sm:h-6 sm:w-6";
   switch (platform) {
     case "instagram":
       return (
@@ -102,83 +102,79 @@ export function RetentionSocialLinks({
   links,
   salonStyle,
 }: {
-  heading: string;
+  /** Optioneel; leeg/weg = geen regel (meer ruimte voor de knoppen). */
+  heading?: string;
   links: RetentionSocialLink[];
   salonStyle: boolean;
 }) {
   if (!links.length) return null;
 
-  const lastOddCenter = links.length % 2 === 1;
+  const showHeading = Boolean(heading?.trim());
 
   return (
-    <div className="flex min-h-0 flex-col gap-2 [@media(max-height:560px)]:gap-1.5">
-      <p
-        className={cn(
-          "shrink-0 text-center text-[10px] font-bold uppercase tracking-[0.18em] [@media(max-height:560px)]:text-[9px]",
-          salonStyle ? "text-stone-500" : "text-white/45",
-        )}
-      >
-        {heading}
-      </p>
+    <div>
+      {showHeading ? (
+        <p
+          className={cn(
+            "text-center text-[11px] font-bold uppercase tracking-[0.2em]",
+            salonStyle ? "text-stone-500" : "text-white/45",
+          )}
+        >
+          {heading}
+        </p>
+      ) : null}
       <ul
         className={cn(
-          "grid w-full grid-cols-2 gap-2 [@media(max-height:560px)]:gap-1.5",
-          "mx-auto max-w-md",
+          "flex max-w-md flex-col gap-2 [@media(max-height:700px)]:gap-1.5 [@media(max-height:600px)]:gap-1.5",
+          "mx-auto w-full",
+          showHeading ? "mt-3 [@media(max-height:700px)]:mt-2.5" : "mt-0",
         )}
         role="list"
       >
-        {links.map(({ platform, href }, idx) => {
-          const centerLast = lastOddCenter && idx === links.length - 1;
-          return (
-            <li
-              key={`${platform}-${href}`}
+        {links.map(({ platform, href }) => (
+          <li key={`${platform}-${href}`} className="min-w-0">
+            <Link
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={LABELS[platform]}
+              aria-label={`${LABELS[platform]} (opent in nieuw tabblad)`}
               className={cn(
-                "min-w-0",
-                centerLast && "col-span-2 flex justify-center",
+                "group flex min-h-[3.25rem] w-full items-center gap-3 rounded-2xl border px-3 py-2.5 text-left shadow-sm transition active:scale-[0.99] sm:min-h-[3.5rem] sm:gap-3.5 sm:px-4 sm:py-3",
+                "[@media(max-height:640px)]:min-h-[3rem] [@media(max-height:640px)]:py-2 [@media(max-height:640px)]:sm:min-h-[3.25rem]",
+                salonStyle
+                  ? "border-stone-200/90 bg-white hover:border-stone-300 hover:bg-stone-50"
+                  : "border-white/12 bg-white/[0.07] hover:border-white/20 hover:bg-white/[0.11]",
               )}
             >
-              <Link
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={LABELS[platform]}
-                aria-label={`${LABELS[platform]} (opent in nieuw tabblad)`}
+              <span
                 className={cn(
-                  "group flex min-h-[2.65rem] w-full items-center gap-2 rounded-xl border px-2 py-1.5 text-left shadow-sm transition active:scale-[0.99] [@media(max-height:560px)]:min-h-[2.4rem] [@media(max-height:560px)]:gap-1.5 [@media(max-height:560px)]:px-1.5 [@media(max-height:560px)]:py-1",
-                  centerLast && "w-[calc(50%-0.25rem)] max-w-[13rem]",
+                  "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl sm:h-12 sm:w-12",
+                  "[@media(max-height:640px)]:h-10 [@media(max-height:640px)]:w-10",
                   salonStyle
-                    ? "border-stone-200/90 bg-white hover:border-stone-300 hover:bg-stone-50"
-                    : "border-white/12 bg-white/[0.07] hover:border-white/20 hover:bg-white/[0.11]",
+                    ? PLATFORM_ICON_SHELL[platform].salon
+                    : PLATFORM_ICON_SHELL[platform].bar,
                 )}
               >
-                <span
-                  className={cn(
-                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg [@media(max-height:560px)]:h-8 [@media(max-height:560px)]:w-8",
-                    salonStyle
-                      ? PLATFORM_ICON_SHELL[platform].salon
-                      : PLATFORM_ICON_SHELL[platform].bar,
-                  )}
-                >
-                  <Icon platform={platform} />
-                </span>
-                <span
-                  className={cn(
-                    "min-w-0 flex-1 truncate text-left text-[11px] font-semibold leading-tight sm:text-xs",
-                    salonStyle ? "text-stone-800" : "text-white/95",
-                  )}
-                >
-                  {LABELS[platform]}
-                </span>
-                <ExternalArrowIcon
-                  className={cn(
-                    "h-3 w-3 shrink-0 opacity-45 transition group-hover:opacity-75 sm:h-3.5 sm:w-3.5",
-                    salonStyle ? "text-stone-400" : "text-white/50",
-                  )}
-                />
-              </Link>
-            </li>
-          );
-        })}
+                <Icon platform={platform} />
+              </span>
+              <span
+                className={cn(
+                  "min-w-0 flex-1 text-sm font-semibold leading-tight sm:text-[0.9375rem]",
+                  salonStyle ? "text-stone-800" : "text-white/95",
+                )}
+              >
+                {LABELS[platform]}
+              </span>
+              <ExternalArrowIcon
+                className={cn(
+                  "h-4 w-4 shrink-0 opacity-50 transition group-hover:opacity-80 sm:h-[1.125rem] sm:w-[1.125rem]",
+                  salonStyle ? "text-stone-400" : "text-white/50",
+                )}
+              />
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   );

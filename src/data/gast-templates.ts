@@ -66,8 +66,8 @@ export interface GastTemplate {
     title: string;
     /** Regel onder de titel (kort) */
     subtitle: string;
-    /** Kleine titel boven het icon-raster */
-    socialHeading: string;
+    /** Optioneel: kleine titel boven de socials (weglaten = meer ruimte) */
+    socialHeading?: string;
     socialLinks: RetentionSocialLink[];
   };
 }
@@ -169,7 +169,6 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
       title: "Volg Café Nova",
       subtitle:
         "Acties, events en nieuws — tik op het kanaal dat jij gebruikt.",
-      socialHeading: "Alle kanalen",
       socialLinks: DEFAULT_SOCIAL_LINKS_DEMO,
     },
   },
@@ -210,7 +209,6 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
       title: "Volg Salon Nova",
       subtitle:
         "Inspiratie, voor- en na-foto’s en afspraken — vind ons op al onze kanalen.",
-      socialHeading: "Alle kanalen",
       socialLinks: DEFAULT_SOCIAL_LINKS_DEMO,
     },
   },
