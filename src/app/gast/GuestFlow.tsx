@@ -336,6 +336,24 @@ function GuestFlowInner({
   const { palette: p } = useGuestTheme();
   const isHorecaTemplate = tpl.id === "horeca";
 
+  const guestCopy = useMemo(
+    () => ({
+      upgradeHeadline:
+        p.themeCopy?.upgradeHeadline ?? tpl.baseDeal.upgradeHeadline,
+      upgradeSubUpgraded:
+        p.themeCopy?.upgradeSubUpgraded ?? tpl.baseDeal.upgradeSubUpgraded,
+      formLead:
+        p.themeCopy?.formLead ?? "Ontvang direct je betere deal",
+      phoneLabel: p.themeCopy?.phoneLabel ?? tpl.baseDeal.phoneLabel,
+      upgradeSubmit:
+        p.themeCopy?.upgradeSubmit ?? tpl.baseDeal.upgradeSubmit,
+      skipUpgrade: p.themeCopy?.skipUpgrade ?? tpl.baseDeal.skipUpgrade,
+      unlockBoxIdleHint:
+        p.themeCopy?.unlockBoxIdleHint ?? tpl.unlock.boxIdleHint,
+    }),
+    [p.themeCopy, tpl.baseDeal, tpl.unlock.boxIdleHint],
+  );
+
   const handleUpgradeSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -453,7 +471,7 @@ function GuestFlowInner({
                 }))}
                 variant={p.prizeBox}
                 interactiveBox={false}
-                idleHint={tpl.unlock.boxIdleHint}
+                idleHint={guestCopy.unlockBoxIdleHint}
               />
               {spinning ? (
                 <p
@@ -629,14 +647,14 @@ function GuestFlowInner({
                         <h3
                           className={cn(
                             "shrink-0 px-0.5 text-center text-[clamp(0.88rem,3.6vw,1.2rem)] leading-tight tracking-tight [@media(max-height:760px)]:text-[clamp(0.82rem,3.4vw,1.05rem)]",
-                            p.shell === "luxury"
+                            p.shell === "luxury" || p.id === "bar"
                               ? "font-medium"
                               : "font-extrabold",
                             p.upgrade.headline,
                           )}
                         >
                           <span className="line-clamp-2 break-words">
-                            {tpl.baseDeal.upgradeHeadline}
+                            {guestCopy.upgradeHeadline}
                           </span>
                         </h3>
 
@@ -645,7 +663,8 @@ function GuestFlowInner({
                             <div>
                               <p
                                 className={cn(
-                                  "text-[9px] font-bold uppercase tracking-[0.18em] [@media(max-height:760px)]:text-[8px]",
+                                  "text-[9px] uppercase tracking-[0.18em] [@media(max-height:760px)]:text-[8px]",
+                                  p.id === "bar" ? "font-normal" : "font-semibold",
                                   p.upgrade.subMuted,
                                 )}
                               >
@@ -669,16 +688,22 @@ function GuestFlowInner({
                             <div>
                               <p
                                 className={cn(
-                                  "text-[9px] font-bold uppercase tracking-[0.18em] [@media(max-height:760px)]:text-[8px]",
+                                  "text-[9px] uppercase tracking-[0.18em] [@media(max-height:760px)]:text-[8px]",
+                                  p.id === "bar" ? "font-normal" : "font-semibold",
                                   p.upgrade.subAccent,
                                 )}
                               >
-                                <span aria-hidden>{p.upgrade.upgradeEmoji}</span>{" "}
-                                {tpl.baseDeal.upgradeSubUpgraded}
+                                {p.upgrade.upgradeEmoji ? (
+                                  <>
+                                    <span aria-hidden>{p.upgrade.upgradeEmoji}</span>{" "}
+                                  </>
+                                ) : null}
+                                {guestCopy.upgradeSubUpgraded}
                               </p>
                               <p
                                 className={cn(
-                                  "mt-0.5 line-clamp-2 text-[clamp(0.82rem,3.4vw,1.05rem)] font-bold leading-tight [@media(max-height:760px)]:text-[clamp(0.78rem,3.2vw,0.98rem)]",
+                                  "mt-0.5 line-clamp-2 text-[clamp(0.82rem,3.4vw,1.05rem)] leading-tight [@media(max-height:760px)]:text-[clamp(0.78rem,3.2vw,0.98rem)]",
+                                  p.id === "bar" ? "font-medium" : "font-bold",
                                   p.upgrade.dealUpgraded,
                                 )}
                               >
@@ -699,11 +724,12 @@ function GuestFlowInner({
                           <div className="w-full min-w-0 space-y-1.5 [@media(max-height:760px)]:space-y-1">
                             <p
                               className={cn(
-                                "text-center text-[clamp(0.95rem,3.8vw,1.15rem)] font-bold leading-snug",
+                                "text-center text-[clamp(0.95rem,3.8vw,1.15rem)] leading-snug",
+                                p.id !== "bar" ? "font-bold" : null,
                                 p.upgrade.formLead,
                               )}
                             >
-                              Ontvang direct je betere deal
+                              {guestCopy.formLead}
                             </p>
                             <div>
                               <label
@@ -713,7 +739,7 @@ function GuestFlowInner({
                                   p.upgrade.label,
                                 )}
                               >
-                                {tpl.baseDeal.phoneLabel}
+                                {guestCopy.phoneLabel}
                               </label>
                               <input
                                 id="guest-tel"
@@ -758,11 +784,14 @@ function GuestFlowInner({
                           <Button
                             type="submit"
                             className={cn(
-                              "w-full shrink-0 py-3.5 text-[clamp(1rem,3.8vw,1.15rem)] font-extrabold [@media(max-height:760px)]:py-3",
+                              "w-full shrink-0 py-3.5 text-[clamp(1rem,3.8vw,1.15rem)] [@media(max-height:760px)]:py-3",
+                              p.id === "bar"
+                                ? "font-semibold"
+                                : "font-extrabold",
                               p.upgrade.submit,
                             )}
                           >
-                            {tpl.baseDeal.upgradeSubmit}
+                            {guestCopy.upgradeSubmit}
                           </Button>
                           <p
                             className={cn(
@@ -784,7 +813,7 @@ function GuestFlowInner({
                       )}
                       onClick={goClaim}
                     >
-                      {tpl.baseDeal.skipUpgrade}
+                      {guestCopy.skipUpgrade}
                     </Button>
                   </div>
                 </>

@@ -75,6 +75,16 @@ export type GuestVisualPalette = {
   viewportBg: string;
   /** Extra klasse op de gast-stap voor typografie / motion */
   stepExtra: string;
+  /** Optionele NL-copy bovenop `gast-templates` (o.a. Bar VIP — ingetogen taal) */
+  themeCopy?: {
+    upgradeHeadline?: string;
+    upgradeSubUpgraded?: string;
+    formLead?: string;
+    unlockBoxIdleHint?: string;
+    phoneLabel?: string;
+    upgradeSubmit?: string;
+    skipUpgrade?: string;
+  };
 };
 
 const bar: GuestVisualPalette = {
@@ -82,63 +92,72 @@ const bar: GuestVisualPalette = {
   shell: "dark",
   prizeBox: "dark",
   retentionLightSurface: false,
-  pageNum: "text-white/25",
+  pageNum: "text-white/20",
   welcome: {
     section: "",
-    brand: "text-amber-200/50 tracking-[0.34em] font-medium",
-    title: "text-white font-semibold tracking-tight",
-    subtitle: "text-white/50",
+    brand: "text-amber-200/40 tracking-[0.32em] font-normal",
+    title: "text-white/95 font-medium tracking-tight",
+    subtitle: "text-white/45",
     badge: "",
     ctaPrimaryAddon:
-      "!border !border-amber-600/45 !bg-amber-600 !text-stone-950 !shadow-[0_10px_28px_rgba(0,0,0,0.55)] transition-colors duration-200 hover:!bg-amber-500 active:!brightness-[0.97]",
-    footerHint: "text-white/35",
+      "!border !border-amber-900/35 !bg-amber-950 !text-amber-100/95 !shadow-[0_6px_20px_rgba(0,0,0,0.45)] transition-colors duration-200 hover:!bg-[#422006] active:!brightness-[0.98]",
+    footerHint: "text-white/30",
   },
   unlock: {
-    openingHint: "text-amber-100/80 font-medium",
-    revealHint: "text-white/38",
+    openingHint: "text-white/50 font-normal",
+    revealHint: "text-white/32",
     spinDisabled: "",
     spinLinkPrimaryAddon:
-      "!border !border-amber-600/40 !bg-amber-600 !text-stone-950 !shadow-md !shadow-black/50 transition-colors duration-200 hover:!bg-amber-500 active:!brightness-[0.97]",
+      "!border !border-amber-900/35 !bg-amber-950 !text-amber-100/95 !shadow-md !shadow-black/40 transition-colors duration-200 hover:!bg-[#422006] active:!brightness-[0.98]",
   },
   baseWon: {
-    card: "border border-white/[0.07] bg-[#111118] shadow-[0_16px_44px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.05)]",
-    label: "text-amber-200/75 font-medium",
-    title: "text-white font-semibold",
-    normalPrice: "text-white/40",
-    timerLead: "text-white/42",
-    timerMono: "text-amber-200/95 font-semibold tabular-nums",
+    card: "border border-white/[0.06] bg-[#0e0e12] shadow-[0_12px_40px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.04)]",
+    label: "text-amber-200/50 font-normal tracking-wide",
+    title: "text-white/95 font-medium",
+    normalPrice: "text-white/35",
+    timerLead: "text-white/38",
+    timerMono: "text-amber-200/70 font-medium tabular-nums",
   },
   upgrade: {
     outer:
-      "border border-white/[0.06] bg-[#0c0c12] shadow-[0_20px_52px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.04)]",
-    ambientA: "bg-gradient-to-b from-[#14141c] via-[#0e0e14] to-[#08080d]",
+      "border border-white/[0.05] bg-[#0a0a0e] shadow-[0_18px_48px_rgba(0,0,0,0.58),inset_0_1px_0_rgba(255,255,255,0.03)]",
+    ambientA: "bg-[#0c0c10]",
     ambientB: "bb-upgrade-bg-drift-bar",
-    ambientBlur: "bg-amber-500/[0.07]",
-    headline: "text-white font-semibold",
-    subMuted: "text-white/38",
-    subAccent: "text-amber-200/85",
-    dealStandard: "text-white/65",
-    dealUpgraded: "text-white font-medium",
-    divider: "via-white/[0.08]",
-    formBorder: "border-white/[0.08]",
-    formLead: "text-white font-medium",
-    label: "text-white/45",
+    ambientBlur: "bg-white/[0.03]",
+    headline: "text-white/95 font-medium tracking-tight",
+    subMuted: "text-white/35 font-normal",
+    subAccent: "text-amber-200/55 font-normal",
+    dealStandard: "text-white/60",
+    dealUpgraded: "text-white/90 font-medium",
+    divider: "via-white/[0.06]",
+    formBorder: "border-white/[0.06]",
+    formLead: "text-white/85 font-normal",
+    label: "text-white/40",
     input:
-      "border-white/[0.12] bg-black/45 text-white ring-amber-900/25 backdrop-blur-[0.5px] placeholder:text-white/35 focus:border-amber-600/40",
-    error: "text-amber-200/90",
+      "border-white/[0.1] bg-black/35 text-white/95 ring-0 placeholder:text-white/30 focus:border-amber-900/50 focus:ring-1 focus:ring-amber-900/30",
+    error: "text-amber-200/75",
     submit:
-      "!border !border-amber-600/45 !bg-amber-600 !text-stone-950 !shadow-[0_10px_26px_rgba(0,0,0,0.5)] transition-colors duration-200 hover:!bg-amber-500 active:!brightness-[0.97]",
-    formTiny: "text-white/32",
-    skip: "text-white/40 transition-colors hover:text-white/65",
-    upgradeEmoji: "✦",
+      "!border !border-amber-900/35 !bg-amber-950 !text-amber-100/95 !shadow-[0_6px_20px_rgba(0,0,0,0.4)] transition-colors duration-200 hover:!bg-[#422006] active:!brightness-[0.98]",
+    formTiny: "text-white/28",
+    skip: "text-white/35 transition-colors hover:text-white/55",
+    upgradeEmoji: "",
   },
   retention: {
-    title: "text-white font-semibold",
-    subtitle: "text-white/45",
-    ghostLink: "text-amber-200/65 hover:text-amber-100/90",
+    title: "text-white/95 font-medium",
+    subtitle: "text-white/40",
+    ghostLink: "text-amber-200/50 hover:text-amber-100/80",
   },
-  viewportBg: "bg-[#050506]",
+  viewportBg: "bg-[#030304]",
   stepExtra: "bb-guest-theme-bar",
+  themeCopy: {
+    upgradeHeadline: "Exclusieve deal beschikbaar",
+    upgradeSubUpgraded: "Upgrade je voordeel",
+    formLead: "Alleen vanavond beschikbaar",
+    unlockBoxIdleHint: "Tik om verder te gaan",
+    phoneLabel: "Telefoonnummer voor activatie",
+    upgradeSubmit: "Activeren",
+    skipUpgrade: "Doorgaan zonder upgrade",
+  },
 };
 
 const salon: GuestVisualPalette = {
@@ -348,6 +367,8 @@ const playful: GuestVisualPalette = {
   },
   viewportBg: "bg-gradient-to-b from-[#1a0528] via-[#0f0220] to-[#060010]",
   stepExtra: "bb-guest-theme-playful",
+  /** Bar-copy overschrijven — Playful gebruikt weer template-teksten uit gast-templates */
+  themeCopy: undefined,
 };
 
 export const GUEST_VISUAL_PALETTES: Record<GuestUiTheme, GuestVisualPalette> = {

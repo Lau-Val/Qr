@@ -306,21 +306,20 @@ body canvas {
   pointer-events: none;
 }
 
-/* Bar / VIP: één diepte-laag — koel charcoal, geen regenboog (scheidt van Playful) */
+/* Bar / VIP: bijna statische diepte — geen zichtbare kleur-drift (vs. Playful) */
 .bb-upgrade-bg-drift-bar {
   position: absolute;
   inset: 0;
   background-image: linear-gradient(
-    128deg,
-    rgba(22, 22, 30, 0.92) 0%,
-    rgba(12, 12, 18, 0.96) 38%,
-    rgba(18, 16, 28, 0.94) 62%,
-    rgba(10, 10, 14, 0.98) 100%
+    140deg,
+    rgba(16, 16, 20, 0.97) 0%,
+    rgba(10, 10, 12, 0.99) 50%,
+    rgba(14, 14, 18, 0.98) 100%
   );
-  background-size: 320% 320%;
-  animation: bb-upgrade-bg-drift 26s ease-in-out infinite;
+  background-size: 200% 200%;
+  animation: bb-upgrade-bg-drift 40s ease-in-out infinite;
   mix-blend-mode: normal;
-  opacity: 0.55;
+  opacity: 0.35;
   pointer-events: none;
 }
 
@@ -449,15 +448,15 @@ body canvas {
   will-change: transform;
 }
 
-/* Bar / VIP: subtiele warme reflectie, geen neon-saturatie */
+/* Bar / VIP: zeer lichte glans, geen kleur-accent in de sweep */
 .bb-guest-theme-bar .bb-upgrade-gloss-ray {
-  opacity: 0.72;
-  filter: saturate(0.75) brightness(1.02);
+  opacity: 0.38;
+  filter: saturate(0.35) brightness(0.98);
 }
 
 .bb-guest-theme-bar .bb-upgrade-gloss-ray--secondary {
-  opacity: 0.42;
-  filter: saturate(0.7);
+  opacity: 0.22;
+  filter: saturate(0.3);
 }
 
 /* Clean: minimale glans — rustig, voorspelbaar */
@@ -596,7 +595,7 @@ select:focus {
 }
 
 .bb-guest-theme-bar .bb-box-float {
-  animation-duration: 5.2s;
+  animation-duration: 6.5s;
   animation-timing-function: ease-in-out;
 }
 
