@@ -530,7 +530,7 @@ function GuestFlowInner({
                 <>
                   <div
                     className={cn(
-                      "min-h-0 max-h-[min(38vh,320px)] shrink-0 overflow-y-auto overscroll-contain rounded-xl border px-2.5 py-2 text-center sm:rounded-2xl sm:px-3 sm:py-2.5 [-webkit-overflow-scrolling:touch] [@media(max-height:760px)]:max-h-[min(34vh,280px)] [@media(max-height:760px)]:py-2",
+                      "shrink-0 overflow-hidden rounded-xl border px-2.5 py-2 text-center sm:rounded-2xl sm:px-3 sm:py-2.5 [@media(max-height:760px)]:py-2",
                       p.baseWon.card,
                     )}
                   >
@@ -544,7 +544,7 @@ function GuestFlowInner({
                     </p>
                     <h2
                       className={cn(
-                        "mt-1.5 break-words text-[clamp(1.15rem,5vw,1.75rem)] font-bold leading-snug [@media(max-height:760px)]:mt-1",
+                        "mt-1.5 line-clamp-3 text-[clamp(1.05rem,4.5vw,1.65rem)] font-bold leading-snug [@media(max-height:760px)]:mt-1 [@media(max-height:760px)]:line-clamp-2",
                         p.baseWon.title,
                       )}
                     >
@@ -625,32 +625,27 @@ function GuestFlowInner({
                         <div className="bb-upgrade-gloss-ray" />
                         <div className="bb-upgrade-gloss-ray bb-upgrade-gloss-ray--secondary" />
                       </div>
-                      <div className="relative z-[3] flex min-h-0 flex-1 flex-col overflow-hidden">
+                      <div className="relative z-[3] flex w-full min-h-0 flex-col overflow-hidden">
                         <h3
                           className={cn(
-                            "shrink-0 px-0.5 text-center text-[clamp(0.95rem,4vw,1.3rem)] leading-tight tracking-tight [@media(max-height:760px)]:text-[clamp(0.92rem,3.8vw,1.15rem)]",
+                            "shrink-0 px-0.5 text-center text-[clamp(0.88rem,3.6vw,1.2rem)] leading-tight tracking-tight [@media(max-height:760px)]:text-[clamp(0.82rem,3.4vw,1.05rem)]",
                             p.shell === "luxury"
                               ? "font-medium"
                               : "font-extrabold",
                             p.upgrade.headline,
                           )}
                         >
-                          <span className="break-words">
+                          <span className="line-clamp-2 break-words">
                             {tpl.baseDeal.upgradeHeadline}
                           </span>
                         </h3>
 
-                        <div
-                          className={cn(
-                            "mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain pr-0.5 [-webkit-overflow-scrolling:touch]",
-                            "[scrollbar-gutter:stable]",
-                          )}
-                        >
-                          <div className="space-y-2 pb-1 [@media(max-height:760px)]:space-y-1.5">
+                        <div className="mt-1.5 shrink-0 overflow-hidden px-0.5 [@media(max-height:760px)]:mt-1">
+                          <div className="space-y-1.5 [@media(max-height:760px)]:space-y-1">
                             <div>
                               <p
                                 className={cn(
-                                  "text-[10px] font-bold uppercase tracking-[0.2em] [@media(max-height:760px)]:text-[9px]",
+                                  "text-[9px] font-bold uppercase tracking-[0.18em] [@media(max-height:760px)]:text-[8px]",
                                   p.upgrade.subMuted,
                                 )}
                               >
@@ -658,7 +653,7 @@ function GuestFlowInner({
                               </p>
                               <p
                                 className={cn(
-                                  "mt-1 break-words text-[clamp(0.85rem,3.5vw,1.05rem)] font-semibold leading-snug [@media(max-height:760px)]:mt-0.5",
+                                  "mt-0.5 line-clamp-2 text-[clamp(0.78rem,3.2vw,0.98rem)] font-semibold leading-tight [@media(max-height:760px)]:text-[0.76rem]",
                                   p.upgrade.dealStandard,
                                 )}
                               >
@@ -674,7 +669,7 @@ function GuestFlowInner({
                             <div>
                               <p
                                 className={cn(
-                                  "text-[10px] font-bold uppercase tracking-[0.2em] [@media(max-height:760px)]:text-[9px]",
+                                  "text-[9px] font-bold uppercase tracking-[0.18em] [@media(max-height:760px)]:text-[8px]",
                                   p.upgrade.subAccent,
                                 )}
                               >
@@ -683,7 +678,7 @@ function GuestFlowInner({
                               </p>
                               <p
                                 className={cn(
-                                  "mt-1 break-words text-[clamp(0.95rem,4vw,1.3rem)] font-bold leading-snug [@media(max-height:760px)]:mt-0.5 [@media(max-height:760px)]:text-[clamp(0.9rem,3.8vw,1.15rem)]",
+                                  "mt-0.5 line-clamp-2 text-[clamp(0.82rem,3.4vw,1.05rem)] font-bold leading-tight [@media(max-height:760px)]:text-[clamp(0.78rem,3.2vw,0.98rem)]",
                                   p.upgrade.dealUpgraded,
                                 )}
                               >
@@ -695,7 +690,7 @@ function GuestFlowInner({
 
                         <form
                           className={cn(
-                            "mt-2 flex min-h-0 w-full min-w-0 shrink-0 flex-col gap-2 border-t pt-2 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:gap-1.5",
+                            "mt-2 flex w-full min-w-0 shrink-0 flex-col gap-2 border-t pt-2 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:gap-1.5",
                             p.upgrade.formBorder,
                           )}
                           onSubmit={handleUpgradeSubmit}
