@@ -690,13 +690,13 @@ function GuestFlowInner({
 
                         <form
                           className={cn(
-                            "mt-2 flex w-full min-w-0 shrink-0 flex-col gap-2 border-t pt-2 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:gap-1.5",
+                            "mt-2 flex w-full min-w-0 shrink-0 flex-col gap-1.5 border-t pt-2 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:gap-1",
                             p.upgrade.formBorder,
                           )}
                           onSubmit={handleUpgradeSubmit}
                           autoComplete="on"
                         >
-                          <div className="w-full min-w-0 space-y-2">
+                          <div className="w-full min-w-0 space-y-1.5">
                             <p
                               className={cn(
                                 "text-center text-[clamp(0.95rem,3.8vw,1.15rem)] font-bold leading-snug",
@@ -740,13 +740,13 @@ function GuestFlowInner({
                                   p.upgrade.input,
                                 )}
                               />
-                              {/* Vaste hoogte: geen layout-shift bij fout, geen scroll nodig */}
-                              <div className="mt-1 min-h-[2.5rem]">
+                              {/* Reserveert ~1 regel fout: compacter dan 2.5rem, knop blijft dicht bij input */}
+                              <div className="mt-0.5 min-h-[1.375rem] [@media(max-height:760px)]:min-h-[1.5rem]">
                                 {phoneError ? (
                                   <p
                                     id="guest-tel-error"
                                     className={cn(
-                                      "line-clamp-2 text-[12px] font-medium leading-snug [@media(max-height:760px)]:text-[11px]",
+                                      "line-clamp-2 text-[12px] font-medium leading-tight [@media(max-height:760px)]:text-[11px]",
                                       p.upgrade.error,
                                     )}
                                     role="alert"
