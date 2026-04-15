@@ -15,6 +15,51 @@ const LABELS: Record<RetentionSocialPlatform, string> = {
   website: "Website",
 };
 
+/** Icon badge: leesbaar op licht (salon) en donker (bar). */
+const PLATFORM_ICON_SHELL: Record<
+  RetentionSocialPlatform,
+  { salon: string; bar: string }
+> = {
+  instagram: {
+    salon:
+      "bg-gradient-to-br from-fuchsia-100 to-orange-100 text-pink-600 ring-1 ring-pink-500/15",
+    bar: "bg-gradient-to-br from-fuchsia-500/30 to-orange-500/25 text-pink-200 ring-1 ring-white/10",
+  },
+  facebook: {
+    salon: "bg-blue-50 text-[#1877F2] ring-1 ring-blue-500/20",
+    bar: "bg-blue-500/25 text-blue-200 ring-1 ring-white/10",
+  },
+  tiktok: {
+    salon: "bg-stone-900 text-white ring-1 ring-stone-800/20",
+    bar: "bg-white/15 text-white ring-1 ring-white/15",
+  },
+  whatsapp: {
+    salon: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-500/20",
+    bar: "bg-emerald-500/20 text-emerald-200 ring-1 ring-emerald-400/25",
+  },
+  website: {
+    salon: "bg-violet-50 text-violet-700 ring-1 ring-violet-500/20",
+    bar: "bg-violet-500/25 text-violet-200 ring-1 ring-white/10",
+  },
+};
+
+function ExternalArrowIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M7 17L17 7M7 7h10v10" />
+    </svg>
+  );
+}
+
 function Icon({ platform }: { platform: RetentionSocialPlatform }) {
   const common = "h-5 w-5 shrink-0 sm:h-6 sm:w-6";
   switch (platform) {
@@ -74,11 +119,14 @@ export function RetentionSocialLinks({
         {heading}
       </p>
       <ul
-        className="mt-2.5 grid grid-cols-3 gap-2 sm:grid-cols-5 [@media(max-height:700px)]:mt-2 [@media(max-height:700px)]:gap-1.5"
+        className={cn(
+          "mt-3 flex max-w-md flex-col gap-2 [@media(max-height:700px)]:mt-2.5 [@media(max-height:700px)]:gap-1.5",
+          "mx-auto w-full",
+        )}
         role="list"
       >
         {links.map(({ platform, href }) => (
-          <li key={`${platform}-${href}`} className="flex min-w-0 justify-center">
+          <li key={`${platform}-${href}`} className="min-w-0">
             <Link
               href={href}
               target="_blank"
@@ -86,14 +134,36 @@ export function RetentionSocialLinks({
               title={LABELS[platform]}
               aria-label={`${LABELS[platform]} (opent in nieuw tabblad)`}
               className={cn(
-                "flex min-h-[3.25rem] w-full max-w-[4.75rem] flex-col items-center justify-center gap-0.5 rounded-xl border px-0.5 py-1.5 text-[8px] font-semibold leading-tight transition active:scale-[0.98] sm:min-h-[3.75rem] sm:max-w-none sm:gap-1 sm:px-1 sm:py-2 sm:text-[9px]",
+                "group flex min-h-[3.25rem] w-full items-center gap-3 rounded-2xl border px-3 py-2.5 text-left shadow-sm transition active:scale-[0.99] sm:min-h-[3.5rem] sm:gap-3.5 sm:px-4 sm:py-3",
                 salonStyle
-                  ? "border-stone-200 bg-white text-stone-700 shadow-sm hover:bg-stone-50"
-                  : "border-white/12 bg-white/[0.06] text-white/90 hover:bg-white/[0.1]",
+                  ? "border-stone-200/90 bg-white hover:border-stone-300 hover:bg-stone-50"
+                  : "border-white/12 bg-white/[0.07] hover:border-white/20 hover:bg-white/[0.11]",
               )}
             >
-              <Icon platform={platform} />
-              <span className="line-clamp-2 w-full text-center">{LABELS[platform]}</span>
+              <span
+                className={cn(
+                  "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl sm:h-12 sm:w-12",
+                  salonStyle
+                    ? PLATFORM_ICON_SHELL[platform].salon
+                    : PLATFORM_ICON_SHELL[platform].bar,
+                )}
+              >
+                <Icon platform={platform} />
+              </span>
+              <span
+                className={cn(
+                  "min-w-0 flex-1 text-sm font-semibold leading-tight sm:text-[0.9375rem]",
+                  salonStyle ? "text-stone-800" : "text-white/95",
+                )}
+              >
+                {LABELS[platform]}
+              </span>
+              <ExternalArrowIcon
+                className={cn(
+                  "h-4 w-4 shrink-0 opacity-50 transition group-hover:opacity-80 sm:h-[1.125rem] sm:w-[1.125rem]",
+                  salonStyle ? "text-stone-400" : "text-white/50",
+                )}
+              />
             </Link>
           </li>
         ))}
