@@ -43,18 +43,18 @@ export function MobileShell({
             isLight &&
               !isLuxury &&
               !isPlayful &&
-              "border border-stone-200/90 bg-gradient-to-b from-white via-[#faf9f7] to-[#f3efe8] shadow-[0_20px_48px_rgba(15,23,42,0.07)]",
+              "border border-slate-200/90 bg-white shadow-[0_12px_40px_rgba(15,23,42,0.06)]",
             !isLight &&
               !isLuxury &&
               !isPlayful &&
-              "border border-white/[0.07] bg-gradient-to-b from-[#0e0e14] via-[#0a0a10] to-[#060608] shadow-[0_24px_64px_rgba(0,0,0,0.55)]",
+              "border border-cyan-500/25 bg-gradient-to-b from-[#0f0820] via-[#080510] to-[#030208] shadow-[0_24px_64px_rgba(0,0,0,0.62),0_0_48px_rgba(139,92,246,0.14)]",
             className,
           )}
         >
           <div
             className={cn(
               "bb-gast-step relative flex h-full min-h-0 max-h-full min-w-0 flex-1 flex-col overflow-hidden px-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-3 sm:px-4 sm:pt-4",
-              isLight && !isLuxury && !isPlayful && "text-stone-800",
+              isLight && !isLuxury && !isPlayful && "text-slate-800",
               isLuxury && "text-[#3a342c] font-medium tracking-[0.02em]",
               isPlayful && "font-semibold tracking-wide text-white",
             )}

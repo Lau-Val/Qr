@@ -1,8 +1,9 @@
 import type { GuestUiTheme } from "@/lib/guest-ui-theme";
 
 /**
- * Visuele tokens voor de gast-flow (geen functionele wijzigingen — alleen CSS-klassen).
- * `bar` / `salon` = bestaande BarBoost-stijlen; `luxury` / `playful` = nieuwe thema's.
+ * Visuele tokens voor de gast-flow (alleen CSS-klassen).
+ * `bar` = Night / bar (neon, hoog contrast); `salon` = Clean / algemeen licht (neutraal, flat);
+ * `luxury` = premium crème; `playful` = fel gamified.
  */
 export type GuestVisualPalette = {
   id: GuestUiTheme;
@@ -81,61 +82,68 @@ const bar: GuestVisualPalette = {
   shell: "dark",
   prizeBox: "dark",
   retentionLightSurface: false,
-  pageNum: "text-white/40",
+  pageNum: "text-fuchsia-400/45",
   welcome: {
     section: "",
-    brand: "text-white/45",
-    title: "text-white",
-    subtitle: "text-white/52",
+    brand: "text-cyan-400/75 font-bold tracking-[0.38em]",
+    title:
+      "text-white font-extrabold drop-shadow-[0_0_28px_rgba(168,85,247,0.35)]",
+    subtitle: "text-white/60",
     badge: "",
-    ctaPrimaryAddon: "",
-    footerHint: "text-white/38",
+    ctaPrimaryAddon:
+      "!border-0 !bg-gradient-to-r !from-violet-600 !via-fuchsia-500 !to-orange-500 !text-white !shadow-[0_0_32px_rgba(217,70,239,0.45)] hover:!brightness-110 active:!scale-[0.98] bb-bar-cta-pulse bb-bar-welcome-cta",
+    footerHint: "text-white/40",
   },
   unlock: {
     openingHint:
-      "bg-gradient-to-r from-violet-200 via-fuchsia-200 to-violet-300 bg-clip-text text-transparent",
-    revealHint: "text-white/45",
+      "bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-orange-300 bg-clip-text font-extrabold text-transparent drop-shadow-[0_0_14px_rgba(34,211,238,0.35)]",
+    revealHint: "text-fuchsia-200/55",
     spinDisabled: "",
-    spinLinkPrimaryAddon: "",
+    spinLinkPrimaryAddon:
+      "!border-0 !bg-gradient-to-r !from-indigo-600 !via-purple-600 !to-fuchsia-600 !text-white !shadow-[0_0_26px_rgba(99,102,241,0.5)] hover:!brightness-110 active:!scale-[0.98] bb-bar-cta-pulse bb-bar-spin-cta",
   },
   baseWon: {
-    card: "border-white/10 bg-white/[0.04]",
-    label: "text-emerald-300/95",
-    title: "text-white",
+    card: "border border-cyan-400/20 bg-gradient-to-b from-white/[0.09] to-white/[0.02] shadow-[0_0_36px_rgba(139,92,246,0.22),inset_0_1px_0_rgba(255,255,255,0.06)]",
+    label: "text-fuchsia-300/95 font-bold",
+    title: "text-white font-extrabold",
     normalPrice: "text-white/45",
-    timerLead: "text-white/55",
-    timerMono: "text-emerald-200/95",
+    timerLead: "text-cyan-200/75 font-medium",
+    timerMono:
+      "bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-pink-300 bg-clip-text font-black text-transparent tabular-nums",
   },
   upgrade: {
     outer:
-      "border-violet-400/55 bg-[#1a0f2e] shadow-[0_0_0_1px_rgba(167,139,250,0.2),0_20px_50px_rgba(0,0,0,0.55),0_0_80px_rgba(124,58,237,0.22)]",
-    ambientA: "bg-gradient-to-b from-violet-950 via-[#1a1228] to-[#12081f]",
-    ambientB: "bb-upgrade-bg-drift",
-    ambientBlur: "bg-violet-500/25",
-    headline: "text-white",
-    subMuted: "text-white/38",
-    subAccent: "text-amber-200/90",
-    dealStandard: "text-white/70",
-    dealUpgraded: "text-white",
-    divider: "via-white/20",
-    formBorder: "border-white/10",
-    formLead: "text-white",
-    label: "text-white",
+      "border border-fuchsia-500/35 bg-[#140a22] shadow-[0_0_0_1px_rgba(168,85,247,0.28),0_22px_56px_rgba(0,0,0,0.58),0_0_72px_rgba(236,72,153,0.18)]",
+    ambientA: "bg-gradient-to-b from-[#1e0b36] via-[#12081f] to-[#06030e]",
+    ambientB: "bb-upgrade-bg-drift-bar",
+    ambientBlur: "bg-fuchsia-500/30",
+    headline:
+      "text-white font-extrabold drop-shadow-[0_0_18px_rgba(167,139,250,0.35)]",
+    subMuted: "text-white/40",
+    subAccent: "text-fuchsia-300/95",
+    dealStandard: "text-white/75",
+    dealUpgraded: "text-white font-bold",
+    divider: "via-fuchsia-500/35",
+    formBorder: "border-white/12",
+    formLead: "text-white font-bold",
+    label: "text-cyan-100/90",
     input:
-      "border-white/25 bg-black/50 text-white ring-violet-400/40 placeholder:text-white/35 focus:border-violet-400/55",
-    error: "text-amber-200/95",
-    submit: "shadow-lg shadow-violet-900/40",
+      "border-fuchsia-500/35 bg-black/55 text-white ring-fuchsia-400/35 backdrop-blur-[1px] placeholder:text-white/40 focus:border-fuchsia-400/70",
+    error: "text-pink-300",
+    submit:
+      "!border-0 !bg-gradient-to-r !from-violet-600 !via-fuchsia-500 !to-orange-500 !text-white !shadow-[0_0_28px_rgba(217,70,239,0.5)] hover:!brightness-110 active:!scale-[0.98] bb-bar-cta-pulse bb-bar-upgrade-submit",
     formTiny: "text-white/38",
-    skip: "text-white/45",
+    skip: "text-fuchsia-200/55 hover:text-white",
     upgradeEmoji: "🔥",
   },
   retention: {
-    title: "text-white",
+    title: "text-white font-extrabold",
     subtitle: "text-white/55",
-    ghostLink: "",
+    ghostLink: "text-fuchsia-300/80 hover:text-white",
   },
-  viewportBg: "bg-[#06060a]",
-  stepExtra: "",
+  viewportBg:
+    "bg-gradient-to-b from-[#0c0618] via-[#06060a] to-[#020106]",
+  stepExtra: "bb-guest-theme-bar",
 };
 
 const salon: GuestVisualPalette = {
@@ -143,66 +151,66 @@ const salon: GuestVisualPalette = {
   shell: "light",
   prizeBox: "light",
   retentionLightSurface: true,
-  pageNum: "text-stone-400",
+  pageNum: "text-slate-400",
   welcome: {
-    section: "text-stone-800",
-    brand: "text-stone-500",
-    title: "text-stone-900",
-    subtitle: "text-stone-600",
-    badge: "border-stone-200/90 bg-white text-stone-600 shadow-sm",
+    section: "text-slate-800",
+    brand: "text-slate-500 font-medium tracking-[0.32em]",
+    title: "text-slate-900 font-semibold",
+    subtitle: "text-slate-600 font-normal",
+    badge: "border-slate-200 bg-white text-slate-600 shadow-[0_1px_2px_rgba(15,23,42,0.05)]",
     cta:
-      "flex w-full cursor-pointer touch-manipulation select-none items-center justify-center rounded-xl border border-stone-300 bg-white px-5 py-3.5 text-center text-base font-semibold tracking-tight text-stone-900 shadow-sm no-underline transition hover:bg-stone-50 active:bg-stone-100 [@media(max-height:640px)]:py-3",
-    footerHint: "text-stone-500",
+      "flex w-full cursor-pointer touch-manipulation select-none items-center justify-center rounded-xl border border-sky-700/10 bg-sky-600 px-5 py-3.5 text-center text-base font-medium tracking-tight text-white shadow-sm no-underline transition hover:bg-sky-700 active:bg-sky-800 [@media(max-height:640px)]:py-3",
+    footerHint: "text-slate-500",
   },
   unlock: {
-    openingHint: "text-stone-600",
-    revealHint: "text-stone-500",
+    openingHint: "text-slate-600 font-medium",
+    revealHint: "text-slate-500",
     spinDisabled:
-      "!border-stone-200 !bg-stone-100 !text-stone-600 !shadow-none",
+      "!border-slate-200 !bg-slate-100 !text-slate-600 !shadow-none",
     spinLink:
-      "flex w-full touch-manipulation select-none items-center justify-center rounded-xl border border-stone-300 bg-white py-2.5 text-center text-sm font-semibold text-stone-900 shadow-sm no-underline transition hover:bg-stone-50 sm:py-3 sm:text-base",
+      "flex w-full touch-manipulation select-none items-center justify-center rounded-xl border border-sky-700/10 bg-sky-600 py-2.5 text-center text-sm font-medium text-white shadow-sm no-underline transition hover:bg-sky-700 active:bg-sky-800 sm:py-3 sm:text-base",
   },
   baseWon: {
-    card: "border-stone-200 bg-white shadow-sm",
-    label: "text-stone-600",
-    title: "text-stone-900",
+    card: "border border-slate-200/90 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.06)]",
+    label: "text-slate-500 font-medium",
+    title: "text-slate-900 font-semibold",
     normalPrice: "",
-    timerLead: "text-stone-500",
-    timerMono: "text-stone-800",
+    timerLead: "text-slate-500",
+    timerMono: "text-slate-800 font-semibold tabular-nums",
   },
   upgrade: {
     outer:
-      "border-amber-400/70 bg-[#fff7e8] shadow-[0_16px_48px_rgba(180,83,9,0.16),0_4px_20px_rgba(251,191,36,0.12),0_0_0_1px_rgba(253,230,138,0.45)]",
-    ambientA: "bg-gradient-to-br from-[#fffbeb] via-amber-100/95 to-amber-200/90",
-    ambientB: "bb-upgrade-bg-drift-salon",
-    ambientBlur: "bg-amber-400/40",
+      "border border-slate-200/90 bg-white shadow-[0_8px_32px_rgba(15,23,42,0.07)]",
+    ambientA: "bg-gradient-to-br from-slate-50 via-white to-slate-50/90",
+    ambientB: "bb-upgrade-bg-drift-clean",
+    ambientBlur: "bg-sky-200/25",
     secondaryBlob:
-      "pointer-events-none absolute -left-10 bottom-0 z-[1] h-32 w-32 rounded-full bg-amber-300/25 blur-2xl",
-    headline: "text-amber-950 drop-shadow-[0_1px_0_rgba(255,251,235,0.9)]",
-    subMuted: "text-amber-900/75",
-    subAccent: "text-amber-950/85",
-    dealStandard: "text-amber-950/90",
-    dealUpgraded: "text-amber-950",
-    divider: "via-amber-600/35",
-    formBorder: "border-amber-800/20",
-    formLead: "text-amber-950",
-    label: "text-amber-900/80",
+      "pointer-events-none absolute -left-10 bottom-0 z-[1] h-28 w-28 rounded-full bg-sky-100/50 blur-2xl",
+    headline: "text-slate-900 font-semibold",
+    subMuted: "text-slate-500",
+    subAccent: "text-sky-800",
+    dealStandard: "text-slate-700",
+    dealUpgraded: "text-slate-900 font-semibold",
+    divider: "via-slate-200",
+    formBorder: "border-slate-200/80",
+    formLead: "text-slate-800 font-semibold",
+    label: "text-slate-600",
     input:
-      "border-amber-300/80 bg-white/95 text-amber-950 ring-amber-400/40 placeholder:text-amber-900/35 focus:border-amber-500",
-    error: "text-red-700",
+      "border-slate-300 bg-white text-slate-900 ring-sky-500/20 placeholder:text-slate-400 focus:border-sky-500",
+    error: "text-red-600",
     submit:
-      "!border !border-amber-700 !bg-amber-600 !text-white !shadow-md !shadow-amber-900/20 hover:!bg-amber-700 active:!bg-amber-800",
-    formTiny: "text-amber-900/55",
-    skip: "text-amber-900/60 hover:text-amber-950",
+      "!border !border-sky-700/10 !bg-sky-600 !text-white !shadow-sm hover:!bg-sky-700 active:!bg-sky-800",
+    formTiny: "text-slate-500",
+    skip: "text-slate-500 hover:text-slate-800",
     upgradeEmoji: "✨",
   },
   retention: {
-    title: "text-stone-900",
-    subtitle: "text-stone-600",
-    ghostLink: "text-stone-600 hover:text-stone-900",
+    title: "text-slate-900 font-semibold",
+    subtitle: "text-slate-600",
+    ghostLink: "text-slate-600 hover:text-slate-900",
   },
-  viewportBg: "bg-[#f5f3ef]",
-  stepExtra: "",
+  viewportBg: "bg-slate-50",
+  stepExtra: "bb-guest-theme-clean",
 };
 
 /** Luxury: rustig, crème, goud — geen harde contrasten */
