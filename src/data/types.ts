@@ -10,6 +10,8 @@ export type DealCategory =
 
 export interface Deal {
   id: string;
+  /** Alleen geüpgrade deals: korte regel voor upgrade-box (alleen het extra t.o.v. de basisdeal). */
+  upgradePreviewDelta?: string;
   title: string;
   subtitle: string;
   description: string;

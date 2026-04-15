@@ -158,7 +158,7 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
     },
     baseDeal: {
       contextLine: "minuten · alleen in",
-      upgradeHeadline: "Pak de beste deal van vanavond",
+      upgradeHeadline: "🔥 Unlock betere deal 🔥",
       upgradeSubStandard: "Jouw deal nu",
       upgradeSubUpgraded: "Met upgrade",
       phoneLabel: "Laat je nummer achter om de deal te activeren.",
@@ -198,7 +198,7 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
     },
     baseDeal: {
       contextLine: "minuten · alleen bij",
-      upgradeHeadline: "Pak het sterkste salon-voordeel",
+      upgradeHeadline: "🔥 Unlock betere deal 🔥",
       upgradeSubStandard: "Jouw prijs nu",
       upgradeSubUpgraded: "Met upgrade",
       phoneLabel: "Laat je nummer achter om de deal te activeren.",

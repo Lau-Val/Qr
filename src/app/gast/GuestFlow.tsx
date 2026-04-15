@@ -565,8 +565,9 @@ function GuestFlowInner({
                               : "text-white",
                           )}
                         >
-                          <span aria-hidden>{salonStyle ? "✨" : "🔥"}</span>{" "}
-                          <span className="break-words">{tpl.baseDeal.upgradeHeadline}</span>
+                          <span className="break-words">
+                            {tpl.baseDeal.upgradeHeadline}
+                          </span>
                         </h3>
 
                         <div
@@ -626,7 +627,7 @@ function GuestFlowInner({
                                     : "text-white",
                                 )}
                               >
-                                {upgraded.title}
+                                {upgraded.upgradePreviewDelta ?? upgraded.title}
                               </p>
                             </div>
                           </div>

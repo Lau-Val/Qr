@@ -33,7 +33,7 @@ const BY_ID: Record<
   d6: {
     normal: "€16",
     now: "€10",
-    upgradeLine: "Cocktails + upgrade inbegrepen",
+    upgradeLine: "+ extra cocktail",
   },
   d7: {
     normal: "€22",
