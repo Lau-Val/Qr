@@ -152,7 +152,7 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
     },
     unlock: {
       openingHint: "De mystery box opent…",
-      boxIdleHint: "Klik op de knop hieronder om je mystery box te openen.",
+      boxIdleHint: "🔥 Klik om je deal te winnen 🔥",
       primaryCta: "Klik om te openen",
     },
     baseDeal: {
@@ -191,7 +191,7 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
     },
     unlock: {
       openingHint: "De mystery box opent…",
-      boxIdleHint: "Klik op de knop hieronder om je mystery box te openen.",
+      boxIdleHint: "🔥 Klik om je deal te winnen 🔥",
       primaryCta: "Klik om te openen",
     },
     baseDeal: {
