@@ -108,7 +108,6 @@ function GuestFlowInner({
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const [voucherUsed, setVoucherUsed] = useState(false);
   const [claimExpiresAt, setClaimExpiresAt] = useState<number | null>(null);
-  const [comebackActivated, setComebackActivated] = useState(false);
   const [spinning, setSpinning] = useState(false);
   /** Na rad: welke deal-id wint — toont reveal voordat we naar baseDeal gaan */
   const [revealDealId, setRevealDealId] = useState<string | null>(null);
@@ -777,66 +776,28 @@ function GuestFlowInner({
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-0.5 [-webkit-overflow-scrolling:touch]">
               <h2
                 className={cn(
-                  "text-[clamp(1.25rem,5vw,1.5rem)] font-bold",
+                  "text-center text-[clamp(1.25rem,5vw,1.5rem)] font-bold leading-tight",
                   salonStyle ? "text-stone-900" : "text-white",
                 )}
               >
-                Nog iets extra?
+                {tpl.retention.title}
               </h2>
               <p
                 className={cn(
-                  "mt-1 text-[clamp(0.9rem,3.8vw,1.05rem)] [@media(max-height:700px)]:mt-0.5",
+                  "mt-2 text-center text-[clamp(0.9rem,3.8vw,1.05rem)] leading-relaxed [@media(max-height:700px)]:mt-1.5",
                   salonStyle ? "text-stone-600" : "text-white/55",
                 )}
               >
-                Mag je overslaan.
+                {tpl.retention.subtitle}
               </p>
 
-              <div className="mt-3 space-y-3 [@media(max-height:700px)]:mt-2 [@media(max-height:700px)]:space-y-2">
-                <div
-                  className={cn(
-                    "rounded-2xl border p-3 [@media(max-height:700px)]:p-2.5",
-                    salonStyle
-                      ? "border-stone-200 bg-white shadow-sm"
-                      : "border-white/[0.1] bg-white/[0.04]",
-                  )}
-                >
-                  <p
-                    className={cn(
-                      "text-[clamp(1rem,4vw,1.125rem)] font-bold",
-                      salonStyle ? "text-stone-900" : "text-white",
-                    )}
-                  >
-                    Binnenkort terug?
-                  </p>
-                  <p
-                    className={cn(
-                      "mt-1 text-[clamp(0.85rem,3.5vw,1.05rem)] [@media(max-height:700px)]:mt-1",
-                      salonStyle ? "text-stone-600" : "text-white/60",
-                    )}
-                  >
-                    {tpl.retention.comebackBody}
-                  </p>
-                  <Button
-                    className={cn(
-                      "mt-3 w-full py-3 text-base font-bold [@media(max-height:700px)]:mt-2 [@media(max-height:700px)]:py-2.5",
-                      salonStyle &&
-                        "!border-stone-300 !bg-stone-50 !text-stone-900 hover:!bg-stone-100",
-                    )}
-                    variant="secondary"
-                    disabled={comebackActivated}
-                    onClick={() => setComebackActivated(true)}
-                  >
-                    {comebackActivated ? "Opgeslagen" : "Ja, dat wil ik"}
-                  </Button>
-                </div>
+              <div className="mt-6 [@media(max-height:700px)]:mt-5">
+                <RetentionSocialLinks
+                  heading={tpl.retention.socialHeading}
+                  links={tpl.retention.socialLinks}
+                  salonStyle={salonStyle}
+                />
               </div>
-
-              <RetentionSocialLinks
-                heading={tpl.retention.socialHeading}
-                links={tpl.retention.socialLinks}
-                salonStyle={salonStyle}
-              />
             </div>
 
             <Link

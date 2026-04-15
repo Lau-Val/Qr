@@ -64,9 +64,13 @@ export interface GastTemplate {
     upgradeSubmit: string;
     skipUpgrade: string;
   };
+  /** Pagina 5: alleen socials (geen comeback-card) */
   retention: {
-    comebackBody: string;
-    /** Titel boven het social-raster, bv. "Volg Café Nova" */
+    /** Hoofdtitel */
+    title: string;
+    /** Regel onder de titel (kort) */
+    subtitle: string;
+    /** Kleine titel boven het icon-raster */
     socialHeading: string;
     socialLinks: RetentionSocialLink[];
   };
@@ -122,6 +126,19 @@ const KAPPER_UNLOCK: UnlockShowcaseRow[] = [
   },
 ];
 
+/** Alle social-platformcategorieën (demo-URL’s — per zaak vervangen). */
+const ALL_SOCIAL_CATEGORIES_DEMO: RetentionSocialLink[] = [
+  { platform: "instagram", href: "https://www.instagram.com/" },
+  { platform: "facebook", href: "https://www.facebook.com/" },
+  { platform: "tiktok", href: "https://www.tiktok.com/" },
+  { platform: "whatsapp", href: "https://wa.me/31612345678" },
+  { platform: "youtube", href: "https://www.youtube.com/" },
+  { platform: "linkedin", href: "https://www.linkedin.com/" },
+  { platform: "x", href: "https://x.com/" },
+  { platform: "website", href: "https://example.com" },
+  { platform: "maps", href: "https://maps.google.com/" },
+];
+
 const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
   horeca: {
     id: "horeca",
@@ -157,31 +174,11 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
       skipUpgrade: "Nee, ik ga door met de minder goede deal hierboven",
     },
     retention: {
-      comebackBody:
-        "Kom binnen 5 dagen — dan krijg je een extraatje aan de bar.",
-      socialHeading: "Volg Café Nova online",
-      socialLinks: [
-        {
-          platform: "instagram",
-          href: "https://www.instagram.com/",
-        },
-        {
-          platform: "facebook",
-          href: "https://www.facebook.com/",
-        },
-        {
-          platform: "tiktok",
-          href: "https://www.tiktok.com/",
-        },
-        {
-          platform: "whatsapp",
-          href: "https://wa.me/31612345678",
-        },
-        {
-          platform: "website",
-          href: "https://example.com",
-        },
-      ],
+      title: "Volg Café Nova",
+      subtitle:
+        "Acties, events en nieuws — tik op het kanaal dat jij gebruikt.",
+      socialHeading: "Alle kanalen",
+      socialLinks: ALL_SOCIAL_CATEGORIES_DEMO,
     },
   },
   kapper: {
@@ -218,31 +215,11 @@ const TEMPLATES: Record<GastTemplateId, GastTemplate> = {
       skipUpgrade: "Nee, ik ga door met de standaardprijs hierboven",
     },
     retention: {
-      comebackBody:
-        "Kom binnen 6 weken terug — dan ontvang je een extraatje bij je volgende bezoek.",
-      socialHeading: "Volg Salon Nova online",
-      socialLinks: [
-        {
-          platform: "instagram",
-          href: "https://www.instagram.com/",
-        },
-        {
-          platform: "facebook",
-          href: "https://www.facebook.com/",
-        },
-        {
-          platform: "website",
-          href: "https://example.com",
-        },
-        {
-          platform: "maps",
-          href: "https://maps.google.com/",
-        },
-        {
-          platform: "whatsapp",
-          href: "https://wa.me/31612345678",
-        },
-      ],
+      title: "Volg Salon Nova",
+      subtitle:
+        "Inspiratie, voor- en na-foto’s en afspraken — vind ons op al onze kanalen.",
+      socialHeading: "Alle kanalen",
+      socialLinks: ALL_SOCIAL_CATEGORIES_DEMO,
     },
   },
 };

@@ -94,7 +94,7 @@ export function RetentionSocialLinks({
   if (!links.length) return null;
 
   return (
-    <div className="mt-3 [@media(max-height:700px)]:mt-2">
+    <div>
       <p
         className={cn(
           "text-center text-[11px] font-bold uppercase tracking-[0.2em]",
