@@ -191,7 +191,7 @@ const salon: GuestVisualPalette = {
       "border-amber-300/80 bg-white/95 text-amber-950 ring-amber-400/40 placeholder:text-amber-900/35 focus:border-amber-500",
     error: "text-red-700",
     submit:
-      "!border !border-amber-500/40 !bg-gradient-to-b !from-amber-300/75 !via-amber-400/65 !to-amber-700/60 !text-amber-950 !shadow-[0_6px_22px_rgba(180,83,9,0.2)] backdrop-blur-[1px] hover:!from-amber-300/88 hover:!via-amber-400/78 hover:!to-amber-700/72 active:!brightness-[0.97]",
+      "!border !border-amber-700 !bg-amber-600 !text-white !shadow-md !shadow-amber-900/20 hover:!bg-amber-700 active:!bg-amber-800",
     formTiny: "text-amber-900/55",
     skip: "text-amber-900/60 hover:text-amber-950",
     upgradeEmoji: "✨",
