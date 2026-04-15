@@ -56,6 +56,7 @@ export type GuestVisualPalette = {
     dealUpgraded: string;
     divider: string;
     formBorder: string;
+    formLead: string;
     label: string;
     input: string;
     error: string;
@@ -118,6 +119,7 @@ const bar: GuestVisualPalette = {
     dealUpgraded: "text-white",
     divider: "via-white/20",
     formBorder: "border-white/10",
+    formLead: "text-white",
     label: "text-white",
     input:
       "border-white/25 bg-black/50 text-white ring-violet-400/40 placeholder:text-white/35 focus:border-violet-400/55",
@@ -183,6 +185,7 @@ const salon: GuestVisualPalette = {
     dealUpgraded: "text-amber-950",
     divider: "via-amber-600/35",
     formBorder: "border-amber-800/20",
+    formLead: "text-amber-950",
     label: "text-amber-900/80",
     input:
       "border-amber-300/80 bg-white/95 text-amber-950 ring-amber-400/40 placeholder:text-amber-900/35 focus:border-amber-500",
@@ -255,6 +258,7 @@ const luxury: GuestVisualPalette = {
     dealUpgraded: "text-[#2c2820]",
     divider: "via-[#d4c9b8]/60",
     formBorder: "border-[#e0d6c8]",
+    formLead: "text-[#3a342c]",
     label: "text-[#6b6358]",
     input:
       "border-[#d4c9b8] bg-white text-[#3a342c] ring-[#c9b896]/40 placeholder:text-[#a89e90] focus:border-[#b8a990]",
@@ -323,6 +327,7 @@ const playful: GuestVisualPalette = {
     dealUpgraded: "text-white font-extrabold",
     divider: "via-fuchsia-500/40",
     formBorder: "border-orange-500/30",
+    formLead: "text-white font-extrabold",
     label: "text-orange-100 font-bold",
     input:
       "border-2 border-fuchsia-500/40 bg-black/60 text-white ring-orange-400/50 placeholder:text-fuchsia-200/50 focus:border-orange-400",

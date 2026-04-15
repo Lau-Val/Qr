@@ -696,53 +696,63 @@ function GuestFlowInner({
                           onSubmit={handleUpgradeSubmit}
                           autoComplete="on"
                         >
-                          <div className="w-full min-w-0">
-                            <label
-                              htmlFor="guest-tel"
+                          <div className="w-full min-w-0 space-y-1.5 [@media(max-height:760px)]:space-y-1">
+                            <p
                               className={cn(
-                                "mb-1 block w-full px-2 text-center text-[10px] font-semibold leading-snug sm:px-3 sm:text-[11px]",
-                                p.upgrade.label,
+                                "text-center text-[clamp(0.95rem,3.8vw,1.15rem)] font-bold leading-snug",
+                                p.upgrade.formLead,
                               )}
                             >
-                              {tpl.baseDeal.phoneLabel}
-                            </label>
-                            <input
-                              id="guest-tel"
-                              name="tel"
-                              type="tel"
-                              inputMode="tel"
-                              autoComplete="section-contact tel-national"
-                              enterKeyHint="go"
-                              autoCapitalize="none"
-                              autoCorrect="off"
-                              spellCheck={false}
-                              placeholder="06 12345678"
-                              value={phone}
-                              onChange={(e) => {
-                                setPhone(e.target.value);
-                                if (phoneError) setPhoneError(null);
-                              }}
-                              aria-invalid={phoneError ? true : undefined}
-                              aria-describedby={
-                                phoneError ? "guest-tel-error" : undefined
-                              }
-                              className={cn(
-                                "w-full rounded-2xl border px-4 py-3 text-[clamp(1rem,4.2vw,1.25rem)] leading-snug shadow-inner outline-none focus:ring-2 [@media(max-height:760px)]:py-2.5",
-                                p.upgrade.input,
-                              )}
-                            />
-                            {phoneError ? (
-                              <p
-                                id="guest-tel-error"
+                              Ontvang direct je betere deal
+                            </p>
+                            <div>
+                              <label
+                                htmlFor="guest-tel"
                                 className={cn(
-                                  "mt-1 line-clamp-2 text-[12px] font-medium leading-snug [@media(max-height:760px)]:mt-0.5 [@media(max-height:760px)]:text-[11px]",
-                                  p.upgrade.error,
+                                  "mb-1 block w-full px-2 text-center text-[10px] font-semibold leading-snug sm:px-3 sm:text-[11px]",
+                                  p.upgrade.label,
                                 )}
-                                role="alert"
                               >
-                                {phoneError}
-                              </p>
-                            ) : null}
+                                {tpl.baseDeal.phoneLabel}
+                              </label>
+                              <input
+                                id="guest-tel"
+                                name="tel"
+                                type="tel"
+                                inputMode="tel"
+                                autoComplete="section-contact tel-national"
+                                enterKeyHint="go"
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                spellCheck={false}
+                                placeholder="06 12345678"
+                                value={phone}
+                                onChange={(e) => {
+                                  setPhone(e.target.value);
+                                  if (phoneError) setPhoneError(null);
+                                }}
+                                aria-invalid={phoneError ? true : undefined}
+                                aria-describedby={
+                                  phoneError ? "guest-tel-error" : undefined
+                                }
+                                className={cn(
+                                  "w-full rounded-2xl border px-4 py-3 text-[clamp(1rem,4.2vw,1.25rem)] leading-snug shadow-inner outline-none focus:ring-2 [@media(max-height:760px)]:py-2.5",
+                                  p.upgrade.input,
+                                )}
+                              />
+                              {phoneError ? (
+                                <p
+                                  id="guest-tel-error"
+                                  className={cn(
+                                    "mt-1 line-clamp-2 text-[12px] font-medium leading-snug [@media(max-height:760px)]:mt-0.5 [@media(max-height:760px)]:text-[11px]",
+                                    p.upgrade.error,
+                                  )}
+                                  role="alert"
+                                >
+                                  {phoneError}
+                                </p>
+                              ) : null}
+                            </div>
                           </div>
 
                           <Button
