@@ -21,6 +21,7 @@ function navItemsForVenue(venueType: VenueType) {
     { href: "/dashboard", label: "Dashboard" },
     { href: "/dashboard/beheer", label: "Dealbeheer" },
     { href: "/campagnes", label: "Campagnes" },
+    { href: "/dashboard/whatsapp", label: "WhatsApp" },
   ] as const;
   if (venueType === "kapper") {
     return [
