@@ -773,10 +773,10 @@ function GuestFlowInner({
 
         {step === "retention" ? (
           <section className="flex h-full min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-hidden [@media(max-height:700px)]:gap-1.5">
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-0.5 [-webkit-overflow-scrolling:touch]">
+            <div className="flex min-h-0 flex-1 flex-col justify-center gap-3 overflow-hidden [@media(max-height:640px)]:gap-2 [@media(max-height:560px)]:gap-1.5">
               <h2
                 className={cn(
-                  "text-center text-[clamp(1.25rem,5vw,1.5rem)] font-bold leading-tight",
+                  "shrink-0 text-center text-[clamp(1.1rem,4.5vw,1.45rem)] font-bold leading-tight [@media(max-height:640px)]:text-[clamp(1rem,4vw,1.25rem)]",
                   salonStyle ? "text-stone-900" : "text-white",
                 )}
               >
@@ -784,14 +784,14 @@ function GuestFlowInner({
               </h2>
               <p
                 className={cn(
-                  "mt-2 text-center text-[clamp(0.9rem,3.8vw,1.05rem)] leading-relaxed [@media(max-height:700px)]:mt-1.5",
+                  "shrink-0 text-center text-[clamp(0.8rem,3.2vw,0.95rem)] leading-snug [@media(max-height:640px)]:line-clamp-3 [@media(max-height:640px)]:text-[0.8rem]",
                   salonStyle ? "text-stone-600" : "text-white/55",
                 )}
               >
                 {tpl.retention.subtitle}
               </p>
 
-              <div className="mt-6 [@media(max-height:700px)]:mt-5">
+              <div className="min-h-0 w-full shrink">
                 <RetentionSocialLinks
                   heading={tpl.retention.socialHeading}
                   links={tpl.retention.socialLinks}
