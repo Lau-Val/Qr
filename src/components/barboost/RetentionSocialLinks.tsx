@@ -65,8 +65,26 @@ function Icon({ platform }: { platform: RetentionSocialPlatform }) {
   switch (platform) {
     case "instagram":
       return (
-        <svg className={common} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.204-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 11-2.881 0 1.44 1.44 0 012.881 0z" />
+        <svg
+          className={common}
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden
+        >
+          <rect
+            x="2"
+            y="2"
+            width="20"
+            height="20"
+            rx="5"
+            ry="5"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" />
+          <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" />
         </svg>
       );
     case "facebook":
