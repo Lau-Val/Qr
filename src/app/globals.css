@@ -465,6 +465,8 @@ body canvas {
 
   .bb-upgrade-bg-drift,
   .bb-upgrade-bg-drift-salon,
+  .bb-upgrade-bg-drift-luxury,
+  .bb-upgrade-bg-drift-playful,
   .bb-bartender-bg-drift,
   .bb-bartender-expired-bg-drift,
   .prize-showcase-drift-layer {
@@ -513,4 +515,96 @@ textarea:focus,
 select:focus {
   outline: 2px solid rgba(232, 121, 249, 0.45);
   outline-offset: 1px;
+}
+
+/* --- Gast UI: Luxury-upgrade wash (champagne, zeer zacht) --- */
+.bb-upgrade-bg-drift-luxury {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    125deg,
+    rgba(201, 184, 150, 0.12) 0%,
+    rgba(232, 224, 212, 0.18) 30%,
+    rgba(180, 165, 130, 0.1) 55%,
+    rgba(245, 240, 232, 0.2) 78%,
+    rgba(190, 175, 145, 0.12) 100%
+  );
+  background-size: 320% 320%;
+  animation: bb-upgrade-bg-drift 14s ease-in-out infinite;
+  mix-blend-mode: multiply;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* --- Gast UI: Playful-upgrade wash (fel paars / oranje) --- */
+.bb-upgrade-bg-drift-playful {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    122deg,
+    rgba(168, 85, 247, 0.55) 0%,
+    rgba(249, 115, 22, 0.42) 22%,
+    rgba(217, 70, 239, 0.48) 44%,
+    rgba(124, 58, 237, 0.52) 62%,
+    rgba(251, 146, 60, 0.4) 82%,
+    rgba(91, 33, 182, 0.5) 100%
+  );
+  background-size: 380% 380%;
+  animation: bb-upgrade-bg-drift 7s ease-in-out infinite;
+  mix-blend-mode: screen;
+  opacity: 0.62;
+  pointer-events: none;
+}
+
+/* Luxury: rustigere mystery-box; Playful: iets levendiger */
+.bb-guest-theme-luxury .bb-box-float {
+  animation-duration: 7s;
+  animation-timing-function: ease-in-out;
+}
+
+.bb-guest-theme-playful .bb-box-float {
+  animation-duration: 2.6s;
+}
+
+@keyframes bb-playful-cta-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 22px rgba(249, 115, 22, 0.42);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow:
+      0 0 38px rgba(217, 70, 239, 0.55),
+      0 0 52px rgba(249, 115, 22, 0.35);
+    filter: brightness(1.06);
+  }
+}
+
+.bb-playful-cta-pulse {
+  animation: bb-playful-cta-pulse 2.1s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-playful-cta-pulse {
+    animation: none;
+  }
+
+  .bb-guest-theme-playful .bb-box-float {
+    animation-duration: 4s;
+  }
+}
+
+@keyframes bb-playful-tap {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.97);
+  }
+}
+
+.bb-playful-welcome-cta:active,
+.bb-playful-spin-cta:active {
+  animation: bb-playful-tap 0.22s ease-out;
 }
