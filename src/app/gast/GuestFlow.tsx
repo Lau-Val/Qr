@@ -625,7 +625,7 @@ function GuestFlowInner({
                         <div className="bb-upgrade-gloss-ray" />
                         <div className="bb-upgrade-gloss-ray bb-upgrade-gloss-ray--secondary" />
                       </div>
-                      <div className="relative z-[3] flex w-full min-h-0 flex-col overflow-hidden">
+                      <div className="relative z-[3] flex min-h-0 w-full flex-1 flex-col overflow-x-hidden overflow-y-auto">
                         <h3
                           className={cn(
                             "shrink-0 px-0.5 text-center text-[clamp(0.88rem,3.6vw,1.2rem)] leading-tight tracking-tight [@media(max-height:760px)]:text-[clamp(0.82rem,3.4vw,1.05rem)]",
