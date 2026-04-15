@@ -341,7 +341,7 @@ function GuestFlowInner({
       e.preventDefault();
       const normalized = normalizeDutchPhone(phone);
       if (!isValidDutchMobile(normalized)) {
-        setPhoneError("Vul een geldig mobiel nummer in");
+        setPhoneError("Vul een geldig nummer in");
         return;
       }
       setPhoneError(null);
@@ -625,7 +625,7 @@ function GuestFlowInner({
                         <div className="bb-upgrade-gloss-ray" />
                         <div className="bb-upgrade-gloss-ray bb-upgrade-gloss-ray--secondary" />
                       </div>
-                      <div className="relative z-[3] flex min-h-0 w-full flex-1 flex-col overflow-hidden">
+                      <div className="relative z-[3] flex min-h-0 w-full flex-1 flex-col overflow-x-hidden overflow-y-auto">
                         <h3
                           className={cn(
                             "shrink-0 px-0.5 text-center text-[clamp(0.88rem,3.6vw,1.2rem)] leading-tight tracking-tight [@media(max-height:760px)]:text-[clamp(0.82rem,3.4vw,1.05rem)]",
@@ -690,13 +690,13 @@ function GuestFlowInner({
 
                         <form
                           className={cn(
-                            "mt-2 flex w-full min-w-0 shrink-0 flex-col gap-1.5 border-t pt-2 [@media(max-height:760px)]:mt-1.5 [@media(max-height:760px)]:gap-1",
+                            "mt-2 flex w-full min-w-0 shrink-0 flex-col gap-1 border-t pt-2 [@media(max-height:760px)]:mt-1.5",
                             p.upgrade.formBorder,
                           )}
                           onSubmit={handleUpgradeSubmit}
                           autoComplete="on"
                         >
-                          <div className="w-full min-w-0 space-y-1.5">
+                          <div className="w-full min-w-0 space-y-1.5 [@media(max-height:760px)]:space-y-1">
                             <p
                               className={cn(
                                 "text-center text-[clamp(0.95rem,3.8vw,1.15rem)] font-bold leading-snug",
@@ -740,28 +740,25 @@ function GuestFlowInner({
                                   p.upgrade.input,
                                 )}
                               />
-                              {/* Reserveert ~1 regel fout: compacter dan 2.5rem, knop blijft dicht bij input */}
-                              <div className="mt-0.5 min-h-[1.375rem] [@media(max-height:760px)]:min-h-[1.5rem]">
-                                {phoneError ? (
-                                  <p
-                                    id="guest-tel-error"
-                                    className={cn(
-                                      "line-clamp-2 text-[12px] font-medium leading-tight [@media(max-height:760px)]:text-[11px]",
-                                      p.upgrade.error,
-                                    )}
-                                    role="alert"
-                                  >
-                                    {phoneError}
-                                  </p>
-                                ) : null}
-                              </div>
+                              {phoneError ? (
+                                <p
+                                  id="guest-tel-error"
+                                  className={cn(
+                                    "mt-1 line-clamp-2 text-[12px] font-medium leading-snug [@media(max-height:760px)]:mt-0.5 [@media(max-height:760px)]:text-[11px]",
+                                    p.upgrade.error,
+                                  )}
+                                  role="alert"
+                                >
+                                  {phoneError}
+                                </p>
+                              ) : null}
                             </div>
                           </div>
 
                           <Button
                             type="submit"
                             className={cn(
-                              "w-full shrink-0 py-4 text-[clamp(1rem,3.8vw,1.15rem)] font-extrabold [@media(max-height:760px)]:py-3.5",
+                              "w-full shrink-0 py-3.5 text-[clamp(1rem,3.8vw,1.15rem)] font-extrabold [@media(max-height:760px)]:py-3",
                               p.upgrade.submit,
                             )}
                           >
