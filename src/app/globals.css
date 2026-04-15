@@ -306,24 +306,21 @@ body canvas {
   pointer-events: none;
 }
 
-/* Night / Bar upgrade: neon violet · magenta · cyan (niet hetzelfde als playful) */
+/* Bar / VIP: één diepte-laag — koel charcoal, geen regenboog (scheidt van Playful) */
 .bb-upgrade-bg-drift-bar {
   position: absolute;
   inset: 0;
   background-image: linear-gradient(
-    122deg,
-    rgba(6, 182, 212, 0.42) 0%,
-    rgba(99, 102, 241, 0.48) 16%,
-    rgba(168, 85, 247, 0.52) 34%,
-    rgba(236, 72, 153, 0.45) 50%,
-    rgba(79, 70, 229, 0.5) 66%,
-    rgba(34, 211, 238, 0.38) 84%,
-    rgba(91, 33, 182, 0.48) 100%
+    128deg,
+    rgba(22, 22, 30, 0.92) 0%,
+    rgba(12, 12, 18, 0.96) 38%,
+    rgba(18, 16, 28, 0.94) 62%,
+    rgba(10, 10, 14, 0.98) 100%
   );
-  background-size: 400% 400%;
-  animation: bb-upgrade-bg-drift 8.5s ease-in-out infinite;
-  mix-blend-mode: screen;
-  opacity: 0.62;
+  background-size: 320% 320%;
+  animation: bb-upgrade-bg-drift 26s ease-in-out infinite;
+  mix-blend-mode: normal;
+  opacity: 0.55;
   pointer-events: none;
 }
 
@@ -452,9 +449,15 @@ body canvas {
   will-change: transform;
 }
 
-/* Night / Bar: iets meer glans op de sweep */
+/* Bar / VIP: subtiele warme reflectie, geen neon-saturatie */
 .bb-guest-theme-bar .bb-upgrade-gloss-ray {
-  filter: saturate(1.12) brightness(1.03);
+  opacity: 0.72;
+  filter: saturate(0.75) brightness(1.02);
+}
+
+.bb-guest-theme-bar .bb-upgrade-gloss-ray--secondary {
+  opacity: 0.42;
+  filter: saturate(0.7);
 }
 
 /* Clean: minimale glans — rustig, voorspelbaar */
@@ -586,56 +589,19 @@ select:focus {
   pointer-events: none;
 }
 
-/* Luxury: rustigere mystery-box; Playful: iets levendiger; Bar: urgent */
+/* Luxury: rustig; Bar: ingetogen VIP; Playful: energiek */
 .bb-guest-theme-luxury .bb-box-float {
   animation-duration: 7s;
   animation-timing-function: ease-in-out;
 }
 
 .bb-guest-theme-bar .bb-box-float {
-  animation-duration: 2.75s;
+  animation-duration: 5.2s;
   animation-timing-function: ease-in-out;
 }
 
 .bb-guest-theme-playful .bb-box-float {
   animation-duration: 2.6s;
-}
-
-/* Night / Bar: pulserende glow op primaire CTA’s */
-@keyframes bb-bar-cta-pulse {
-  0%,
-  100% {
-    box-shadow:
-      0 0 18px rgba(139, 92, 246, 0.42),
-      0 0 36px rgba(236, 72, 153, 0.22);
-    filter: brightness(1);
-  }
-  50% {
-    box-shadow:
-      0 0 28px rgba(34, 211, 238, 0.38),
-      0 0 44px rgba(168, 85, 247, 0.48);
-    filter: brightness(1.07);
-  }
-}
-
-.bb-bar-cta-pulse {
-  animation: bb-bar-cta-pulse 2.35s ease-in-out infinite;
-}
-
-@keyframes bb-bar-tap {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(0.97);
-  }
-}
-
-.bb-bar-welcome-cta:active,
-.bb-bar-spin-cta:active,
-.bb-bar-upgrade-submit:active {
-  animation: bb-bar-tap 0.2s ease-out;
 }
 
 @keyframes bb-playful-cta-pulse {
@@ -657,10 +623,6 @@ select:focus {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bb-bar-cta-pulse {
-    animation: none;
-  }
-
   .bb-playful-cta-pulse {
     animation: none;
   }
@@ -670,7 +632,7 @@ select:focus {
   }
 
   .bb-guest-theme-bar .bb-box-float {
-    animation-duration: 4s;
+    animation-duration: 6s;
   }
 }
 

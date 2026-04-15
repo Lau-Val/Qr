@@ -2,7 +2,7 @@ import type { GuestUiTheme } from "@/lib/guest-ui-theme";
 
 /**
  * Visuele tokens voor de gast-flow (alleen CSS-klassen).
- * `bar` = Night / bar (neon, hoog contrast); `salon` = Clean / algemeen licht (neutraal, flat);
+ * `bar` = Nightclub premium (diep donker, goud-accent, ingetogen); `salon` = Clean licht (neutraal, flat);
  * `luxury` = premium crème; `playful` = fel gamified.
  */
 export type GuestVisualPalette = {
@@ -82,67 +82,62 @@ const bar: GuestVisualPalette = {
   shell: "dark",
   prizeBox: "dark",
   retentionLightSurface: false,
-  pageNum: "text-fuchsia-400/45",
+  pageNum: "text-white/25",
   welcome: {
     section: "",
-    brand: "text-cyan-400/75 font-bold tracking-[0.38em]",
-    title:
-      "text-white font-extrabold drop-shadow-[0_0_28px_rgba(168,85,247,0.35)]",
-    subtitle: "text-white/60",
+    brand: "text-amber-200/50 tracking-[0.34em] font-medium",
+    title: "text-white font-semibold tracking-tight",
+    subtitle: "text-white/50",
     badge: "",
     ctaPrimaryAddon:
-      "!border-0 !bg-gradient-to-r !from-violet-600 !via-fuchsia-500 !to-orange-500 !text-white !shadow-[0_0_32px_rgba(217,70,239,0.45)] hover:!brightness-110 active:!scale-[0.98] bb-bar-cta-pulse bb-bar-welcome-cta",
-    footerHint: "text-white/40",
+      "!border !border-amber-600/45 !bg-amber-600 !text-stone-950 !shadow-[0_10px_28px_rgba(0,0,0,0.55)] transition-colors duration-200 hover:!bg-amber-500 active:!brightness-[0.97]",
+    footerHint: "text-white/35",
   },
   unlock: {
-    openingHint:
-      "bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-orange-300 bg-clip-text font-extrabold text-transparent drop-shadow-[0_0_14px_rgba(34,211,238,0.35)]",
-    revealHint: "text-fuchsia-200/55",
+    openingHint: "text-amber-100/80 font-medium",
+    revealHint: "text-white/38",
     spinDisabled: "",
     spinLinkPrimaryAddon:
-      "!border-0 !bg-gradient-to-r !from-indigo-600 !via-purple-600 !to-fuchsia-600 !text-white !shadow-[0_0_26px_rgba(99,102,241,0.5)] hover:!brightness-110 active:!scale-[0.98] bb-bar-cta-pulse bb-bar-spin-cta",
+      "!border !border-amber-600/40 !bg-amber-600 !text-stone-950 !shadow-md !shadow-black/50 transition-colors duration-200 hover:!bg-amber-500 active:!brightness-[0.97]",
   },
   baseWon: {
-    card: "border border-cyan-400/20 bg-gradient-to-b from-white/[0.09] to-white/[0.02] shadow-[0_0_36px_rgba(139,92,246,0.22),inset_0_1px_0_rgba(255,255,255,0.06)]",
-    label: "text-fuchsia-300/95 font-bold",
-    title: "text-white font-extrabold",
-    normalPrice: "text-white/45",
-    timerLead: "text-cyan-200/75 font-medium",
-    timerMono:
-      "bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-pink-300 bg-clip-text font-black text-transparent tabular-nums",
+    card: "border border-white/[0.07] bg-[#111118] shadow-[0_16px_44px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.05)]",
+    label: "text-amber-200/75 font-medium",
+    title: "text-white font-semibold",
+    normalPrice: "text-white/40",
+    timerLead: "text-white/42",
+    timerMono: "text-amber-200/95 font-semibold tabular-nums",
   },
   upgrade: {
     outer:
-      "border border-fuchsia-500/35 bg-[#140a22] shadow-[0_0_0_1px_rgba(168,85,247,0.28),0_22px_56px_rgba(0,0,0,0.58),0_0_72px_rgba(236,72,153,0.18)]",
-    ambientA: "bg-gradient-to-b from-[#1e0b36] via-[#12081f] to-[#06030e]",
+      "border border-white/[0.06] bg-[#0c0c12] shadow-[0_20px_52px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.04)]",
+    ambientA: "bg-gradient-to-b from-[#14141c] via-[#0e0e14] to-[#08080d]",
     ambientB: "bb-upgrade-bg-drift-bar",
-    ambientBlur: "bg-fuchsia-500/30",
-    headline:
-      "text-white font-extrabold drop-shadow-[0_0_18px_rgba(167,139,250,0.35)]",
-    subMuted: "text-white/40",
-    subAccent: "text-fuchsia-300/95",
-    dealStandard: "text-white/75",
-    dealUpgraded: "text-white font-bold",
-    divider: "via-fuchsia-500/35",
-    formBorder: "border-white/12",
-    formLead: "text-white font-bold",
-    label: "text-cyan-100/90",
+    ambientBlur: "bg-amber-500/[0.07]",
+    headline: "text-white font-semibold",
+    subMuted: "text-white/38",
+    subAccent: "text-amber-200/85",
+    dealStandard: "text-white/65",
+    dealUpgraded: "text-white font-medium",
+    divider: "via-white/[0.08]",
+    formBorder: "border-white/[0.08]",
+    formLead: "text-white font-medium",
+    label: "text-white/45",
     input:
-      "border-fuchsia-500/35 bg-black/55 text-white ring-fuchsia-400/35 backdrop-blur-[1px] placeholder:text-white/40 focus:border-fuchsia-400/70",
-    error: "text-pink-300",
+      "border-white/[0.12] bg-black/45 text-white ring-amber-900/25 backdrop-blur-[0.5px] placeholder:text-white/35 focus:border-amber-600/40",
+    error: "text-amber-200/90",
     submit:
-      "!border-0 !bg-gradient-to-r !from-violet-600 !via-fuchsia-500 !to-orange-500 !text-white !shadow-[0_0_28px_rgba(217,70,239,0.5)] hover:!brightness-110 active:!scale-[0.98] bb-bar-cta-pulse bb-bar-upgrade-submit",
-    formTiny: "text-white/38",
-    skip: "text-fuchsia-200/55 hover:text-white",
-    upgradeEmoji: "🔥",
+      "!border !border-amber-600/45 !bg-amber-600 !text-stone-950 !shadow-[0_10px_26px_rgba(0,0,0,0.5)] transition-colors duration-200 hover:!bg-amber-500 active:!brightness-[0.97]",
+    formTiny: "text-white/32",
+    skip: "text-white/40 transition-colors hover:text-white/65",
+    upgradeEmoji: "✦",
   },
   retention: {
-    title: "text-white font-extrabold",
-    subtitle: "text-white/55",
-    ghostLink: "text-fuchsia-300/80 hover:text-white",
+    title: "text-white font-semibold",
+    subtitle: "text-white/45",
+    ghostLink: "text-amber-200/65 hover:text-amber-100/90",
   },
-  viewportBg:
-    "bg-gradient-to-b from-[#0c0618] via-[#06060a] to-[#020106]",
+  viewportBg: "bg-[#050506]",
   stepExtra: "bb-guest-theme-bar",
 };
 

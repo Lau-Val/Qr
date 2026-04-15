@@ -47,7 +47,7 @@ export function MobileShell({
             !isLight &&
               !isLuxury &&
               !isPlayful &&
-              "border border-cyan-500/25 bg-gradient-to-b from-[#0f0820] via-[#080510] to-[#030208] shadow-[0_24px_64px_rgba(0,0,0,0.62),0_0_48px_rgba(139,92,246,0.14)]",
+              "border border-white/[0.07] bg-[#0a0a0e] shadow-[0_28px_64px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.04)]",
             className,
           )}
         >
